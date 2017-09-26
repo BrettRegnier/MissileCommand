@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PlayerSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <soundEnabled>true</soundEnabled>
+  <P1Color>-8323200</P1Color>
+  <P2Color>-10092289</P2Color>
+  <P3Color>-10092289</P3Color>
+  <P4Color>-16181</P4Color>
+  <P1Index>6</P1Index>
+  <P2Index>10</P2Index>
+  <P3Index>10</P3Index>
+  <P4Index>1</P4Index>
+  <Player1Controller>false</Player1Controller>
+  <Player2Controller>true</Player2Controller>
+  <Player3Controller>true</Player3Controller>
+  <Player4Controller>true</Player4Controller>
+</PlayerSettings>
