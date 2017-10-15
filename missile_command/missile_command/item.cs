@@ -12,8 +12,29 @@ namespace missile_command
 		public abstract void draw(Graphics g);
 	}
 
-	public abstract class bomb
+	public class bomb : item
 	{
-		public abstract void move()
+		public bomb(Team t, Point origin, Point destination, )
+
+		public override void draw(Graphics g)
+		{
+
+		}
+		public void move()
+		{
+
+		}
+		public void collide()
+		{
+
+		}
+		public void calcVelocity()
+		{
+
+		}
+		public void explosionCalc()
+		{
+
+		}
 	}
 }

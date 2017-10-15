@@ -100,3 +100,12 @@ C:\Data\Dropbox\College\Programming\SecondYear\First Semester\Missile Command - 
 C:\Data\.code\C#\missile_command\Missile Command - Final\bin\Debug\Missile Command - Final.exe.config
 C:\Data\.code\C#\missile_command\Missile Command - Final\obj\Debug\Missile Command - Final.exe
 C:\Data\.code\C#\missile_command\Missile Command - Final\obj\Debug\Missile Command - Final.pdb
+C:\Data\.code\C#\missile_command\Missile Command - Final\obj\Debug\Missile Command - Final.csprojResolveAssemblyReference.cache
+C:\Data\.code\C#\missile_command\Missile Command - Final\obj\Debug\Missile_Command___Final.Form1.resources
+C:\Data\.code\C#\missile_command\Missile Command - Final\obj\Debug\Missile_Command___Final.GameForm.resources
+C:\Data\.code\C#\missile_command\Missile Command - Final\obj\Debug\Missile_Command___Final.GameSettingsForm.resources
+C:\Data\.code\C#\missile_command\Missile Command - Final\obj\Debug\Missile_Command___Final.HighscoreForm.resources
+C:\Data\.code\C#\missile_command\Missile Command - Final\obj\Debug\Missile_Command___Final.HowToPlayForm.resources
+C:\Data\.code\C#\missile_command\Missile Command - Final\obj\Debug\Missile_Command___Final.MainMenuForm.resources
+C:\Data\.code\C#\missile_command\Missile Command - Final\obj\Debug\Missile_Command___Final.Properties.Resources.resources
+C:\Data\.code\C#\missile_command\Missile Command - Final\obj\Debug\Missile Command - Final.csproj.GenerateResource.Cache

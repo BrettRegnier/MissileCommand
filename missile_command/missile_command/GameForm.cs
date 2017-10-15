@@ -29,7 +29,7 @@ namespace missile_command
 			{
 
 				// Maximize and hide everything else
-				this.StartPosition = 0;
+				this.StartPosition = FormStartPosition.Manual;
 				int height = Screen.PrimaryScreen.Bounds.Height;
 				int width = Screen.PrimaryScreen.Bounds.Width;
 				this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
