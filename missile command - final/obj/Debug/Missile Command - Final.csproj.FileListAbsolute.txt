@@ -109,3 +109,5 @@ C:\Data\.code\C#\missile_command\Missile Command - Final\obj\Debug\Missile_Comma
 C:\Data\.code\C#\missile_command\Missile Command - Final\obj\Debug\Missile_Command___Final.MainMenuForm.resources
 C:\Data\.code\C#\missile_command\Missile Command - Final\obj\Debug\Missile_Command___Final.Properties.Resources.resources
 C:\Data\.code\C#\missile_command\Missile Command - Final\obj\Debug\Missile Command - Final.csproj.GenerateResource.Cache
+C:\Data\.code\C#\missile_command\Missile Command - Final\bin\Debug\Missile Command - Final.exe
+C:\Data\.code\C#\missile_command\Missile Command - Final\bin\Debug\Missile Command - Final.pdb

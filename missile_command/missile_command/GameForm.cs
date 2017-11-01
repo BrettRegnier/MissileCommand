@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 namespace missile_command
 {
+	using System.Drawing;
 	public partial class GameForm : Form
 	{
 		private Graphics g;
