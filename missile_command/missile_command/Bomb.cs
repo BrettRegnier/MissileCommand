@@ -1,4 +1,6 @@
-﻿using System;
+﻿using missile_command.Properties;
+
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -27,10 +29,10 @@ namespace missile_command
 					color = Color.White;
 					break;
 				case (Player.player1):
-					color = Color.Green;
+					color = PlayerSettings.LoadColor(Player.player1);
 					break;
-				case (Player.player2)
-					c
+				case (Player.player2):
+					break;
 			}
 
 

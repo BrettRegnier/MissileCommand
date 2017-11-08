@@ -63,5 +63,10 @@ namespace missile_command
 
 			}
 		}
+
+		private void GameTimer_Tick(object sender, EventArgs e)
+		{
+			Bomb b = new Bomb(Player.player1, new Point(0, 0), new Point(0, 0));
+		}
 	}
 }

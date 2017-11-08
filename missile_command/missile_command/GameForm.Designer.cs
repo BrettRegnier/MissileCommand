@@ -35,6 +35,7 @@
 			// GameTimer
 			// 
 			this.GameTimer.Interval = 50;
+			this.GameTimer.Tick += new System.EventHandler(this.GameTimer_Tick);
 			// 
 			// GameForm
 			// 
