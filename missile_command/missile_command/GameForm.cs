@@ -10,10 +10,11 @@ using System.Windows.Forms;
 
 namespace missile_command
 {
-	using System.Drawing;
-	public partial class GameForm : Form
+    using System.Drawing;
+    public partial class GameForm : Form
 	{
 		private Graphics g;
+        private List<Bomb> bombList = new List<Bomb>();
 
 		public GameForm()
 		{
@@ -45,6 +46,7 @@ namespace missile_command
 
 				// Once everything is initialized, enable timer.
 				GameTimer.Enabled = true;
+                bombList.Add(BombFactory.makeBomb(Player.enemy, new Point(0, 0), new Point(500, 1080)));
 			}
 			catch (Exception ex)
 			{
@@ -57,16 +59,22 @@ namespace missile_command
 			try
 			{
 				g = e.Graphics;
+
+                for (int i = 0; i < bombList.Count; i++)
+                {
+                    bombList[i].move();
+                    bombList[i].draw(g);
+                }
 			}
 			catch (Exception ex)
 			{
-
+                Close();
 			}
 		}
 
 		private void GameTimer_Tick(object sender, EventArgs e)
 		{
-			Bomb b = new Bomb(Player.player1, new Point(0, 0), new Point(0, 0));
+            this.Invalidate(false);
 		}
 	}
 }
