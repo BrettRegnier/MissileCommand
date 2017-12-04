@@ -1,5 +1,4 @@
 ﻿using missile_command.Properties;
-
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -9,9 +8,10 @@ using System.Threading.Tasks;
 
 namespace missile_command
 {
-    public class Bomb
+    public class Bomb : GameObject
     {
         const int CURSOR_OFFSET = 5;
+        static Graphics g;
 
         Rectangle circle;
         Player player;
@@ -25,10 +25,12 @@ namespace missile_command
         Point destination;
 
         SolidBrush color;
+        
 
-        public Bomb(Player p, Point o, Point d)
+        public Bomb(Point o, Point d, Graphics g, Player p) : base(o, g)
         {
             player = p;
+
             origin = o;
             destination = d;
 
@@ -39,13 +41,7 @@ namespace missile_command
             calculateVelocity();
         }
 
-        public void draw(Graphics g)
-        {
-            // TODO Add in the checking if it has been collided/at destination.
-            g.FillEllipse(color, circle);
-        }
-
-        public void move()
+        public void Move()
         {
             if (!atDestination)
             {
@@ -78,12 +74,12 @@ namespace missile_command
             }
         }
 
-        public void collide()
+        private void collide()
         {
             throw new NotImplementedException();
         }
 
-        public void explosionCalc()
+        private void explosionCalc()
         {
             throw new NotImplementedException();
         }
@@ -115,6 +111,16 @@ namespace missile_command
         private void setColor()
         {
             color = new SolidBrush(Config.getInstance().getPlayerColor(player));
+        }
+
+        public override void Draw()
+        {
+            // TODO Use the move and collision detection
+            g.FillEllipse(color, circle);
+        }
+
+        public override void Collided()
+        {
         }
 
         public int getWidth { get { return circle.Width; } }

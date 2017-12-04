@@ -62,7 +62,7 @@ namespace missile_command
 
                 for (int i = 0; i < bombList.Count; i++)
                 {
-                    bombList[i].move();
+                    bombList[i].Move();
                     bombList[i].draw(g);
                 }
 			}
