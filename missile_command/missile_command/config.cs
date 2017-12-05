@@ -11,17 +11,17 @@ namespace missile_command
     public class Config
     {
         private static Config instance;
-        private static Color P1Color;
-        private static Color P2Color;
-        private static Color P3Color;
-        private static Color P4Color;
+        private static Color p1Color;
+        private static Color p2Color;
+        private static Color p3Color;
+        private static Color p4Color;
 
         public Config()
         {
             //load configs
         }
 
-        public static Config getInstance()
+        public static Config GetInstance()
         {
             if (instance == null)
                 instance = new Config();
@@ -29,24 +29,24 @@ namespace missile_command
             return instance;
         }
 
-        public Color getPlayerColor(Player p)
+        public Color GetPlayerColor(PType p)
         {
             Color color = Color.Black;
             switch (p)
             {
-                case (Player.enemy):
+                case (PType.ENEMY):
                     color = Color.White;
                     break;
-                case (Player.player1):
+                case (PType.PLAYER1):
                     color = Color.Green;
                     break;
-                case (Player.player2):
+                case (PType.PLAYER2):
                     color = Color.Blue;
                     break;
-                case (Player.player3):
+                case (PType.PLAYER3):
                     color = Color.Yellow;
                     break;
-                case (Player.player4):
+                case (PType.PLAYER4):
                     color = Color.Red;
                     break;
             }

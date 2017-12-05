@@ -14,7 +14,7 @@ namespace missile_command
         static Graphics g;
 
         Rectangle circle;
-        Player player;
+        PType player;
         int radius = 5; // TODO REMOVE MAGIC NUMBER
         float speed = 5; // TODO REMOVE MAGIC NUMBER
         PointF velocity;
@@ -27,12 +27,12 @@ namespace missile_command
         SolidBrush color;
         
 
-        public Bomb(Point o, Point d, Graphics g, Player p) : base(o, g)
+        public Bomb(Point pos, Point des, Size dim, Graphics g, PType p) : base(pos, des, dim, g, p)
         {
             player = p;
 
-            origin = o;
-            destination = d;
+            origin = pos;
+            destination = ;
 
             // 10, 10 is the bomb size?
             circle = new Rectangle(200, 200, 10, 10);
@@ -110,7 +110,7 @@ namespace missile_command
 
         private void setColor()
         {
-            color = new SolidBrush(Config.getInstance().getPlayerColor(player));
+            color = new SolidBrush(Config.GetInstance().getPlayerColor(player));
         }
 
         public override void Draw()

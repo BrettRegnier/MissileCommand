@@ -1,0 +1,4 @@
+﻿Replace destination and find another way, perhaps they need to calculate it itself. Since it should be randomly shot at the ground
+but also needs to consistently hit player objects on the ground.
+
+They need to have a destination point, I should store those static position in something.... STATIC... hint.

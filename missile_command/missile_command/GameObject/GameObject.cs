@@ -23,7 +23,7 @@ namespace missile_command
         public Point Position { get; set; }
         public Size Dimensions { get; set; }
 
-        public GameObject(Point pos, Graphics g)
+        public GameObject(Point pos, Size dim, Graphics g, PType p)
         {
             Position = pos;
             Dimensions = dim;

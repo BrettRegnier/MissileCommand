@@ -8,11 +8,12 @@ namespace missile_command
 {
     public enum PType
     {
-        enemy = 0,
-        player1 = 1,
-        player2 = 2,
-        player3 = 3,
-        player4 = 4
+        ENEMY = 0,
+        PLAYER1 = 1,
+        PLAYER2 = 2,
+        PLAYER3 = 3,
+        PLAYER4 = 4,
+        SYSTEM = 5
     }
 
     public class Size

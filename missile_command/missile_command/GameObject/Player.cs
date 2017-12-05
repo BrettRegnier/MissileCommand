@@ -9,7 +9,7 @@ namespace missile_command
 {
     class Player : GameObject
     {
-        public Player(Point p, Graphics g) : base(p, g)
+        public Player(Point pos, Size dim, Graphics g, PType p) : base(pos, dim, g, p)
         {
 
         }
