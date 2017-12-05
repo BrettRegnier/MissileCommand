@@ -8,10 +8,9 @@ using System.Threading.Tasks;
 
 namespace missile_command
 {
-    public class Bomb : GameObject
+    class Bomb : GameObject
     {
         const int CURSOR_OFFSET = 5;
-        static Graphics g;
 
         Rectangle circle;
         PType player;
@@ -27,12 +26,12 @@ namespace missile_command
         SolidBrush color;
         
 
-        public Bomb(Point pos, Point des, Size dim, Graphics g, PType p) : base(pos, des, dim, g, p)
+        public Bomb(Point pos, Point des, Dimensions dim, PType p) : base(pos, dim, p)
         {
             player = p;
 
             origin = pos;
-            destination = ;
+            destination = des;
 
             // 10, 10 is the bomb size?
             circle = new Rectangle(200, 200, 10, 10);
@@ -110,10 +109,10 @@ namespace missile_command
 
         private void setColor()
         {
-            color = new SolidBrush(Config.GetInstance().getPlayerColor(player));
+            color = new SolidBrush(Config.GetInstance().GetPlayerColor(player));
         }
 
-        public override void Draw()
+        public override void Draw(Graphics g)
         {
             // TODO Use the move and collision detection
             g.FillEllipse(color, circle);
@@ -123,11 +122,11 @@ namespace missile_command
         {
         }
 
-        public int getWidth { get { return circle.Width; } }
-        public int getHeight { get { return circle.Height; } }
-        public int getX { get { return circle.X; } }
-        public int getY { get { return circle.Y; } }
-        public Point getCenter { get { return new Point(circle.X + (circle.Width / 2), circle.Y + (circle.Height / 2)); } }
-        public int getRadius { get { return radius; } }
+        public int GetWidth { get { return circle.Width; } }
+        public int GetHeight { get { return circle.Height; } }
+        public int GetX { get { return circle.X; } }
+        public int GetY { get { return circle.Y; } }
+        public Point GetCenter { get { return new Point(circle.X + (circle.Width / 2), circle.Y + (circle.Height / 2)); } }
+        public int GetRadius { get { return radius; } }
     }
 }

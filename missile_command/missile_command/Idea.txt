@@ -2,3 +2,6 @@
 but also needs to consistently hit player objects on the ground.
 
 They need to have a destination point, I should store those static position in something.... STATIC... hint.
+Make the same thing as normal missle command for the ground with 3 specific spots.
+
+Iffy on dimensions. They should probably set themselves? But the factory does need to be the one MAKING it.	`

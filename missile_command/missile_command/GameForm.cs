@@ -46,7 +46,8 @@ namespace missile_command
 
 				// Once everything is initialized, enable timer.
 				GameTimer.Enabled = true;
-                bombList.Add(BombFactory.makeBomb(Player.enemy, new Point(0, 0), new Point(500, 1080)));
+                // Unit tests?
+                bombList.Add(BombFactory.MakeBomb(new Point(0, 0), new Point(500, 1080), new Dimensions(1, 1), g, PType.ENEMY));
 			}
 			catch (Exception ex)
 			{
@@ -63,7 +64,7 @@ namespace missile_command
                 for (int i = 0; i < bombList.Count; i++)
                 {
                     bombList[i].Move();
-                    bombList[i].draw(g);
+                    bombList[i].Draw();
                 }
 			}
 			catch (Exception ex)

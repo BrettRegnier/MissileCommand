@@ -16,12 +16,12 @@ namespace missile_command
         SYSTEM = 5
     }
 
-    public class Size
+    public class Dimensions
     {
         int Width { get; set; }
         int Height { get; set; }
 
-        public Size(int w, int h)
+        public Dimensions(int w, int h)
         {
             Width = w;
             Height = h;

@@ -9,17 +9,19 @@ namespace missile_command
 {
     class Player : GameObject
     {
-        public Player(Point pos, Size dim, Graphics g, PType p) : base(pos, dim, g, p)
-        {
+        private Reticle cursor;
 
+        public Player(Point pos, Dimensions dim, Graphics g, PType p) : base(pos, dim, g, p)
+        {
+            cursor = new Reticle(g, p);
         }
 
-        public override void Collided()
+        public override void Draw()
         {
             throw new NotImplementedException();
         }
 
-        public override void Draw()
+        public override void Collided()
         {
             throw new NotImplementedException();
         }

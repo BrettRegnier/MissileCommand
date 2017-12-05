@@ -9,9 +9,9 @@ namespace missile_command
 {
     class BombFactory
     {
-        public static Bomb makeBomb(Player player, Point origin, Point destination)
+        public static Bomb MakeBomb(Point ori, Point des, Dimensions dim, Graphics g, PType p)
         {
-            return new Bomb(player, origin, destination);
+            return new Bomb(ori, des, dim, g, p);
         }
     }
 }
