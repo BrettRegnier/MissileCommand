@@ -11,12 +11,12 @@ namespace missile_command
     {
         private Reticle cursor;
 
-        public Player(Point pos, Dimensions dim, Graphics g, PType p) : base(pos, dim, g, p)
+        public Player(Point pos, Dimensions dim, Graphics g, PType p) : base(pos, dim, p)
         {
             cursor = new Reticle(g, p);
         }
 
-        public override void Draw()
+        public override void Draw(Graphics g)
         {
             throw new NotImplementedException();
         }
