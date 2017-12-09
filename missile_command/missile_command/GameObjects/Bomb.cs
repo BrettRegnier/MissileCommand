@@ -13,7 +13,7 @@ namespace missile_command
         Rectangle circle;
         PType player;
         int radius = 5; // TODO REMOVE MAGIC NUMBER
-        float speed = 1.5f; // TODO REMOVE MAGIC NUMBER
+        float speed = 5f; // TODO REMOVE MAGIC NUMBER
         PointF velocity;
 
         bool atDestination = false;
