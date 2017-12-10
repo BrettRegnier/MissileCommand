@@ -19,7 +19,7 @@ namespace missile_command
             //load configs
         }
 
-        public static Config GetInstance()
+        public static Config Instance()
         {
             if (instance == null)
                 instance = new Config();

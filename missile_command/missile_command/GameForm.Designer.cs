@@ -39,7 +39,7 @@
 			this.Name = "GameForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "Missile Command";
-			this.Paint += new System.Windows.Forms.PaintEventHandler(this.GameForm_Paint);
+			this.Paint += new System.Windows.Forms.PaintEventHandler(this.UpdateGame);
 			this.ResumeLayout(false);
 
 		}

@@ -9,7 +9,7 @@ namespace missile_command
 	{
 		private Reticle cursor;
 
-		public Player(Point pos, Dimensions dim, Graphics g, PType p) : base(pos, dim, p)
+		public Player(Point pos, Dimension dim, Graphics g, PType p) : base(pos, dim, p)
 		{
 			cursor = new Reticle(g, p);
 		}

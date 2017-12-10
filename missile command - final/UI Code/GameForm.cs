@@ -112,7 +112,11 @@ namespace Missile_Command___Final
 
                 if (PSettings.soundEnabled)
                     GameMusic.PlayLooping();
-            }
+
+
+								Point originPoint = new Point(100, 0);
+								EnemyBomb EBB = new EnemyBomb(originPoint, new Point(200, 1035), this, speed, Link, PSettings);
+			}
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);

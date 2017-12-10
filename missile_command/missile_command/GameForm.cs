@@ -12,9 +12,17 @@ namespace missile_command
 {
 	public partial class GameForm : Form
 	{
-		int fps = 0, frames = 0;
-		long tickCount = Environment.TickCount;
-		long elapsedTime = 0;
+		// TODO make wave game mode
+
+		// This is needed because the bounds point 1920x1080 is the upper left corner of an object.
+		private const int SCREEN_OFFSET = 5;
+
+		private Random rand = new Random();
+		private Point gameBounds;
+
+		private int fps = 0, frames = 0;
+		private long tickCount = Environment.TickCount;
+		private long elapsedTime = Environment.TickCount;
 
 		List<GameObject> objectList = new List<GameObject>();
 
@@ -27,9 +35,6 @@ namespace missile_command
 		private void Main()
 		{
 			InitGame();
-
-			// Unit tests?
-			objectList.Add(GameObjectFactory.MakeBomb(new Point(0, 0), new Point(500, 1080), new Dimensions(1, 1), PType.ENEMY));
 		}
 		private void InitGame()
 		{
@@ -45,8 +50,9 @@ namespace missile_command
 			int height = Screen.PrimaryScreen.Bounds.Height;
 			int width = Screen.PrimaryScreen.Bounds.Width;
 			ClientSize = new Size(width, height);
+			gameBounds = new Point(width - SCREEN_OFFSET, height - SCREEN_OFFSET);
 		}
-		private void Update()
+		private void Loop()
 		{
 			while (true)
 			{
@@ -57,6 +63,7 @@ namespace missile_command
 					elapsedTime = Environment.TickCount;
 					Console.Out.WriteLine("Frames: " + fps);
 				}
+
 				if (Environment.TickCount >= tickCount + 15)
 				{
 					tickCount = Environment.TickCount;
@@ -65,27 +72,43 @@ namespace missile_command
 				}
 			}
 		}
-		private void GameForm_Paint(object sender, PaintEventArgs e)
+		private void UpdateGame(object sender, PaintEventArgs e)
 		{
 			try
 			{
+				SpawnEnemies();
 				for (int i = 0; i < objectList.Count; i++)
 				{
-					((Bomb)objectList[i]).Move();
 					objectList[i].Draw(e.Graphics);
 				}
-
-
-				
 				frames++;
 
 				// Update after drawing
-				Update();
+				Loop();
 			}
 			catch (Exception ex)
 			{
 				Close();
 			}
+		}
+		private void SpawnEnemies()
+		{
+			// TODO complex calculation based on ticks to determine when the next spawn is.
+			if (Environment.TickCount >= elapsedTime + 1000)
+			{
+				Point spawnPoint = new Point(rand.Next(0, gameBounds.X), 0);
+				// TODO make a list of guaranteed points
+				Point destination = new Point(rand.Next(0, gameBounds.X), gameBounds.Y);
+				Dimension bombSize = new Dimension(10, 10);
+				Bomb bmb = GameObjectFactory.MakeBomb(spawnPoint, destination, bombSize, PType.ENEMY);
+				bmb.DestroyBomb += DestroyGameObject;
+				objectList.Add(bmb);
+			}
+		}
+
+		private void DestroyGameObject(GameObject gameObject)
+		{
+			objectList.Remove(gameObject);
 		}
 	}
 }

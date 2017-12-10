@@ -8,7 +8,7 @@ namespace missile_command
     interface IGameObject
     {
         Point Position { get; set; }
-        Dimensions Dimensions { get; set; }
+        Dimension Dimensions { get; set; }
 
         void Draw(Graphics g);
         void Collided();
@@ -16,12 +16,12 @@ namespace missile_command
 
     abstract class GameObject : IGameObject
     {
-        private PType player;
+        protected PType player;
 
         public Point Position { get; set; }
-        public Dimensions Dimensions { get; set; }
+        public Dimension Dimensions { get; set; }
 
-        public GameObject(Point pos, Dimensions dim, PType p)
+        public GameObject(Point pos, Dimension dim, PType p)
         {
             Position = pos;
             Dimensions = dim;
