@@ -11,5 +11,9 @@ namespace missile_command
 		{
 			return new Bomb(ori, des, dim, p);
 		}
+		public static Player MakePlayer(Point ori, PType p)
+		{
+			return new Player(ori, p);
+		}
 	}
 }

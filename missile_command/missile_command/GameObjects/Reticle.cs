@@ -2,23 +2,34 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
+using System.Windows.Forms;
 
 namespace missile_command
 {
-    class Reticle
-    {
-        PType player;
-        Graphics graphics;
+	class Reticle
+	{
+		#region Constants
+		private const int CURSOR_DIMENSION = 9;
+		private const int CURSOR_OFFSET = 5;
+		private const int MOVE_VAL = 25;
+		#endregion
 
-        public Reticle(Graphics g, PType p)
-        {
-            graphics = g;
-            player = p;
-        }
+		#region Fields
+		private PType player;
+		private PictureBox sprite = new PictureBox();
+		#endregion
 
-        public void Draw()
-        {
+		public Reticle(Point ori, PType p)
+		{
+			sprite.Left = ori.X;
+			sprite.Top = ori.Y;
+			player = p;
+			sprite.Image = new Bitmap("cursor_8.png");
+		}
 
-        }
-    }
+		public void Draw(Graphics g)
+		{
+			g.DrawImage(sprite.Image, new Point(sprite.Left, sprite.Top));
+		}
+	}
 }

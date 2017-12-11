@@ -24,7 +24,7 @@ namespace missile_command
 		private long tickCount = Environment.TickCount;
 		private long elapsedTime = Environment.TickCount;
 
-		List<GameObject> objectList = new List<GameObject>();
+		List<List<GameObject>> objectLists = new List<List<GameObject>>();
 
 		// Methods
 		public GameForm()
@@ -51,6 +51,14 @@ namespace missile_command
 			int width = Screen.PrimaryScreen.Bounds.Width;
 			ClientSize = new Size(width, height);
 			gameBounds = new Point(width - SCREEN_OFFSET, height - SCREEN_OFFSET);
+
+			for (int i = 0; i < 3; i++)
+				objectLists.Add(new List<GameObject>());
+
+			// Make players.... 
+			// TODO make players objects.
+			Point ori = new Point(200, 200);
+			objectLists[(int)ListType.PLAYER].Add(GameObjectFactory.MakePlayer(ori, PType.PLAYER1));
 		}
 		private void Loop()
 		{
@@ -77,9 +85,12 @@ namespace missile_command
 			try
 			{
 				SpawnEnemies();
-				for (int i = 0; i < objectList.Count; i++)
+				for (int i = 0; i < objectLists.Count; i++)
 				{
-					objectList[i].Draw(e.Graphics);
+					for (int j = 0; j < objectLists[i].Count; j++)
+					{
+						objectLists[i][j].Draw(e.Graphics);
+					}
 				}
 				frames++;
 
@@ -102,13 +113,22 @@ namespace missile_command
 				Dimension bombSize = new Dimension(10, 10);
 				Bomb bmb = GameObjectFactory.MakeBomb(spawnPoint, destination, bombSize, PType.ENEMY);
 				bmb.DestroyBomb += DestroyGameObject;
-				objectList.Add(bmb);
+				objectLists[(int)ListType.E_BOMB].Add(bmb);
 			}
 		}
 
-		private void DestroyGameObject(GameObject gameObject)
+		private void GameForm_KeyDown(object sender, KeyEventArgs e)
 		{
-			objectList.Remove(gameObject);
+			KeypressHandler.KeyDown(e);
+		}
+
+		private void GameForm_KeyUp(object sender, KeyEventArgs e)
+		{
+		}
+
+		private void DestroyGameObject(ListType lt, GameObject gameObject)
+		{
+			objectLists[(int)lt].Remove(gameObject);
 		}
 	}
 }

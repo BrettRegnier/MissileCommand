@@ -40,6 +40,8 @@
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "Missile Command";
 			this.Paint += new System.Windows.Forms.PaintEventHandler(this.UpdateGame);
+			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.GameForm_KeyDown);
+			this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.GameForm_KeyUp);
 			this.ResumeLayout(false);
 
 		}

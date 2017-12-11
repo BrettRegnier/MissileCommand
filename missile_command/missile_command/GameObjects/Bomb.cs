@@ -11,7 +11,7 @@ namespace missile_command
 		private const int CURSOR_OFFSET = 5;
 
 		#region Delegates
-		public delegate void Deconstruct(GameObject bomb);
+		public delegate void Deconstruct(ListType lt, GameObject bomb);
 		public event Deconstruct DestroyBomb;
 		#endregion
 
@@ -33,7 +33,7 @@ namespace missile_command
 		private int flashCount = 0;
 		private int destroyCount = 0;
 
-		public Bomb(Point pos, Point des, Dimension dim, PType p) : base(pos, dim, p)
+		public Bomb(Point pos, Point des, Dimension dim, PType p) : base(pos, p)
 		{
 			destination = des;
 
@@ -138,7 +138,10 @@ namespace missile_command
 				}
 				if (flashCount == 16)
 				{
-					DestroyBomb(this);
+					ListType t = ListType.E_BOMB;
+					if (player != 0)
+						t = ListType.P_BOMB;
+					DestroyBomb(t, this);
 				}
 			}
 		}

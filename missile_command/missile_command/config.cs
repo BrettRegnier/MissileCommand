@@ -2,55 +2,75 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
+using System.Windows.Forms;
 
 namespace missile_command
 {
-    // Singleton class.
-    public class Config
-    {
-        private static Config instance;
-        private static Color p1Color;
-        private static Color p2Color;
-        private static Color p3Color;
-        private static Color p4Color;
+	// Singleton class.
+	public class Config
+	{
+		private struct KeyConfig
+		{
+			Keys up;
+			Keys down;
+			Keys left;
+			Keys right;
+			Keys shoot;
+		};
 
-        public Config()
-        {
-            //load configs
-        }
+		private static Config instance;
+		private Color p1Color;
+		private Color p2Color;
+		private Color p3Color;
+		private Color p4Color;
+		
+		// TODO figure out how to select the image for a cursor, maybe a string that will load it?
 
-        public static Config Instance()
-        {
-            if (instance == null)
-                instance = new Config();
+		public Config()
+		{
+			LoadColorConfig();
+			LoadPlayerKeys();
+		}
 
-            return instance;
-        }
+		public static Config Instance()
+		{
+			if (instance == null)
+				instance = new Config();
 
-        public Color GetPlayerColor(PType p)
-        {
-            Color color = Color.Black;
-            switch (p)
-            {
-                case (PType.ENEMY):
-                    color = Color.White;
-                    break;
-                case (PType.PLAYER1):
-                    color = Color.Green;
-                    break;
-                case (PType.PLAYER2):
-                    color = Color.Blue;
-                    break;
-                case (PType.PLAYER3):
-                    color = Color.Yellow;
-                    break;
-                case (PType.PLAYER4):
-                    color = Color.Red;
-                    break;
-            }
+			return instance;
+		}
 
-            return color;
-        }
-    }
+		public Color GetPlayerColor(PType p)
+		{
+			Color color = Color.Black;
+			switch (p)
+			{
+				case (PType.ENEMY):
+					color = Color.White;
+					break;
+				case (PType.PLAYER1):
+					color = Color.Green;
+					break;
+				case (PType.PLAYER2):
+					color = Color.Blue;
+					break;
+				case (PType.PLAYER3):
+					color = Color.Yellow;
+					break;
+				case (PType.PLAYER4):
+					color = Color.Red;
+					break;
+			}
+			return color;
+		}
+		private void LoadColorConfig()
+		{
+
+		}
+		private void LoadPlayerKeys()
+		{
+
+		}
+	}
 }
 

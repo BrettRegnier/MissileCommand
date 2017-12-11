@@ -9,17 +9,16 @@ namespace missile_command
 	{
 		private Reticle cursor;
 
-		public Player(Point pos, Dimension dim, Graphics g, PType p) : base(pos, dim, p)
+		public Player(Point pos, PType p) : base(pos, p)
 		{
-			cursor = new Reticle(g, p);
+			Point reticleOrigin = new Point(200, 200);
+			cursor = new Reticle(reticleOrigin, p);
 		}
-
 		public override void Draw(Graphics g)
 		{
 			// Need to calculate the circle size, and the line, with the angle based on the aming reticle
-			throw new NotImplementedException();
+			cursor.Draw(g);
 		}
-
 		public override void Collided()
 		{
 			throw new NotImplementedException();
