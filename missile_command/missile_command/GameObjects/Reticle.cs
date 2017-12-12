@@ -24,7 +24,7 @@ namespace missile_command
 			sprite.Left = ori.X;
 			sprite.Top = ori.Y;
 			player = p;
-			sprite.Image = new Bitmap("cursor_8.png");
+			sprite.Image = Properties.Resources.cursor_09;
 		}
 
 		public void Draw(Graphics g)

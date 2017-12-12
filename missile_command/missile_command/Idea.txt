@@ -5,3 +5,7 @@ They need to have a destination point, I should store those static position in s
 Make the same thing as normal missle command for the ground with 3 specific spots.
 
 Iffy on dimensions. They should probably set themselves? But the factory does need to be the one MAKING it.	`
+
+########State pattern for ht reticle, (movingleft, movingright, etc.)
+Need the keypress to call a method in Player or something to chagne the state.
+State pattern for, damage, death, explode, moving, etc on bombs.

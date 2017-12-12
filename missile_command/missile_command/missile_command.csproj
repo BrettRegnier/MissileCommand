@@ -36,22 +36,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.DirectX, Version=1.0.2902.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Windows\Microsoft.NET\DirectX for Managed Code\1.0.2902.0\Microsoft.DirectX.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.DirectX.Direct3D, Version=1.0.2902.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Windows\Microsoft.NET\DirectX for Managed Code\1.0.2902.0\Microsoft.DirectX.Direct3D.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.DirectX.Direct3DX, Version=1.0.2909.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Windows\Microsoft.NET\DirectX for Managed Code\1.0.2902.0\Microsoft.DirectX.Direct3DX.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.DirectX.DirectDraw, Version=1.0.2902.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Windows\Microsoft.NET\DirectX for Managed Code\1.0.2902.0\Microsoft.DirectX.DirectDraw.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -85,7 +69,7 @@
       <DependentUpon>GameForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -110,6 +94,26 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Idea.txt" />
+    <None Include="Resources\SpaceShip_R_4.png" />
+    <None Include="Resources\SpaceShip_R_3.png" />
+    <None Include="Resources\SpaceShip_R_2.png" />
+    <None Include="Resources\SpaceShip_R_1.png" />
+    <None Include="Resources\SpaceShip_L_4.png" />
+    <None Include="Resources\SpaceShip_L_3.png" />
+    <None Include="Resources\SpaceShip_L_2.png" />
+    <None Include="Resources\SpaceShip_L_1.png" />
+    <None Include="Resources\cursor_11.png" />
+    <None Include="Resources\cursor_10.png" />
+    <None Include="Resources\cursor_09.png" />
+    <None Include="Resources\cursor_08.png" />
+    <None Include="Resources\cursor_07.png" />
+    <None Include="Resources\cursor_06.png" />
+    <None Include="Resources\cursor_05.png" />
+    <None Include="Resources\cursor_04.png" />
+    <None Include="Resources\cursor_03.png" />
+    <None Include="Resources\cursor_02.png" />
+    <None Include="Resources\cursor_01.png" />
+    <None Include="Resources\cursor_00.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

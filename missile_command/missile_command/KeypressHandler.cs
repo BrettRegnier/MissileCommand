@@ -9,7 +9,7 @@ namespace missile_command
 {
 	class KeypressHandler
 	{
-		enum KPress
+		private enum KPress
 		{
 			NONE = 0,
 			UP = 1,
@@ -19,24 +19,26 @@ namespace missile_command
 			SHOOT = 16
 		};
 
-		private KPress P1 = KPress.NONE;
+		private KPress pPress = KPress.NONE;
+		private bool isKeyDown = false;
+		private Player player;
+		private PType type;
 
-		private bool isKeyDownP1 = false;
-		private bool isKeyDownP2 = false;
-		private bool isKeyDownP3 = false;
-		private bool isKeyDownP4 = false;
+		public KeypressHandler(Player p)
+		{
+			player = p;
 
+			// Load key configs
+		}
 		private void MoveCursor()
 		{
-
+			player.MoveReticle();
 		}
-
-		public static void KeyDown(KeyEventArgs e)
+		public void KeyDown(KeyEventArgs e)
 		{
 
 		}
-
-		public static void KeyUp(KeyEventArgs e)
+		public void KeyUp(KeyEventArgs e)
 		{
 
 		}

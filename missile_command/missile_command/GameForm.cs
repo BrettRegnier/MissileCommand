@@ -23,6 +23,7 @@ namespace missile_command
 		private int fps = 0, frames = 0;
 		private long tickCount = Environment.TickCount;
 		private long elapsedTime = Environment.TickCount;
+		int test = 0;
 
 		List<List<GameObject>> objectLists = new List<List<GameObject>>();
 
@@ -94,6 +95,12 @@ namespace missile_command
 				}
 				frames++;
 
+				if (test < 1)
+				{
+					e.Graphics.DrawEllipse(new Pen(Color.Blue), new Rectangle(50, 50, 50, 50));
+					test++;
+				}
+
 				// Update after drawing
 				Loop();
 			}
@@ -124,6 +131,7 @@ namespace missile_command
 
 		private void GameForm_KeyUp(object sender, KeyEventArgs e)
 		{
+			KeypressHandler.KeyDown(e);
 		}
 
 		private void DestroyGameObject(ListType lt, GameObject gameObject)
