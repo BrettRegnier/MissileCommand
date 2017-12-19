@@ -126,12 +126,12 @@ namespace missile_command
 
 		private void GameForm_KeyDown(object sender, KeyEventArgs e)
 		{
-			KeypressHandler.KeyDown(e);
+			//KeypressHandler.KeyDown(e);
 		}
 
 		private void GameForm_KeyUp(object sender, KeyEventArgs e)
 		{
-			KeypressHandler.KeyDown(e);
+			//KeypressHandler.KeyDown(e);
 		}
 
 		private void DestroyGameObject(ListType lt, GameObject gameObject)

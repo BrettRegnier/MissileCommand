@@ -20,14 +20,14 @@ namespace Missile_Command___Final
 
         #region Fields
 
-        private static List<PictureBox> CursorList = new List<PictureBox>();
+        private static List<PictureBox> cursorList = new List<PictureBox>();
         private PictureBox mainImage = new PictureBox();
         private int playerNum = 0;
-        private PlayerSettings PSettings;
+        private PlayerSettings pSettings;
 
         private enum KPress
         {
-            none = 0,
+            NONE = 0,
             up = 1,
             right = 2,
             down = 4,
@@ -44,8 +44,8 @@ namespace Missile_Command___Final
             {
                 for (int i = 0; i < 12; i++)
                 {
-                    CursorList.Add(new PictureBox());
-                    CursorList[CursorList.Count - 1].Image = new Bitmap("cursor_" + i.ToString() + ".png");
+                    cursorList.Add(new PictureBox());
+                    cursorList[cursorList.Count - 1].Image = new Bitmap("cursor_" + i.ToString() + ".png");
                 }
             }
             catch
@@ -59,18 +59,18 @@ namespace Missile_Command___Final
         /// </summary>
         public Cursor(int originX, int originY, int PlayerNum, PlayerSettings playerSettings)
         {
-            PSettings = playerSettings;
+            pSettings = playerSettings;
 
             this.playerNum = PlayerNum;
 
             if (PlayerNum == 0)
-                mainImage.Image = CursorList[PSettings.P1Index].Image;
+                mainImage.Image = cursorList[pSettings.P1Index].Image;
             if (PlayerNum == 1)
-                mainImage.Image = CursorList[PSettings.P2Index].Image;
+                mainImage.Image = cursorList[pSettings.P2Index].Image;
             if (PlayerNum == 2)
-                mainImage.Image = CursorList[PSettings.P3Index].Image;
+                mainImage.Image = cursorList[pSettings.P3Index].Image;
             if (PlayerNum == 3)
-                mainImage.Image = CursorList[PSettings.P4Index].Image;
+                mainImage.Image = cursorList[pSettings.P4Index].Image;
 
             mainImage.SizeMode = PictureBoxSizeMode.AutoSize;
 

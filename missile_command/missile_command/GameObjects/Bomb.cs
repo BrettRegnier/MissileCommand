@@ -20,7 +20,7 @@ namespace missile_command
 		private int explosionSize = 200;
 		private int explosionRadius;
 		private int radius = 5; // TODO REMOVE MAGIC NUMBER
-		private float speed = 20f; // TODO REMOVE MAGIC NUMBER
+		private float speed = 30f; // TODO REMOVE MAGIC NUMBER
 		private PointF velocity;
 
 		private bool atDestination = false;
@@ -38,6 +38,7 @@ namespace missile_command
 			destination = des;
 
 			// TODO replace magic numbers
+			// TODO add line tracing
 			circle = new Rectangle(pos.X, pos.Y, 10, 10);
 			newX = pos.X;
 			newY = pos.Y;
