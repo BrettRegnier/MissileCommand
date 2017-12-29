@@ -12,12 +12,19 @@ namespace missile_command
 		PLAYER3 = 3,
 		PLAYER4 = 4,
 		SYSTEM = 5
-	}
+	};
 	public enum ListType
 	{
 		E_BOMB,
 		P_BOMB,
 		PLAYER
+	};
+	public enum Direction
+	{
+		UP = 0,
+		RIGHT = 1,
+		DOWN = 2,
+		LEFT = 3
 	};
 	public class Dimension
 	{

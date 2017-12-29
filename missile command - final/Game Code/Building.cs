@@ -293,7 +293,7 @@ namespace Missile_Command___Final
         public void TurretCalc(int CursorX, int CursorY)
         {
             // 5 offset from the origin not the top left point,
-            cursorPX = CursorX - (int)OriginPoint.X + 5;
+            cursorPX = CursorX - OriginPoint.X + 5;
             cursorPY = (int)OriginPoint.Y - CursorY + 5;
 
             turretAngle = (Math.Atan((double)cursorPY / (double)cursorPX));

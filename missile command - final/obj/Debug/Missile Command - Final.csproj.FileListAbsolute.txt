@@ -126,3 +126,18 @@ D:\_code\C#\missile_command\Missile Command - Final\obj\Debug\Missile_Command___
 D:\_code\C#\missile_command\Missile Command - Final\obj\Debug\Missile_Command___Final.Properties.Resources.resources
 D:\_code\C#\missile_command\Missile Command - Final\obj\Debug\Missile Command - Final.csproj.GenerateResource.Cache
 D:\_code\C#\missile_command\Missile Command - Final\obj\Debug\Missile Command - Final.csproj.CoreCompileInputs.cache
+C:\Data\_code\C#\missile_command\Missile Command - Final\bin\Debug\Missile Command - Final.exe.config
+C:\Data\_code\C#\missile_command\Missile Command - Final\bin\Debug\Missile Command - Final.exe
+C:\Data\_code\C#\missile_command\Missile Command - Final\bin\Debug\Missile Command - Final.pdb
+C:\Data\_code\C#\missile_command\Missile Command - Final\obj\Debug\Missile Command - Final.csprojResolveAssemblyReference.cache
+C:\Data\_code\C#\missile_command\Missile Command - Final\obj\Debug\Missile_Command___Final.Form1.resources
+C:\Data\_code\C#\missile_command\Missile Command - Final\obj\Debug\Missile_Command___Final.GameForm.resources
+C:\Data\_code\C#\missile_command\Missile Command - Final\obj\Debug\Missile_Command___Final.GameSettingsForm.resources
+C:\Data\_code\C#\missile_command\Missile Command - Final\obj\Debug\Missile_Command___Final.HighscoreForm.resources
+C:\Data\_code\C#\missile_command\Missile Command - Final\obj\Debug\Missile_Command___Final.HowToPlayForm.resources
+C:\Data\_code\C#\missile_command\Missile Command - Final\obj\Debug\Missile_Command___Final.MainMenuForm.resources
+C:\Data\_code\C#\missile_command\Missile Command - Final\obj\Debug\Missile_Command___Final.Properties.Resources.resources
+C:\Data\_code\C#\missile_command\Missile Command - Final\obj\Debug\Missile Command - Final.csproj.GenerateResource.Cache
+C:\Data\_code\C#\missile_command\Missile Command - Final\obj\Debug\Missile Command - Final.csproj.CoreCompileInputs.cache
+C:\Data\_code\C#\missile_command\Missile Command - Final\obj\Debug\Missile Command - Final.exe
+C:\Data\_code\C#\missile_command\Missile Command - Final\obj\Debug\Missile Command - Final.pdb

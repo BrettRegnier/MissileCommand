@@ -19,19 +19,18 @@ namespace missile_command
 		};
 
 		private static Config instance;
-		private Color p1Color;
-		private Color p2Color;
-		private Color p3Color;
-		private Color p4Color;
+
+		private List<Color> lPColor = new List<Color>();
+		private List<List<Keys>> lPKeys = new List<List<Keys>>();
 		
 		// TODO figure out how to select the image for a cursor, maybe a string that will load it?
-
+		// TODO Pretty much this whole class.
+		// TODO decide on how many players... leaning towards 3
 		public Config()
 		{
 			LoadColorConfig();
 			LoadPlayerKeys();
 		}
-
 		public static Config Instance()
 		{
 			if (instance == null)
@@ -39,7 +38,6 @@ namespace missile_command
 
 			return instance;
 		}
-
 		public Color GetPlayerColor(PType p)
 		{
 			Color color = Color.Black;
@@ -62,6 +60,10 @@ namespace missile_command
 					break;
 			}
 			return color;
+		}
+		public List<Keys> GetPlayerKeySet()
+		{
+			throw new NotImplementedException();
 		}
 		private void LoadColorConfig()
 		{

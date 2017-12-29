@@ -23,7 +23,6 @@ namespace missile_command
 		private int fps = 0, frames = 0;
 		private long tickCount = Environment.TickCount;
 		private long elapsedTime = Environment.TickCount;
-		int test = 0;
 
 		List<List<GameObject>> objectLists = new List<List<GameObject>>();
 
@@ -36,6 +35,8 @@ namespace missile_command
 		private void Main()
 		{
 			InitGame();
+			CreatePlayers();
+			this.Invalidate(); // Start the game.
 		}
 		private void InitGame()
 		{
@@ -55,11 +56,18 @@ namespace missile_command
 
 			for (int i = 0; i < 3; i++)
 				objectLists.Add(new List<GameObject>());
-
+		}
+		private void CreatePlayers()
+		{
 			// Make players.... 
-			// TODO make players objects.
+			// TODO make logic for creating players objects.
+			List<Player> pl = new List<Player>();
 			Point ori = new Point(200, 200);
-			objectLists[(int)ListType.PLAYER].Add(GameObjectFactory.MakePlayer(ori, PType.PLAYER1));
+			Player p = GameObjectFactory.MakePlayer(ori, PType.PLAYER1);
+			objectLists[(int)ListType.PLAYER].Add(p);
+			pl.Add(p);
+
+			KeypressHandler.Instance().Initialize(pl);
 		}
 		private void Loop()
 		{
@@ -95,11 +103,8 @@ namespace missile_command
 				}
 				frames++;
 
-				if (test < 1)
-				{
-					e.Graphics.DrawEllipse(new Pen(Color.Blue), new Rectangle(50, 50, 50, 50));
-					test++;
-				}
+				Player.DrawBase(e.Graphics);
+				KeypressHandler.Instance().MoveCursor();
 
 				// Update after drawing
 				Loop();
@@ -126,12 +131,12 @@ namespace missile_command
 
 		private void GameForm_KeyDown(object sender, KeyEventArgs e)
 		{
-			//KeypressHandler.KeyDown(e);
+			KeypressHandler.Instance().KeyDown(e);
 		}
 
 		private void GameForm_KeyUp(object sender, KeyEventArgs e)
 		{
-			//KeypressHandler.KeyDown(e);
+			KeypressHandler.Instance().KeyUp(e);
 		}
 
 		private void DestroyGameObject(ListType lt, GameObject gameObject)
