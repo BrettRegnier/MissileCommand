@@ -48,6 +48,10 @@ namespace missile_command
 
 			explosionRadius = explosionSize / 2;
 		}
+		protected override void Collided()
+		{
+			PositionExplosion();
+		}
 		private void Move()
 		{
 			if (!atDestination)
@@ -75,10 +79,6 @@ namespace missile_command
 				}
 			}
 		}
-		private void Collide()
-		{
-			throw new NotImplementedException();
-		}
 		private void ExplosionCalc()
 		{
 			throw new NotImplementedException();
@@ -93,8 +93,8 @@ namespace missile_command
 		private void CalculateVelocity()
 		{
 			// Difference between the origin and where it will hit.
-			double diffX = Position.X - destination.X;
-			double diffY = Position.Y - destination.Y;
+			double diffX = bPosition.X - destination.X;
+			double diffY = bPosition.Y - destination.Y;
 			double tanAngle = 0; //Trajectory angle
 
 			tanAngle = Math.Atan(diffY / diffX); //Gets the Tangent Angle 
@@ -102,7 +102,7 @@ namespace missile_command
 			velocity.X = speed * (float)Math.Cos(tanAngle);
 			velocity.Y = speed * (float)Math.Sin(tanAngle);
 
-			if (destination.X < Position.X)
+			if (destination.X < bPosition.X)
 			{
 				velocity.X *= -1.0F;
 				velocity.Y *= -1.0F;
@@ -110,7 +110,7 @@ namespace missile_command
 		}
 		private void SetColor()
 		{
-			Color color = Config.Instance().GetPlayerColor(player);
+			Color color = Config.Instance().GetPlayerColor(bPlayer);
 			brush = new SolidBrush(color);
 			pen = new Pen(color);
 		}
@@ -140,17 +140,19 @@ namespace missile_command
 				if (flashCount == 16)
 				{
 					ListType t = ListType.E_BOMB;
-					if (player != 0)
+					if (bPlayer != 0)
 						t = ListType.P_BOMB;
 					DestroyBomb(t, this);
 				}
 			}
 		}
-		public override void Collided()
+		public override void DetectCollision(GameObject collider)
 		{
-			PositionExplosion();
+			throw new NotImplementedException();
 		}
 
+		public override Point GetPosition() { return new Point(circle.X, circle.Y); }
+		public override Dimension GetDimension() { throw new NotImplementedException(); }
 		public int GetWidth { get { return circle.Width; } }
 		public int GetHeight { get { return circle.Height; } }
 		public int GetX { get { return circle.X; } }

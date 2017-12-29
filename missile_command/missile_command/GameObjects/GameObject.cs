@@ -5,29 +5,31 @@ using System.Text;
 
 namespace missile_command
 {
-    interface IGameObject
-    {
-        Point Position { get; set; }
-        Dimension Dimensions { get; set; }
+	// TODO add needed public methods for the width, position, 
+	interface IGameObject
+	{
+		void Draw(Graphics g);
+		void DetectCollision(GameObject collider);
+		Point GetPosition();
+		Dimension GetDimension();
+	}
 
-        void Draw(Graphics g);
-        void Collided();
-    }
+	abstract class GameObject : IGameObject
+	{
+		protected PType bPlayer;
+		protected Point bPosition;
+		protected Dimension bDimension;
 
-    abstract class GameObject : IGameObject
-    {
-        protected PType player;
+		public GameObject(Point pos, PType p)
+		{
+			bPosition = pos;
+			bPlayer = p;
+		}
 
-        public Point Position { get; set; }
-        public Dimension Dimensions { get; set; }
-
-        public GameObject(Point pos, PType p)
-        {
-            Position = pos;
-            player = p;
-        }
-
-        public abstract void Draw(Graphics g);
-        public abstract void Collided();
-    }
+		protected abstract void Collided();
+		public abstract void Draw(Graphics g);
+		public abstract void DetectCollision(GameObject collider);
+		public abstract Point GetPosition();
+		public abstract Dimension GetDimension();
+	}
 }

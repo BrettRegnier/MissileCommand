@@ -73,7 +73,7 @@ namespace missile_command
 			// TODO maybe need to pass in a player type.
 			Bomb b = GameObjectFactory.MakeBomb(origin, destination, PType.PLAYER1);
 			b.DestroyBomb += DestroyGameObject;
-			objectLists[(int)PType.PLAYER1].Add(b);
+			objectLists[(int)ObjectType.BOMB].Add(b);
 		}
 		private void Loop()
 		{
@@ -107,6 +107,9 @@ namespace missile_command
 						objectLists[i][j].Draw(e.Graphics);
 					}
 				}
+				CollisionDetection();
+
+
 				frames++;
 
 				Player.DrawBase(e.Graphics);
@@ -117,6 +120,19 @@ namespace missile_command
 			}
 			catch (Exception ex)
 			{
+			}
+		}
+		private void CollisionDetection()
+		{
+			for (int i = 0; i < objectLists.Count; i++)
+			{
+				for (int j = 0; j < objectLists[i].Count; j++)
+				{
+					for (int k = 0; k < objectLists[i].Count; k++)
+					{
+						
+					}
+				}
 			}
 		}
 		private void SpawnEnemies()

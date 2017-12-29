@@ -13,6 +13,12 @@ namespace missile_command
 		PLAYER4 = 4,
 		SYSTEM = 5
 	};
+	public enum ObjectType
+	{
+		BOMB = 0,
+		PLAYER = 1,
+		NPO
+	};
 	public enum ListType
 	{
 		E_BOMB,

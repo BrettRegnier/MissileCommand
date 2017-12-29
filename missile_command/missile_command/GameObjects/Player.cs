@@ -8,6 +8,7 @@ namespace missile_command
 {
 	class Player : GameObject
 	{
+		// TODO Add ammo
 		public delegate void Fire(Point origin, Point destination);
 		public event Fire TurretShoot;
 
@@ -63,9 +64,14 @@ namespace missile_command
 		}
 		public Player(Point pos, PType p) : base(pos, p)
 		{
+			Dimensions = new Dimension(turretRadius, turretRadius);
 			numPlayers++;
 			cursor = new Reticle(new Point(lOrigin[1].X, 200), p, bounds);
 			TurretCalculation();
+		}
+		protected override void Collided()
+		{
+			throw new NotImplementedException();
 		}
 		public override void Draw(Graphics g)
 		{
@@ -79,10 +85,6 @@ namespace missile_command
 				g.DrawEllipse(pen, towers[i]);
 				g.DrawLine(pen, lOrigin[i], lTurretEnd[i]);
 			}
-		}
-		public override void Collided()
-		{
-			throw new NotImplementedException();
 		}
 		public void MoveReticle(Direction dir)
 		{
@@ -110,13 +112,12 @@ namespace missile_command
 				coolingDownCount = 0;
 			}
 		}
-		public PType GetPType
+		public override void DetectCollision(GameObject collider)
 		{
-			get
-			{
-				return player;
-			}
+			throw new NotImplementedException();
 		}
+		public PType GetPType() { return bPlayer; }
+		public static List<Point> TowerPositions() { return lOrigin; }
 
 		private void TurretCalculation()
 		{
