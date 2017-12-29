@@ -33,7 +33,7 @@ namespace missile_command
 		private int flashCount = 0;
 		private int destroyCount = 0;
 
-		public Bomb(Point pos, Point des, Dimension dim, PType p) : base(pos, p)
+		public Bomb(Point pos, Point des, PType p) : base(pos, p)
 		{
 			destination = des;
 

@@ -14,9 +14,6 @@ namespace missile_command
 	{
 		// TODO make wave game mode
 
-		// This is needed because the bounds point 1920x1080 is the upper left corner of an object.
-		private const int SCREEN_OFFSET = 5;
-
 		private Random rand = new Random();
 		private Point gameBounds;
 
@@ -32,6 +29,7 @@ namespace missile_command
 			InitializeComponent();
 			Main();
 		}
+
 		private void Main()
 		{
 			InitGame();
@@ -52,7 +50,7 @@ namespace missile_command
 			int height = Screen.PrimaryScreen.Bounds.Height;
 			int width = Screen.PrimaryScreen.Bounds.Width;
 			ClientSize = new Size(width, height);
-			gameBounds = new Point(width - SCREEN_OFFSET, height - SCREEN_OFFSET);
+			gameBounds = new Point(width - Utils.SCREEN_OFFSET, height - Utils.SCREEN_OFFSET);
 
 			for (int i = 0; i < 3; i++)
 				objectLists.Add(new List<GameObject>());
@@ -64,10 +62,18 @@ namespace missile_command
 			List<Player> pl = new List<Player>();
 			Point ori = new Point(200, 200);
 			Player p = GameObjectFactory.MakePlayer(ori, PType.PLAYER1);
+			p.TurretShoot += P_TurretShoot;
 			objectLists[(int)ListType.PLAYER].Add(p);
 			pl.Add(p);
 
 			KeypressHandler.Instance().Initialize(pl);
+		}
+		private void P_TurretShoot(Point origin, Point destination)
+		{
+			// TODO maybe need to pass in a player type.
+			Bomb b = GameObjectFactory.MakeBomb(origin, destination, PType.PLAYER1);
+			b.DestroyBomb += DestroyGameObject;
+			objectLists[(int)PType.PLAYER1].Add(b);
 		}
 		private void Loop()
 		{
@@ -111,7 +117,6 @@ namespace missile_command
 			}
 			catch (Exception ex)
 			{
-				Close();
 			}
 		}
 		private void SpawnEnemies()
@@ -122,23 +127,19 @@ namespace missile_command
 				Point spawnPoint = new Point(rand.Next(0, gameBounds.X), 0);
 				// TODO make a list of guaranteed points
 				Point destination = new Point(rand.Next(0, gameBounds.X), gameBounds.Y);
-				Dimension bombSize = new Dimension(10, 10);
-				Bomb bmb = GameObjectFactory.MakeBomb(spawnPoint, destination, bombSize, PType.ENEMY);
+				Bomb bmb = GameObjectFactory.MakeBomb(spawnPoint, destination, PType.ENEMY);
 				bmb.DestroyBomb += DestroyGameObject;
 				objectLists[(int)ListType.E_BOMB].Add(bmb);
 			}
 		}
-
 		private void GameForm_KeyDown(object sender, KeyEventArgs e)
 		{
 			KeypressHandler.Instance().KeyDown(e);
 		}
-
 		private void GameForm_KeyUp(object sender, KeyEventArgs e)
 		{
 			KeypressHandler.Instance().KeyUp(e);
 		}
-
 		private void DestroyGameObject(ListType lt, GameObject gameObject)
 		{
 			objectLists[(int)lt].Remove(gameObject);

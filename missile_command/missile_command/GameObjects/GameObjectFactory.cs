@@ -7,9 +7,9 @@ namespace missile_command
 {
 	class GameObjectFactory
 	{
-		public static Bomb MakeBomb(Point ori, Point des, Dimension dim, PType p)
+		public static Bomb MakeBomb(Point ori, Point des, PType p)
 		{
-			return new Bomb(ori, des, dim, p);
+			return new Bomb(ori, des, p);
 		}
 		public static Player MakePlayer(Point ori, PType p)
 		{

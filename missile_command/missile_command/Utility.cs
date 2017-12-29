@@ -37,4 +37,9 @@ namespace missile_command
 			Height = h;
 		}
 	}
+	public static class Utils
+	{
+		public const int SCREEN_OFFSET = 5;
+		public const int GAME_BOUND_OFFSET = 100;
+	}
 }

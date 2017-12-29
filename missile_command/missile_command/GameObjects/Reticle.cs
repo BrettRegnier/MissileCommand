@@ -49,10 +49,10 @@ namespace missile_command
 						sprite.Left = bounds.X - CURSOR_DIMENSION;
 					break;
 				case Direction.DOWN:
-					if (sprite.Top + MOVE_VAL + CURSOR_DIMENSION < bounds.Y)
+					if (sprite.Top + MOVE_VAL + CURSOR_DIMENSION < bounds.Y - Utils.GAME_BOUND_OFFSET)
 						sprite.Top += MOVE_VAL;
 					else
-						sprite.Top = bounds.Y - CURSOR_DIMENSION;
+						sprite.Top = bounds.Y - (CURSOR_DIMENSION + Utils.GAME_BOUND_OFFSET);
 					break;
 				case Direction.LEFT:
 					if (sprite.Left - MOVE_VAL > 0)
