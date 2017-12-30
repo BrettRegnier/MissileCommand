@@ -17,16 +17,14 @@ namespace missile_command
 		#region Fields
 		private PType player;
 		private PictureBox sprite = new PictureBox();
-		private Point bounds;
 		#endregion
 
-		public Reticle(Point ori, PType p, Point bound)
+		public Reticle(Point ori, PType p)
 		{
-			sprite.Left = ori.X;
+			sprite.Left = ori.X - CURSOR_OFFSET;
 			sprite.Top = ori.Y;
 			player = p;
 			sprite.Image = Properties.Resources.cursor_09;
-			bounds = bound;
 		}
 		public void Draw(Graphics g)
 		{
@@ -36,6 +34,7 @@ namespace missile_command
 		{
 			switch (dir)
 			{
+				//TODO maybe move into its own collision detection?
 				case Direction.UP:
 					if (sprite.Top - MOVE_VAL > 0)
 						sprite.Top -= MOVE_VAL;
@@ -43,16 +42,16 @@ namespace missile_command
 						sprite.Top = 0;
 					break;
 				case Direction.RIGHT:
-					if (sprite.Left + MOVE_VAL + CURSOR_DIMENSION < bounds.X)
+					if (sprite.Left + MOVE_VAL + CURSOR_DIMENSION < Utils.gameBounds.Width)
 						sprite.Left += MOVE_VAL;
 					else
-						sprite.Left = bounds.X - CURSOR_DIMENSION;
+						sprite.Left = Utils.gameBounds.Width - CURSOR_DIMENSION;
 					break;
 				case Direction.DOWN:
-					if (sprite.Top + MOVE_VAL + CURSOR_DIMENSION < bounds.Y - Utils.GAME_BOUND_OFFSET)
+					if (sprite.Top + MOVE_VAL + CURSOR_DIMENSION < Utils.gameBounds.Height - Utils.RETICLE_BOUNDS_OFFSET)
 						sprite.Top += MOVE_VAL;
 					else
-						sprite.Top = bounds.Y - (CURSOR_DIMENSION + Utils.GAME_BOUND_OFFSET);
+						sprite.Top = Utils.gameBounds.Height - (CURSOR_DIMENSION + Utils.RETICLE_BOUNDS_OFFSET);
 					break;
 				case Direction.LEFT:
 					if (sprite.Left - MOVE_VAL > 0)

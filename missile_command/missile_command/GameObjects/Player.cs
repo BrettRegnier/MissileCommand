@@ -6,99 +6,56 @@ using System.Windows.Forms;
 
 namespace missile_command
 {
-	class Player : GameObject
+	// TODO take player out of gameobjects, it isn't one, it controls gameobjects but isn't a gameobject
+	class Player
 	{
+		// TODO make turret into its own class and add them to a player.
+		// TODO move delegates to turret
 		// TODO Add ammo
-		public delegate void Fire(Point origin, Point destination);
-		public event Fire TurretShoot;
+
+		private List<Turret> lTurrets = new List<Turret>();
 
 		private Reticle cursor;
+		private PType pType;
+		private Account player;
+
 		private int fireCount = 0;
 		private int coolingDownCount = 0;
 		private bool coolingDown = false;
 
-		// TODO perhaps remove the number of players I dont know if I want to have more than one player
-		private static int numPlayers = 0;
-		private static int turretRadius = 100;
-		private static Pen pen;
-		private static Point bounds;
-		private static List<Point> lTurretEnd = new List<Point>();
-		private static List<Point> lOrigin = new List<Point>();
-		private static List<Rectangle> towers = new List<Rectangle>();
-
-		static Player()
+		public Player(Point pos, PType p, Account ap)
 		{
-			int width = Screen.PrimaryScreen.Bounds.Width - Utils.SCREEN_OFFSET;
-			int height = Screen.PrimaryScreen.Bounds.Height - Utils.SCREEN_OFFSET;
-			bounds = new Point(width, height);
-			Rectangle leftTower = new Rectangle(
-				turretRadius / 2,
-				bounds.Y - turretRadius / 2,
-				turretRadius,
-				turretRadius
-				);
-			Rectangle middleTower = new Rectangle(
-				bounds.X / 2 - turretRadius / 2,
-				bounds.Y - turretRadius / 2,
-				turretRadius,
-				turretRadius
-				);
-			Rectangle rightTower = new Rectangle(
-				bounds.X - 150,
-				bounds.Y - turretRadius / 2,
-				turretRadius,
-				turretRadius
-				);
-			towers.Add(leftTower);
-			towers.Add(middleTower);
-			towers.Add(rightTower);
-
-			lOrigin.Add(new Point(turretRadius, bounds.Y));
-			lOrigin.Add(new Point(bounds.X / 2, bounds.Y));
-			lOrigin.Add(new Point(bounds.X - 100, bounds.Y));
-
-			for (int i = 0; i < 3; i++)
-				lTurretEnd.Add(new Point());
-
-			pen = new Pen(Config.Instance().GetPlayerColor(PType.PLAYER1));
+			cursor = new Reticle(new Point(Utils.gameBounds.Width/2, 200), p);
+			pType = p;
+			player = ap;
 		}
-		public Player(Point pos, PType p) : base(pos, p)
+		public void AttachTurret(Turret t)
 		{
-			Dimensions = new Dimension(turretRadius, turretRadius);
-			numPlayers++;
-			cursor = new Reticle(new Point(lOrigin[1].X, 200), p, bounds);
-			TurretCalculation();
+			lTurrets.Add(t);
+			t.TurretCalculation(cursor.CenterPosition());
 		}
-		protected override void Collided()
+		public void Draw(Graphics g)
 		{
-			throw new NotImplementedException();
-		}
-		public override void Draw(Graphics g)
-		{
-			// Need to calculate the circle size, and the line, with the angle based on the aiming reticle
+			// TODO maybe add statistics into drawing just like cursors.
 			cursor.Draw(g);
-		}
-		public static void DrawBase(Graphics g)
-		{
-			for (int i = 0; i < towers.Count; i++)
-			{
-				g.DrawEllipse(pen, towers[i]);
-				g.DrawLine(pen, lOrigin[i], lTurretEnd[i]);
-			}
 		}
 		public void MoveReticle(Direction dir)
 		{
 			Point newPoint = cursor.Move(dir);
-			TurretCalculation();
+			for (int i = 0; i < lTurrets.Count; i++)
+				lTurrets[i].TurretCalculation(cursor.CenterPosition());
 		}
 		public void Shoot()
 		{
 			if (coolingDown == false)
 			{
-				if (fireCount > 2)
+				// TODO add logic to shoot from a tower based on the position of the cursor, if its closer
+				// it should fire first, if ammo is 0 then the next closest should fire.
+				if (fireCount == lTurrets.Count)
 					fireCount = 0;
 
-				TurretShoot(lTurretEnd[fireCount++], cursor.CenterPosition());
+				// TODO add logic for destroyed turrets
+				lTurrets[fireCount++].ShootTurret(cursor.CenterPosition());
 				coolingDown = true;
 			}
 			else
@@ -112,38 +69,6 @@ namespace missile_command
 				coolingDownCount = 0;
 			}
 		}
-		public override void DetectCollision(GameObject collider)
-		{
-			throw new NotImplementedException();
-		}
-		public PType GetPType() { return bPlayer; }
-		public static List<Point> TowerPositions() { return lOrigin; }
-
-		private void TurretCalculation()
-		{
-			for (int i = 0; i < lTurretEnd.Count; i++)
-			{
-				int cursorTowerDiffX = cursor.CenterPosition().X - lOrigin[i].X + 2;
-				int cursorTowerDiffY = lOrigin[i].Y - cursor.CenterPosition().Y + 5;
-				int turretDistance = turretRadius / 2;
-
-				double turretAngle = Math.Atan((double)cursorTowerDiffY / (double)cursorTowerDiffX);
-				int turretX;
-				int turretY;
-
-				if (turretAngle > 0)
-				{
-					turretX = (int)(((Math.Cos(turretAngle) * turretDistance)) + lOrigin[i].X);
-					turretY = (int)(lOrigin[i].Y - (Math.Sin(turretAngle) * turretDistance));
-				}
-				else
-				{
-					turretX = (int)(((Math.Cos(turretAngle) * turretDistance) * -1) + lOrigin[i].X);
-					turretY = (int)(lOrigin[i].Y - (Math.Sin(turretAngle) * turretDistance) * -1);
-				}
-
-				lTurretEnd[i] = new Point(turretX, turretY);
-			}
-		}
+		public Account GetAccount() { return player; }
 	}
 }

@@ -7,13 +7,13 @@ namespace missile_command
 {
 	class GameObjectFactory
 	{
-		public static Bomb MakeBomb(Point ori, Point des, PType p)
+		public static Bomb MakeBomb(Point ori, Point des, PType p, Account a)
 		{
-			return new Bomb(ori, des, p);
+			return new Bomb(ori, des, p, a);
 		}
-		public static Player MakePlayer(Point ori, PType p)
+		public static Turret MakeTurret(Point ori, PType p, Account a)
 		{
-			return new Player(ori, p);
+			return new Turret(ori, p, a);
 		}
 	}
 }

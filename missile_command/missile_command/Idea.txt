@@ -1,11 +1,9 @@
-﻿Replace destination and find another way, perhaps they need to calculate it itself. Since it should be randomly shot at the ground
-but also needs to consistently hit player objects on the ground.
+﻿// TODO Make the same thing as normal missle command for the ground with 3 specific spots.
+// TODO State pattern for, damage, death, explode, moving, etc on gameobjects. 
 
-They need to have a destination point, I should store those static position in something.... STATIC... hint.
-Make the same thing as normal missle command for the ground with 3 specific spots.
-
-Iffy on dimensions. They should probably set themselves? But the factory does need to be the one MAKING it.	`
-
-########State pattern for ht reticle, (movingleft, movingright, etc.)
-Need the keypress to call a method in Player or something to chagne the state.
-State pattern for, damage, death, explode, moving, etc on bombs.
+////////
+Make new old missile command repo in git
+Move files from this folder to the new one
+Upload
+Delete the old missile command from this project
+Delete mercurial repo

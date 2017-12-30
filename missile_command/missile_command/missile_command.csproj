@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameObjects\Building.cs" />
     <Compile Include="GameObjects\GameObjectFactory.cs" />
     <Compile Include="GameForm.cs">
       <SubType>Form</SubType>
@@ -59,8 +60,10 @@
     </Compile>
     <Compile Include="GameObjects\Bomb.cs" />
     <Compile Include="GameObjects\GameObject.cs" />
+    <Compile Include="LandMass.cs" />
     <Compile Include="GameObjects\Player.cs" />
     <Compile Include="GameObjects\Reticle.cs" />
+    <Compile Include="GameObjects\Turret.cs" />
     <Compile Include="KeypressHandler.cs" />
     <Compile Include="Utility.cs" />
     <Compile Include="Program.cs" />

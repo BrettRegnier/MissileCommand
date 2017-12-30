@@ -1,30 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace missile_command
+﻿namespace missile_command
 {
 	public enum PType
 	{
 		ENEMY = 0,
-		PLAYER1 = 1,
-		PLAYER2 = 2,
-		PLAYER3 = 3,
-		PLAYER4 = 4,
-		SYSTEM = 5
+		PLAYER = 1
 	};
-	public enum ObjectType
+	public enum Account
 	{
-		BOMB = 0,
-		PLAYER = 1,
-		NPO
-	};
-	public enum ListType
-	{
-		E_BOMB,
-		P_BOMB,
-		PLAYER
-	};
+		ENEMY,
+		P1,
+		P2,
+		P3,
+		SYSTEM
+	}
 	public enum Direction
 	{
 		UP = 0,
@@ -34,8 +22,8 @@ namespace missile_command
 	};
 	public class Dimension
 	{
-		int Width { get; set; }
-		int Height { get; set; }
+		public int Width { get; set; }
+		public int Height { get; set; }
 
 		public Dimension(int w, int h)
 		{
@@ -45,7 +33,12 @@ namespace missile_command
 	}
 	public static class Utils
 	{
+		// landmass + 100
+		public const int RETICLE_BOUNDS_OFFSET = 150;
+		public const int LAND_MASS_SIZE = 50;
 		public const int SCREEN_OFFSET = 5;
-		public const int GAME_BOUND_OFFSET = 100;
+		public static Dimension gameBounds = new Dimension(
+			System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width - Utils.SCREEN_OFFSET,
+			System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height - Utils.SCREEN_OFFSET);
 	}
 }

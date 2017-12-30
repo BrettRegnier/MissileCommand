@@ -9,27 +9,28 @@ namespace missile_command
 	interface IGameObject
 	{
 		void Draw(Graphics g);
-		void DetectCollision(GameObject collider);
+		void Collided();
 		Point GetPosition();
 		Dimension GetDimension();
 	}
 
 	abstract class GameObject : IGameObject
 	{
-		protected PType bPlayer;
-		protected Point bPosition;
-		protected Dimension bDimension;
+		protected PType pType;
+		protected Point origin;
+		protected Account account;
 
-		public GameObject(Point pos, PType p)
+		public GameObject(Point pos, PType p, Account a)
 		{
-			bPosition = pos;
-			bPlayer = p;
+			origin = pos;
+			pType = p;
+			account = a;
 		}
-
-		protected abstract void Collided();
+		
 		public abstract void Draw(Graphics g);
-		public abstract void DetectCollision(GameObject collider);
+		public abstract void Collided();
 		public abstract Point GetPosition();
 		public abstract Dimension GetDimension();
+		public abstract PType GetPlayerType();
 	}
 }

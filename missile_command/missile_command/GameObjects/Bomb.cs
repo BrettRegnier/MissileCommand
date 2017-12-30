@@ -11,16 +11,16 @@ namespace missile_command
 		private const int CURSOR_OFFSET = 5;
 
 		#region Delegates
-		public delegate void Deconstruct(ListType lt, GameObject bomb);
+		public delegate void Deconstruct(GameObject bomb);
 		public event Deconstruct DestroyBomb;
 		#endregion
 
 		// TODO add some sort of config based settings
 		private Rectangle circle;
-		private int explosionSize = 200;
+		private int explosionSize = 100;
 		private int explosionRadius;
-		private int radius = 5; // TODO REMOVE MAGIC NUMBER
-		private float speed = 30f; // TODO REMOVE MAGIC NUMBER
+		private int radius = 4; // TODO REMOVE MAGIC NUMBER
+		private float speed = 5f; // TODO REMOVE MAGIC NUMBER
 		private PointF velocity;
 
 		private bool atDestination = false;
@@ -33,24 +33,25 @@ namespace missile_command
 		private int flashCount = 0;
 		private int destroyCount = 0;
 
-		public Bomb(Point pos, Point des, PType p) : base(pos, p)
+		public Bomb(Point pos, Point des, PType p, Account a) : base(pos, p, a)
 		{
-			destination = des;
-
 			// TODO replace magic numbers
 			// TODO add line tracing
-			circle = new Rectangle(pos.X, pos.Y, 10, 10);
-			newX = pos.X;
-			newY = pos.Y;
+			destination = des;
+
+			circle = new Rectangle(origin.X, origin.Y, radius, radius);
+			explosionRadius = explosionSize / 2;
+
+			newX = origin.X;
+			newY = origin.Y;
 
 			SetColor();
 			CalculateVelocity();
-
-			explosionRadius = explosionSize / 2;
 		}
-		protected override void Collided()
+		public override void Collided()
 		{
-			PositionExplosion();
+			if (!atDestination)
+				PositionExplosion();
 		}
 		private void Move()
 		{
@@ -79,22 +80,21 @@ namespace missile_command
 				}
 			}
 		}
-		private void ExplosionCalc()
-		{
-			throw new NotImplementedException();
-		}
 		private void PositionExplosion()
 		{
-			int meanCoorindates = ((explosionSize / 2) - Convert.ToInt32(CURSOR_OFFSET));
+			int meanCoorindates = ((explosionSize / 2) - Convert.ToInt32(CURSOR_OFFSET) / 2);
 			circle.X = circle.X - meanCoorindates;
 			circle.Y = circle.Y - meanCoorindates;
+			circle.Width = explosionSize;
+			circle.Height = explosionSize;
+
 			atDestination = true;
 		}
 		private void CalculateVelocity()
 		{
 			// Difference between the origin and where it will hit.
-			double diffX = bPosition.X - destination.X;
-			double diffY = bPosition.Y - destination.Y;
+			double diffX = circle.X - destination.X;
+			double diffY = circle.Y - destination.Y;
 			double tanAngle = 0; //Trajectory angle
 
 			tanAngle = Math.Atan(diffY / diffX); //Gets the Tangent Angle 
@@ -102,7 +102,7 @@ namespace missile_command
 			velocity.X = speed * (float)Math.Cos(tanAngle);
 			velocity.Y = speed * (float)Math.Sin(tanAngle);
 
-			if (destination.X < bPosition.X)
+			if (destination.X <= circle.X)
 			{
 				velocity.X *= -1.0F;
 				velocity.Y *= -1.0F;
@@ -110,7 +110,7 @@ namespace missile_command
 		}
 		private void SetColor()
 		{
-			Color color = Config.Instance().GetPlayerColor(bPlayer);
+			Color color = Config.Instance().GetPlayerColor(account);
 			brush = new SolidBrush(color);
 			pen = new Pen(color);
 		}
@@ -119,13 +119,10 @@ namespace missile_command
 			Move();
 			if (!atDestination)
 			{
-				g.FillEllipse(brush, circle); // Might draw into a line or a smaller circle.
+				g.FillEllipse(brush, circle);
 			}
 			else
 			{
-				circle.Width = explosionSize;
-				circle.Height = explosionSize;
-
 				if (explosionFlash)
 					g.DrawEllipse(pen, circle);
 				else
@@ -139,25 +136,14 @@ namespace missile_command
 				}
 				if (flashCount == 16)
 				{
-					ListType t = ListType.E_BOMB;
-					if (bPlayer != 0)
-						t = ListType.P_BOMB;
-					DestroyBomb(t, this);
+					DestroyBomb(this);
 				}
 			}
-		}
-		public override void DetectCollision(GameObject collider)
-		{
-			throw new NotImplementedException();
+			g.DrawLine(pen, origin.X, origin.Y, circle.X + circle.Width / 2, circle.Y + circle.Height / 2);
 		}
 
 		public override Point GetPosition() { return new Point(circle.X, circle.Y); }
-		public override Dimension GetDimension() { throw new NotImplementedException(); }
-		public int GetWidth { get { return circle.Width; } }
-		public int GetHeight { get { return circle.Height; } }
-		public int GetX { get { return circle.X; } }
-		public int GetY { get { return circle.Y; } }
-		public Point GetCenter { get { return new Point(circle.X + (circle.Width / 2), circle.Y + (circle.Height / 2)); } }
-		public int GetRadius { get { return radius; } }
+		public override Dimension GetDimension() { return new Dimension(circle.Width, circle.Height); }
+		public override PType GetPlayerType() { return pType; }
 	}
 }

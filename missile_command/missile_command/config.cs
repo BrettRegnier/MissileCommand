@@ -38,25 +38,22 @@ namespace missile_command
 
 			return instance;
 		}
-		public Color GetPlayerColor(PType p)
+		public Color GetPlayerColor(Account p)
 		{
 			Color color = Color.Black;
 			switch (p)
 			{
-				case (PType.ENEMY):
+				case (Account.ENEMY):
 					color = Color.White;
 					break;
-				case (PType.PLAYER1):
+				case (Account.P1):
 					color = Color.Green;
 					break;
-				case (PType.PLAYER2):
+				case (Account.P2):
 					color = Color.Blue;
 					break;
-				case (PType.PLAYER3):
+				case (Account.P3):
 					color = Color.Yellow;
-					break;
-				case (PType.PLAYER4):
-					color = Color.Red;
 					break;
 			}
 			return color;
