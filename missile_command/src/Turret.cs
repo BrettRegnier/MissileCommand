@@ -15,8 +15,7 @@ namespace missile_command
 		public delegate void Fire(Point origin, Point destination, Account a);
 		public event Fire TurretShoot;
 
-		private const int TURRET_RADIUS = 50;
-		private const int GUN_END = 5;
+		private const int GUN_END_LENGTH = 5;
 
 		private static int turretCount = 0;
 		// TODO use a static constant position for all towers in the config
@@ -28,24 +27,26 @@ namespace missile_command
 
 		static Turret()
 		{
-			Point middleTower = new Point(Utils.gameBounds.Width / 2 - TURRET_RADIUS / 2, Utils.gameBounds.Height - TURRET_RADIUS / 2);
-			Point leftTower = new Point(TURRET_RADIUS / 2, Utils.gameBounds.Height - TURRET_RADIUS / 2);
-			Point rightTower = new Point(Utils.gameBounds.Width - (TURRET_RADIUS + TURRET_RADIUS /2), Utils.gameBounds.Height - TURRET_RADIUS / 2);
+			int tRadius = Config.Instance().TowerSize().Width;
+			Point middleTower = new Point(Utils.gameBounds.Width / 2 - tRadius / 2, Utils.gameBounds.Height - tRadius / 2);
+			Point leftTower = new Point(tRadius / 2, Utils.gameBounds.Height - tRadius / 2);
+			Point rightTower = new Point(Utils.gameBounds.Width - (tRadius + tRadius /2), Utils.gameBounds.Height - tRadius / 2);
 			lTurretPos.Add(middleTower);
 			lTurretPos.Add(leftTower);
 			lTurretPos.Add(rightTower);
 		}
-		public Turret(Point pos, PType p, Account a) : base(pos, p, a)
+		public Turret(Point pos, Size d, PType p, Account a) :  base(pos, d, p, a)
 		{
+			int tRadius = Config.Instance().TowerSize().Width;
 			//TODO replace this logic with static positions from config
 			tower = new Rectangle(
 				lTurretPos[turretCount].X,
 				lTurretPos[turretCount].Y,
-				TURRET_RADIUS,
-				TURRET_RADIUS
+				tRadius,
+				tRadius
 				);
 			// TODO Gross
-			origin = new Point(lTurretPos[turretCount].X + TURRET_RADIUS / 2, lTurretPos[turretCount].Y + TURRET_RADIUS / 2);
+			UpdatePosition(lTurretPos[turretCount].X + tRadius / 2, lTurretPos[turretCount].Y + tRadius / 2);
 
 			pen = new Pen(Config.Instance().GetPlayerColor(a));
 			turretCount++;
@@ -57,13 +58,13 @@ namespace missile_command
 		public override void Draw(Graphics g)
 		{
 			g.DrawEllipse(pen, tower);
-			g.DrawLine(pen, origin, turretEnd);
+			g.DrawLine(pen, position, turretEnd);
 		}
 		public void TurretCalculation(Point aim)
 		{
-			int cursorTowerDiffX = aim.X - origin.X + 2;
-			int cursorTowerDiffY = origin.Y - aim.Y + 5;
-			int turretDistance = TURRET_RADIUS / 2 + GUN_END;
+			int cursorTowerDiffX = aim.X - position.X + 2;
+			int cursorTowerDiffY = position.Y - aim.Y + 5;
+			int turretDistance = Config.Instance().TowerSize().Width / 2 + GUN_END_LENGTH;
 
 			double turretAngle = Math.Atan((double)cursorTowerDiffY / (double)cursorTowerDiffX);
 			int turretX;
@@ -71,13 +72,13 @@ namespace missile_command
 
 			if (turretAngle > 0)
 			{
-				turretX = (int)(((Math.Cos(turretAngle) * turretDistance)) + origin.X);
-				turretY = (int)(origin.Y - (Math.Sin(turretAngle) * turretDistance));
+				turretX = (int)(((Math.Cos(turretAngle) * turretDistance)) + position.X);
+				turretY = (int)(position.Y - (Math.Sin(turretAngle) * turretDistance));
 			}
 			else
 			{
-				turretX = (int)(((Math.Cos(turretAngle) * turretDistance) * -1) + origin.X);
-				turretY = (int)(origin.Y - (Math.Sin(turretAngle) * turretDistance) * -1);
+				turretX = (int)(((Math.Cos(turretAngle) * turretDistance) * -1) + position.X);
+				turretY = (int)(position.Y - (Math.Sin(turretAngle) * turretDistance) * -1);
 			}
 
 			turretEnd = new Point(turretX, turretY);
@@ -86,9 +87,7 @@ namespace missile_command
 		{
 			TurretShoot(turretEnd, destination, account);
 		}
-
-		public override Dimension GetDimension() { return new Dimension(TURRET_RADIUS, TURRET_RADIUS); }
+		
 		public override PType GetPlayerType() { return pType; }
-		public override Point GetPosition() { return new Point(tower.X, tower.Y); }
 	}
 }

@@ -9,7 +9,7 @@ namespace missile_command
 {
 	class Building : GameObject
 	{
-		public Building(Point pos, PType p, Account a) : base(pos, p, a)
+		public Building(Point pos, Size d, PType p, Account a) : base(pos, d, p, a)
 		{
 
 		}
@@ -21,15 +21,7 @@ namespace missile_command
 		{
 			throw new NotImplementedException();
 		}
-		public override Dimension GetDimension()
-		{
-			throw new NotImplementedException();
-		}
 		public override PType GetPlayerType()
-		{
-			throw new NotImplementedException();
-		}
-		public override Point GetPosition()
 		{
 			throw new NotImplementedException();
 		}

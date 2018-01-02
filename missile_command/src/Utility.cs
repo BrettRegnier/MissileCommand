@@ -20,25 +20,18 @@
 		DOWN = 2,
 		LEFT = 3
 	};
-	public class Dimension
-	{
-		public int Width { get; set; }
-		public int Height { get; set; }
-
-		public Dimension(int w, int h)
-		{
-			Width = w;
-			Height = h;
-		}
-	}
 	public static class Utils
 	{
-		// landmass + 100
-		public const int RETICLE_BOUNDS_OFFSET = 150;
+		// landmass + 100 + hill height
+		public const int RETICLE_BOUNDS_OFFSET = LAND_MASS_SIZE + HILL_MASS_HEIGHT + 100;
 		public const int LAND_MASS_SIZE = 50;
-		public const int SCREEN_OFFSET = 5;
-		public static Dimension gameBounds = new Dimension(
+		public const int HILL_MASS_WIDTH = 10;
+		public const int HILL_MASS_HEIGHT = 10;
+		public const int SCREEN_OFFSET = 0;
+
+		public static System.Drawing.Size gameBounds = new System.Drawing.Size(
 			System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width - Utils.SCREEN_OFFSET,
 			System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height - Utils.SCREEN_OFFSET);
+		public static int[] HILL_POSITIONS_X = { 0, gameBounds.Width / 2, gameBounds.Width };
 	}
 }

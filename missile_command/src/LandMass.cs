@@ -7,22 +7,17 @@ using System.Threading.Tasks;
 
 namespace missile_command
 {
-	class LandMass
+	class LandMass : Entity
 	{
 		private Rectangle land;
 		private SolidBrush brush;
 
-		public LandMass()
+		public LandMass(Point o, Size d) : base(o, d)
 		{
-			int x = 0;
-			int y = Utils.gameBounds.Height - Utils.LAND_MASS_SIZE;
-			Point position = new Point(x, y);
-			int width = Utils.gameBounds.Width;
-			int height = Utils.LAND_MASS_SIZE;
-			Size size = new Size(width, height);
+			// adjust the origin for the height, good ole microsoft windows and stuff
+			UpdatePosition(position.X, position.Y - (dimension.Height - 5));
 
-			land = new Rectangle(position, size);
-
+			land = new Rectangle(position, dimension);
 			brush = new SolidBrush(Config.Instance().GetPlayerColor(Account.SYSTEM));
 		}
 		public void Draw(Graphics g)

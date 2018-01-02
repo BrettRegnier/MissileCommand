@@ -20,6 +20,7 @@ namespace missile_command
 		private long elapsedTime = Environment.TickCount;
 
 		LandMass lm;
+		List<LandMass> lHill;
 		List<GameObject> lObject;
 		List<Player> lPlayer;
 
@@ -54,7 +55,18 @@ namespace missile_command
 		}
 		private void InitGame()
 		{
-			lm = new LandMass(); 
+			// Create landmasses
+			Point baseLand = new Point(0, Utils.gameBounds.Height);
+			Size baseSize = new Size(Utils.gameBounds.Width, Utils.LAND_MASS_SIZE);
+			lm = new LandMass(baseLand, baseSize);
+
+			lHill = new List<LandMass>();
+			for (int i = 0; i < 3; i++)
+			{
+				Point p = new Point(Utils.HILL_POSITIONS_X[i], lm.TopLeft().Y);
+				lHill.Add(new LandMass(p, new Size(Utils.HILL_MASS_WIDTH, Utils.HILL_MASS_HEIGHT)));
+			}
+
 			lObject = new List<GameObject>();
 			lPlayer = new List<Player>();
 		}
@@ -85,19 +97,14 @@ namespace missile_command
 				else if (numPlayers == 3)
 					currentPlayer = lPlayer[i];
 
-				Turret t = GameObjectFactory.MakeTurret(new Point(0, 0), PType.PLAYER, currentPlayer.GetAccount());
+				Size size = Config.Instance().TowerSize();
+				Turret t = GameObjectFactory.MakeTurret(new Point(), size, PType.PLAYER, currentPlayer.GetAccount());
 				t.TurretShoot += P_TurretShoot;
 				lObject.Add(t);
 				currentPlayer.AttachTurret(t);
 			}
 
 			KeypressHandler.Instance().Initialize(lPlayer);
-		}
-		private void P_TurretShoot(Point origin, Point destination, Account a)
-		{
-			Bomb b = GameObjectFactory.MakeBomb(origin, destination, PType.PLAYER, a);
-			b.DestroyBomb += DestroyGameObject;
-			lObject.Add(b);
 		}
 		private void Loop()
 		{
@@ -130,6 +137,10 @@ namespace missile_command
 				for (int i = 0; i < lPlayer.Count; i++)
 					lPlayer[i].Draw(e.Graphics);
 				CollisionDetector();
+
+				lm.Draw(e.Graphics);
+				for (int i = 0; i < lHill.Count; i++)
+					lHill[i].Draw(e.Graphics);
 
 				frames++;
 				KeypressHandler.Instance().MoveCursor();
@@ -167,18 +178,27 @@ namespace missile_command
 		}
 		private bool CheckCollision(GameObject collider, GameObject collidee)
 		{
+			// TODO maybe make specific calculations in this?
 			// If this was viewed as a square,
 			// the way to view it is checks in this order of collider right, left, bottom, top
-			if (collider.GetPosition().X + collider.GetDimension().Width < collidee.GetPosition().X)
+			if (collider.TopRight().X < collidee.TopLeft().X)
 				return false;
-			if (collidee.GetPosition().X + collidee.GetDimension().Width < collider.GetPosition().X)
+			if (collidee.TopRight().X < collider.TopLeft().X)
 				return false;
-			if (collider.GetPosition().Y + collider.GetDimension().Height < collidee.GetPosition().Y)
+			if (collider.BottomLeft().Y < collidee.TopLeft().Y)
 				return false;
-			if (collidee.GetPosition().Y + collidee.GetDimension().Height < collider.GetPosition().Y)
+			if (collidee.BottomLeft().Y < collider.TopLeft().Y)
 				return false;
 
 			return true;
+		}
+		private void P_TurretShoot(Point origin, Point destination, Account a)
+		{
+			// use player upgrades, if I add them, to determine the size.
+			Size size = Config.Instance().DefaultBombSize();
+			Bomb b = GameObjectFactory.MakeBomb(origin, size, destination, PType.PLAYER, a);
+			b.DestroyBomb += DestroyGameObject;
+			lObject.Add(b);
 		}
 		private void SpawnEnemies()
 		{
@@ -188,7 +208,8 @@ namespace missile_command
 				Point spawnPoint = new Point(rand.Next(0, Utils.gameBounds.Width), 0);
 				// TODO make a list of guaranteed points
 				Point destination = new Point(rand.Next(0, Utils.gameBounds.Width), Utils.gameBounds.Height);
-				Bomb bmb = GameObjectFactory.MakeBomb(spawnPoint, destination, PType.ENEMY, Account.ENEMY);
+				Size size = Config.Instance().DefaultBombSize();
+				Bomb bmb = GameObjectFactory.MakeBomb(spawnPoint, size, destination, PType.ENEMY, Account.ENEMY);
 				bmb.DestroyBomb += DestroyGameObject;
 				lObject.Add(bmb);
 			}
@@ -197,28 +218,25 @@ namespace missile_command
 		{
 			Point spawnPoint = new Point(rand.Next(0, Utils.gameBounds.Width), 0);
 			Point destination = new Point(Utils.gameBounds.Width / 2, Utils.gameBounds.Height);
-			Bomb bmb = GameObjectFactory.MakeBomb(spawnPoint, destination, PType.ENEMY, Account.ENEMY);
+			Size size = Config.Instance().DefaultBombSize();
+			Bomb bmb = GameObjectFactory.MakeBomb(spawnPoint, size, destination, PType.ENEMY, Account.ENEMY);
 			bmb.DestroyBomb += DestroyGameObject;
 			lObject.Add(bmb);
 		}
 		private void MassTest()
 		{
 			for (int i = 0; i < 100; i++)
-			{
-				Point spawnPoint = new Point(rand.Next(0, Utils.gameBounds.Width), 0);
-				Point destination = new Point(Utils.gameBounds.Width / 2, Utils.gameBounds.Height);
-				Bomb bmb = GameObjectFactory.MakeBomb(spawnPoint, destination, PType.ENEMY, Account.ENEMY);
-				bmb.DestroyBomb += DestroyGameObject;
-				lObject.Add(bmb);
-			}
+				SpawnTest();
 		}
 		private void GameForm_KeyDown(object sender, KeyEventArgs e)
 		{
 			KeypressHandler.Instance().KeyDown(e);
 			if (e.KeyCode == Keys.H)
 				SpawnTest();
-			if (e.KeyCode == Keys.J)
+			else if (e.KeyCode == Keys.J)
 				MassTest();
+			else if (e.KeyCode == Keys.Escape)
+				this.Close();
 		}
 		private void GameForm_KeyUp(object sender, KeyEventArgs e)
 		{

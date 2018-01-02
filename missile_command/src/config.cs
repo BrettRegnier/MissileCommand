@@ -9,6 +9,7 @@ namespace missile_command
 	// Singleton class.
 	public class Config
 	{
+
 		private struct KeyConfig
 		{
 			Keys up;
@@ -19,15 +20,19 @@ namespace missile_command
 		};
 
 		private static Config instance;
-
-		private List<Color> lPColor = new List<Color>();
-		private List<List<Keys>> lPKeys = new List<List<Keys>>();
 		
+		private List<List<Keys>> lPKeys = new List<List<Keys>>();
+		private List<Color> lAccountColors;
+		// Remove magic numbers
+		private int bombRadius = 4;
+		private int turretRadius = 50;
+
 		// TODO figure out how to select the image for a cursor, maybe a string that will load it?
 		// TODO Pretty much this whole class.
 		// TODO decide on how many players... leaning towards 3
 		public Config()
 		{
+			LoadBasicConfig();
 			LoadColorConfig();
 			LoadPlayerKeys();
 		}
@@ -40,31 +45,34 @@ namespace missile_command
 		}
 		public Color GetPlayerColor(Account p)
 		{
-			Color color = Color.Black;
-			switch (p)
-			{
-				case (Account.ENEMY):
-					color = Color.White;
-					break;
-				case (Account.P1):
-					color = Color.Green;
-					break;
-				case (Account.P2):
-					color = Color.Blue;
-					break;
-				case (Account.P3):
-					color = Color.Yellow;
-					break;
-			}
-			return color;
+			int index = (int)p;
+			return lAccountColors[index];
 		}
 		public List<Keys> GetPlayerKeySet()
 		{
 			throw new NotImplementedException();
 		}
-		private void LoadColorConfig()
+		public Size DefaultBombSize()
+		{
+			return new Size(bombRadius, bombRadius);
+		}
+		public Size TowerSize()
+		{
+			return new Size(turretRadius, turretRadius);
+		}
+		private void LoadBasicConfig()
 		{
 
+		}
+		private void LoadColorConfig()
+		{
+			// TODO load config
+			lAccountColors = new List<Color>();
+			lAccountColors.Add(Color.White);
+			lAccountColors.Add(Color.LightGreen);
+			lAccountColors.Add(Color.Blue);
+			lAccountColors.Add(Color.Yellow);
+			lAccountColors.Add(Color.White);
 		}
 		private void LoadPlayerKeys()
 		{
