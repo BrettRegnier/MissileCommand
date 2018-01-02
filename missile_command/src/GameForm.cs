@@ -57,7 +57,7 @@ namespace missile_command
 		{
 			// Create landmasses
 			Point baseLand = new Point(0, Utils.gameBounds.Height);
-			Size baseSize = new Size(Utils.gameBounds.Width, Utils.LAND_MASS_SIZE);
+			 Size baseSize = new Size(Utils.gameBounds.Width, Utils.LAND_MASS_SIZE);
 			lm = new LandMass(baseLand, baseSize);
 
 			lHill = new List<LandMass>();
@@ -98,7 +98,7 @@ namespace missile_command
 					currentPlayer = lPlayer[i];
 
 				Size size = Config.Instance().TowerSize();
-				Turret t = GameObjectFactory.MakeTurret(new Point(), size, PType.PLAYER, currentPlayer.GetAccount());
+				Turret t = GameObjectFactory.MakeTurret(lHill[i].TopMiddle(), size, PType.PLAYER, currentPlayer.GetAccount());
 				t.TurretShoot += P_TurretShoot;
 				lObject.Add(t);
 				currentPlayer.AttachTurret(t);
@@ -155,6 +155,7 @@ namespace missile_command
 		}
 		private void CollisionDetector()
 		{
+			// TODO collisions for the ground and buildings
 			for (int i = 0; i < lObject.Count; i++)
 			{
 				for (int j = 0; j < lObject.Count; j++)

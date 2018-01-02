@@ -20,11 +20,13 @@ namespace missile_command
 		};
 
 		private static Config instance;
-		
+
 		private List<List<Keys>> lPKeys = new List<List<Keys>>();
 		private List<Color> lAccountColors;
-		// Remove magic numbers
+		// TODO Remove magic numbers
 		private int bombRadius = 4;
+		private float bombSpeed = 4f;
+		private int explosionSize = 100;
 		private int turretRadius = 50;
 
 		// TODO figure out how to select the image for a cursor, maybe a string that will load it?
@@ -52,14 +54,12 @@ namespace missile_command
 		{
 			throw new NotImplementedException();
 		}
-		public Size DefaultBombSize()
-		{
-			return new Size(bombRadius, bombRadius);
-		}
-		public Size TowerSize()
-		{
-			return new Size(turretRadius, turretRadius);
-		}
+
+		public Size DefaultBombSize() { return new Size(bombRadius, bombRadius); }
+		public int DefaultExplosionSize() { return explosionSize; }
+		public float DefaultBombSpeed() { return bombSpeed; }
+		public Size TowerSize() { return new Size(turretRadius, turretRadius); }
+
 		private void LoadBasicConfig()
 		{
 

@@ -17,9 +17,7 @@ namespace missile_command
 
 		// TODO add some sort of config based settings
 		private Rectangle circle;
-		private int explosionSize = 100;
 		private int explosionRadius;
-		private float speed = 5f; // TODO REMOVE MAGIC NUMBER
 		private PointF velocity;
 
 		private bool atDestination = false;
@@ -35,14 +33,13 @@ namespace missile_command
 
 		public Bomb(Point o, Size d, Point des, PType p, Account a) : base(o, d, p, a)
 		{
-			// TODO replace magic numbers
-			// TODO add line tracing
 			destination = des;
-			origin = o;
+			origin = position;
 
-			circle = new Rectangle(o.X, o.Y, dimension.Width, dimension.Height);
-			explosionRadius = explosionSize / 2;
-			fPoints = o;
+			UpdatePosition(position.X - dimension.Width/2, position.Y);
+			circle = new Rectangle(position.X, position.Y, dimension.Width, dimension.Height);
+			explosionRadius = Config.Instance().DefaultExplosionSize() / 2;
+			fPoints = position;
 
 			SetColor();
 			CalculateVelocity();
@@ -56,10 +53,10 @@ namespace missile_command
 		{
 			if (!atDestination)
 			{
-				float remainingDiffX = Math.Abs(destination.X - circle.X);
-				float remainingDiffY = Math.Abs(destination.Y - circle.Y);
+				float remainingDiffX = Math.Abs(destination.X - position.X);
+				float remainingDiffY = Math.Abs(destination.Y - position.Y);
 
-				if ((circle.Y != destination.Y) || (circle.X != destination.X))
+				if ((position.Y != destination.Y) || (position.X != destination.X))
 				{
 					fPoints.X += velocity.X;
 					fPoints.Y += velocity.Y;
@@ -70,7 +67,7 @@ namespace missile_command
 						fPoints.Y = destination.Y;
 					}
 
-					UpdatePosition((int)fPoints.X, (int)fPoints.Y);
+					UpdatePosition(Convert.ToInt32(fPoints.X), Convert.ToInt32(fPoints.Y));
 				}
 				else
 				{
@@ -81,6 +78,7 @@ namespace missile_command
 		private void RepositionExplosion()
 		{
 			// Reposition the bomb's point for the explosion
+			int explosionSize = Config.Instance().DefaultExplosionSize();
 			int meanCoorindates = ((explosionSize / 2) - Convert.ToInt32(CURSOR_OFFSET) / 2);
 			
 			int nX = circle.X - meanCoorindates;
@@ -95,6 +93,7 @@ namespace missile_command
 		}
 		private void CalculateVelocity()
 		{
+			float speed = Config.Instance().DefaultBombSpeed();
 			// Difference between the origin and where it will hit.
 			double diffX = circle.X - destination.X;
 			double diffY = circle.Y - destination.Y;
@@ -127,7 +126,7 @@ namespace missile_command
 		{
 			circle.Width = w;
 			circle.Height = h;
-			base.UpdatePosition(w, h);
+			base.UpdateDimension(w, h);
 		}
 		public override void Draw(Graphics g)
 		{
@@ -154,7 +153,7 @@ namespace missile_command
 					DestroyBomb(this);
 				}
 			}
-			g.DrawLine(pen, origin.X, origin.Y, circle.X + circle.Width / 2, circle.Y + circle.Height / 2);
+			g.DrawLine(pen, origin.X, origin.Y, Center().X, Center().Y);
 		}
 		
 		public override PType GetPlayerType() { return pType; }
