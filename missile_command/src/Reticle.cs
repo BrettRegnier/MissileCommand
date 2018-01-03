@@ -6,12 +6,12 @@ using System.Windows.Forms;
 
 namespace missile_command
 {
-	class Reticle
+	class Reticle : Entity
 	{
 		#region Constants
-		private const int CURSOR_DIMENSION = 9;
 		private const int CURSOR_OFFSET = 5;
 		private const int MOVE_VAL = 10;
+		public const int CURSOR_DIMENSION = 9;
 		#endregion
 
 		#region Fields
@@ -19,14 +19,14 @@ namespace missile_command
 		private PictureBox sprite = new PictureBox();
 		#endregion
 
-		public Reticle(Point ori, PType p)
+		public Reticle(Point o, PType p, ETag t, int w = CURSOR_DIMENSION, int h = CURSOR_DIMENSION) : base(o, w, h,t)
 		{
-			sprite.Left = ori.X - CURSOR_OFFSET;
-			sprite.Top = ori.Y;
-			player = p;
+			UpdatePosition(position.X - CURSOR_OFFSET, position.Y);
+			sprite.Left = o.X - CURSOR_OFFSET;
+			sprite.Top = o.Y;
 			sprite.Image = Properties.Resources.cursor_09;
 		}
-		public void Draw(Graphics g)
+		public override void Draw(Graphics g)
 		{
 			g.DrawImage(sprite.Image, new Point(sprite.Left, sprite.Top));
 		}
@@ -69,6 +69,12 @@ namespace missile_command
 			int Top = sprite.Top + CURSOR_OFFSET;
 			Point center = new Point(Left, Top);
 			return center;
+		}
+		protected override void UpdatePosition(int x, int y)
+		{
+			sprite.Left = x;
+			sprite.Top = y;
+			base.UpdatePosition(x, y);
 		}
 	}
 }

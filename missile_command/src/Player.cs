@@ -17,17 +17,17 @@ namespace missile_command
 
 		private Reticle cursor;
 		private PType pType;
-		private Account player;
+		private ETag tag;
 
 		private int fireCount = 0;
 		private int coolingDownCount = 0;
 		private bool coolingDown = false;
 
-		public Player(Point pos, PType p, Account ap)
+		public Player(Point pos, PType p, ETag a)
 		{
-			cursor = new Reticle(new Point(Utils.gameBounds.Width/2, 200), p);
+			cursor = new Reticle(new Point(Utils.gameBounds.Width/2, 200), p, a);
 			pType = p;
-			player = ap;
+			tag = a;
 		}
 		public void AttachTurret(Turret t)
 		{
@@ -69,6 +69,7 @@ namespace missile_command
 				coolingDownCount = 0;
 			}
 		}
-		public Account GetAccount() { return player; }
+		public ETag GetTag() { return tag; }
+		public PType GetPType() { return pType; }
 	}
 }

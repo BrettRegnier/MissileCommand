@@ -9,7 +9,7 @@ namespace missile_command
 {
 	class Building : GameObject
 	{
-		public Building(Point pos, Size d, PType p, Account a) : base(pos, d, p, a)
+		public Building(Point pos, Size d, PType p, ETag a) : base(pos, d, p, a)
 		{
 
 		}

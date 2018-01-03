@@ -5,7 +5,7 @@
 		ENEMY = 0,
 		PLAYER = 1
 	};
-	public enum Account
+	public enum ETag
 	{
 		ENEMY,
 		P1,

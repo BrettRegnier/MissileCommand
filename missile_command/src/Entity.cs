@@ -7,12 +7,33 @@ namespace missile_command
 	{
 		protected Point position;
 		protected Size dimension;
+		protected ETag tag;
 
-		public Entity(Point o, Size d)
+		public Entity(Point o, Size d, ETag t)
+		{
+			Initialize(o, d, t);
+		}
+		public Entity(Point o, int w, int h, ETag t)
+		{
+			Initialize(o, new Size(w, h), t);
+		}
+		public Entity(int x, int y, Size d, ETag t)
+		{
+			Initialize(new Point(x, y), d, t);
+		}
+		public Entity(int x, int y, int w, int h, ETag t)
+		{
+			Initialize(new Point(x, y), dimension = new Size(w, h), t);
+		}
+		private void Initialize(Point o, Size d, ETag t)
 		{
 			position = o;
 			dimension = d;
+			tag = t;
 		}
+
+		public abstract void Draw(Graphics g);
+
 		public Point TopLeft()
 		{
 			return position;
@@ -69,6 +90,11 @@ namespace missile_command
 		{
 			return dimension;
 		}
+		public ETag GetTag()
+		{
+			return tag;
+		}
+
 		protected virtual void UpdatePosition(int x, int y)
 		{
 			position.X = x;
@@ -78,6 +104,14 @@ namespace missile_command
 		{
 			dimension.Width = w;
 			dimension.Height = h;
+		}
+		protected virtual void UpdatePositionX(int x)
+		{
+			position.X = x;
+		}
+		protected virtual void UpdatePositionY(int y)
+		{
+			position.Y = y;
 		}
 	}
 }

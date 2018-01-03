@@ -12,7 +12,7 @@ namespace missile_command
 	// TODO make cooldown and ready state for turret, on update(draw) game will update on the cooldown
 	class Turret : GameObject
 	{
-		public delegate void Fire(Point origin, Point destination, Account a);
+		public delegate void Fire(Point origin, Point destination, ETag a);
 		public event Fire TurretShoot;
 
 		private const int GUN_END_LENGTH = 5;
@@ -21,7 +21,7 @@ namespace missile_command
 		private Rectangle tower;
 		private Point turretEnd;
 		
-		public Turret(Point o, Size d, PType p, Account a) : base(o, d, p, a)
+		public Turret(Point o, Size d, PType p, ETag a) : base(o, d, p, a)
 		{
 			int tRadius = Config.Instance().TowerSize().Width;
 			pen = new Pen(Config.Instance().GetPlayerColor(a));
@@ -66,7 +66,7 @@ namespace missile_command
 		}
 		public void ShootTurret(Point destination)
 		{
-			TurretShoot(turretEnd, destination, account);
+			TurretShoot(turretEnd, destination, tag);
 		}
 
 		public override PType GetPlayerType() { return pType; }

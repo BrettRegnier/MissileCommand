@@ -45,7 +45,7 @@ namespace missile_command
 
 			return instance;
 		}
-		public Color GetPlayerColor(Account p)
+		public Color GetPlayerColor(ETag p)
 		{
 			int index = (int)p;
 			return lAccountColors[index];

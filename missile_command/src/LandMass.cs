@@ -11,16 +11,18 @@ namespace missile_command
 	{
 		private Rectangle land;
 		private SolidBrush brush;
+		private ETag account;
 
-		public LandMass(Point o, Size d) : base(o, d)
+		public LandMass(Point o, Size d, ETag a = ETag.SYSTEM) : base(o, d, a)
 		{
 			// adjust the origin for the height, good ole microsoft windows and stuff
-			UpdatePosition(position.X, position.Y - (dimension.Height - 5));
+			UpdatePositionY(position.Y - (dimension.Height - 5));
 
 			land = new Rectangle(position, dimension);
-			brush = new SolidBrush(Config.Instance().GetPlayerColor(Account.SYSTEM));
+			brush = new SolidBrush(Config.Instance().GetPlayerColor(ETag.SYSTEM));
+			account = a;
 		}
-		public void Draw(Graphics g)
+		public override void Draw(Graphics g)
 		{
 			g.FillRectangle(brush, land);
 		}
