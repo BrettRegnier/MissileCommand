@@ -42,10 +42,10 @@ namespace missile_command
 						UpdatePositionX(Utils.gameBounds.Width - dimension.Width);
 					break;
 				case Direction.DOWN:
-					if (Bottom() + MOVE_VAL < Utils.gameBounds.Height)
+					if (Bottom() + MOVE_VAL < Utils.gameBounds.Height - Utils.STAGE_BOUND_HEIGHT)
 						MovePositionY(MOVE_VAL);
 					else
-						UpdatePositionY(Utils.gameBounds.Height - (CURSOR_DIMENSION + Utils.STAGE_BOUNDS));
+						UpdatePositionY(Utils.gameBounds.Height - (CURSOR_DIMENSION + Utils.STAGE_BOUND_HEIGHT));
 					break;
 				case Direction.LEFT:
 					if (Left() - MOVE_VAL > 0)

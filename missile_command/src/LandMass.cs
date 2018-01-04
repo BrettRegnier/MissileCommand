@@ -15,6 +15,7 @@ namespace missile_command
 
 		public LandMass(Point o, Size d, ETag a = ETag.SYSTEM) : base(o, d, a)
 		{
+			// TODO maybe for hills chop it up so that it makes a hill ish? Perhaps make a new class for it.
 			// adjust the origin for the height, good ole microsoft windows and stuff
 			UpdatePositionY(position.Y - (dimension.Height - 5));
 

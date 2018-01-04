@@ -13,12 +13,12 @@ namespace missile_command
 		{
 			pType = p;
 		}
-		public GameObject(PType p, ETag t) : base (t)
+		public GameObject(PType p, ETag t) : base(t)
 		{
 			pType = p;
 		}
 
 		public abstract void Collided();
-		public abstract PType GetPlayerType();
+		public PType GetPlayerType() { return pType; }
 	}
 }

@@ -19,6 +19,8 @@ namespace missile_command
 		private long tickCount = Environment.TickCount;
 		private long elapsedTime = Environment.TickCount;
 
+		private long score; // TODO move into score handler/UI stuff
+
 		List<GameObject> lObject;
 		List<Player> lPlayer;
 
@@ -228,6 +230,7 @@ namespace missile_command
 			Size size = Config.Instance().DefaultBombSize();
 			Bomb bmb = EntityFactory.MakeBomb(origin, size, destination, PType.PLAYER, a);
 			bmb.DestroyBomb += DestroyGameObject;
+			bmb.AddScore += AddScore;
 			lEntities[(int)bmb.GetTag()].Add(bmb);
 		}
 		private void SpawnEnemies()
@@ -241,6 +244,7 @@ namespace missile_command
 				Size size = Config.Instance().DefaultBombSize();
 				Bomb bmb = EntityFactory.MakeBomb(spawnPoint, size, destination, PType.ENEMY, missile_command.ETag.ENEMY);
 				bmb.DestroyBomb += DestroyGameObject;
+				bmb.AddScore += AddScore;
 				lEntities[(int)bmb.GetTag()].Add(bmb);
 			}
 		}
@@ -252,6 +256,7 @@ namespace missile_command
 			Size size = Config.Instance().DefaultBombSize();
 			Bomb bmb = EntityFactory.MakeBomb(spawnPoint, size, destination, PType.ENEMY, missile_command.ETag.ENEMY);
 			bmb.DestroyBomb += DestroyGameObject;
+			bmb.AddScore += AddScore;
 			lEntities[(int)bmb.GetTag()].Add(bmb);
 		}
 		private void MassTest()
@@ -276,6 +281,14 @@ namespace missile_command
 		private void DestroyGameObject(Entity gameObject)
 		{
 			lEntities[(int)gameObject.GetTag()].Remove(gameObject);
+		}
+		private void AddScore(int score)
+		{
+			this.score += score;
+		}
+		private void GameOver()
+		{
+			// TODO show gameover on screen, and a menu to enter score, quit(close), restart game
 		}
 	}
 }

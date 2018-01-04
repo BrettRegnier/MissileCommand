@@ -6,3 +6,5 @@ Perhaps seperate the draw method into a different class that is a parent object,
 while making gameobjects contain a entity?
 
 // TODO make art for cities smaller
+// TODO add deconstructors for starting the game over.
+// TODO maybe make a game controller class

@@ -11,8 +11,17 @@ namespace missile_command
 {
 	class City : GameObject
 	{
+		private enum SpriteType
+		{
+			ALIVE = 0,
+			DEAD
+		};
+
+		private bool isDestroyed;
+
 		private static List<Image> lSprite = new List<Image>();
 		private static int cityCount = 0;
+		private static int aliveCities = 0;
 
 		private Image sprite;
 
@@ -30,22 +39,32 @@ namespace missile_command
 		}
 		public City(PType p, ETag a) : base(p, a)
 		{
-			sprite = lSprite[0];
+			sprite = lSprite[(int)SpriteType.ALIVE];
 			UpdateDimension(Utils.CITY_SIZE, Utils.CITY_SIZE);
 			UpdatePositionX(Utils.CITY_POSITIONS_X[cityCount++]);
 			UpdatePositionY(Utils.gameBounds.Height - (Utils.LAND_MASS_HEIGHT + dimension.Height));
+			aliveCities++;
+			isDestroyed = false;
 		}
 		public override void Collided()
 		{
-
+			sprite = lSprite[(int)SpriteType.DEAD];
+			isDestroyed = true;
 		}
 		public override void Draw(Graphics g)
 		{
 			g.DrawImage(sprite, position);
 		}
-		public override PType GetPlayerType()
+		public override int Top()
 		{
-			throw new NotImplementedException();
+			if (isDestroyed)
+				return base.Top() + Utils.DESTROYED_CITY_SIZE_OFFSET;
+			else
+				return base.Top();
+		}
+		public static int NumCitiesAlive()
+		{
+			return aliveCities;
 		}
 	}
 }

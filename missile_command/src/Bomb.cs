@@ -12,6 +12,8 @@ namespace missile_command
 
 		public delegate void Deconstruct(Entity bomb);
 		public event Deconstruct DestroyBomb;
+		public delegate void RaisePoints(int points);
+		public event RaisePoints AddScore;
 
 		// TODO add some sort of config based settings
 		private Rectangle circle;
@@ -46,7 +48,10 @@ namespace missile_command
 		public override void Collided()
 		{
 			if (!atDestination)
+			{
 				RepositionExplosion();
+				AddScore(10); // TODO add into config, plus a calculation based on survival waves.
+			}
 		}
 		private void Move()
 		{
@@ -155,7 +160,5 @@ namespace missile_command
 				}
 			}
 		}
-
-		public override PType GetPlayerType() { return pType; }
 	}
 }

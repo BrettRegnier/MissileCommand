@@ -71,7 +71,5 @@ namespace missile_command
 		{
 			TurretShoot(turretEnd, destination, tag);
 		}
-
-		public override PType GetPlayerType() { return pType; }
 	}
 }

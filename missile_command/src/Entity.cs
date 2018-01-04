@@ -41,20 +41,20 @@ namespace missile_command
 		public Size Dimension() { return dimension; }
 		public ETag GetTag() { return tag; }
 
-		public int Left() { return position.X; }
-		public int Right() { return position.X + dimension.Width; }
-		public int Top() { return position.Y; }
-		public int Bottom() { return position.Y + dimension.Height; }
-		public int CenterX() { return position.X + dimension.Width / 2; }
-		public int CenterY() { return position.Y + dimension.Height / 2; }
-		public Point TopLeft() { return new Point(Left(), Top()); }
-		public Point TopMiddle() { return new Point(CenterX(), Top()); }
-		public Point TopRight() { return new Point(Right(), Top()); }
-		public Point BottomLeft() { return new Point(Left(), Bottom()); }
-		public Point BottomMiddle() { return new Point(CenterX(), Bottom()); }
-		public Point BottomRight() { return new Point(Right(), Bottom()); }
-		public Point MiddleLeft() { return new Point(Left(), CenterY()); }
-		public Point MiddleRight() { return new Point(Right(), CenterY()); }
+		public virtual int Left() { return position.X; }
+		public virtual int Right() { return position.X + dimension.Width; }
+		public virtual int Top() { return position.Y; }
+		public virtual int Bottom() { return position.Y + dimension.Height; }
+		public virtual int CenterX() { return position.X + dimension.Width / 2; }
+		public virtual int CenterY() { return position.Y + dimension.Height / 2; }
+		public virtual Point TopLeft() { return new Point(Left(), Top()); }
+		public virtual Point TopMiddle() { return new Point(CenterX(), Top()); }
+		public virtual Point TopRight() { return new Point(Right(), Top()); }
+		public virtual Point BottomLeft() { return new Point(Left(), Bottom()); }
+		public virtual Point BottomMiddle() { return new Point(CenterX(), Bottom()); }
+		public virtual Point BottomRight() { return new Point(Right(), Bottom()); }
+		public virtual Point MiddleLeft() { return new Point(Left(), CenterY()); }
+		public virtual Point MiddleRight() { return new Point(Right(), CenterY()); }
 		public virtual Point Center()
 		{
 			int nX = position.X + dimension.Width / 2;
