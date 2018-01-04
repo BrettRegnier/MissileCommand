@@ -98,6 +98,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Idea.txt" />
+    <None Include="res\City_1.png" />
+    <None Include="res\City_0.png" />
     <None Include="res\SpaceShip_R_4.png" />
     <None Include="res\SpaceShip_R_3.png" />
     <None Include="res\SpaceShip_R_2.png" />

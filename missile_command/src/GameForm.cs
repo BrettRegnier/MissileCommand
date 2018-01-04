@@ -62,7 +62,7 @@ namespace missile_command
 
 			// Create landmasses
 			Point baseLand = new Point(0, Utils.gameBounds.Height);
-			Size baseSize = new Size(Utils.gameBounds.Width, Utils.LAND_MASS_SIZE);
+			Size baseSize = new Size(Utils.gameBounds.Width, Utils.LAND_MASS_HEIGHT);
 			LandMass lm = new LandMass(baseLand, baseSize);
 			lEntities[(int)ETag.SYSTEM].Add(lm);
 

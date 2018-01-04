@@ -63,6 +63,26 @@ namespace missile_command.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap City_0 {
+            get {
+                object obj = ResourceManager.GetObject("City_0", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap City_1 {
+            get {
+                object obj = ResourceManager.GetObject("City_1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap cursor_00 {
             get {
                 object obj = ResourceManager.GetObject("cursor_00", resourceCulture);

@@ -8,22 +8,20 @@ namespace missile_command
 {
 	class Reticle : Entity
 	{
-		#region Constants
 		private const int CURSOR_OFFSET = 5;
 		private const int MOVE_VAL = 10;
-		public const int CURSOR_DIMENSION = 9;
-		#endregion
+		private const int CURSOR_DIMENSION = 9;
 
-		#region Fields
 		private PType player;
 		private PictureBox sprite = new PictureBox();
-		#endregion
 
 		public Reticle(Point o, PType p, ETag t, int w = CURSOR_DIMENSION, int h = CURSOR_DIMENSION) : base(o, w, h,t)
 		{
 			UpdatePosition(position.X - CURSOR_OFFSET, position.Y);
 			sprite.Left = o.X - CURSOR_OFFSET;
 			sprite.Top = o.Y;
+
+			// TODO load cursor by config
 			sprite.Image = Properties.Resources.cursor_09;
 		}
 		public override void Draw(Graphics g)

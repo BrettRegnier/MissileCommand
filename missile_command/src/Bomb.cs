@@ -9,7 +9,7 @@ namespace missile_command
 	class Bomb : GameObject
 	{
 		private const int CURSOR_OFFSET = 5;
-		
+
 		public delegate void Deconstruct(Entity bomb);
 		public event Deconstruct DestroyBomb;
 
@@ -31,11 +31,12 @@ namespace missile_command
 
 		public Bomb(Point o, Size d, Point des, PType p, ETag a) : base(o, d, p, a)
 		{
+			des.X -= dimension.Width / 2;
 			destination = des;
 			origin = position;
 
 			// Adjust the bomb so the "origin" of it is the center
-			UpdatePositionX(position.X - dimension.Width/2);
+			UpdatePositionX(position.X - dimension.Width / 2);
 			circle = new Rectangle(position.X, position.Y, dimension.Width, dimension.Height);
 			explosionRadius = Config.Instance().DefaultExplosionSize() / 2;
 			fPoints = position;
@@ -79,7 +80,7 @@ namespace missile_command
 			// Reposition the bomb's point for the explosion
 			int explosionSize = Config.Instance().DefaultExplosionSize();
 			int meanCoorindates = ((explosionSize / 2) - Convert.ToInt32(CURSOR_OFFSET) / 2);
-			
+
 			int nX = position.X - meanCoorindates;
 			int nY = position.Y - meanCoorindates;
 			int nWidth = explosionSize;
@@ -155,7 +156,7 @@ namespace missile_command
 				}
 			}
 		}
-		
+
 		public override PType GetPlayerType() { return pType; }
 	}
 }
