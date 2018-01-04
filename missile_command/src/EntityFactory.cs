@@ -5,7 +5,7 @@ using System.Text;
 
 namespace missile_command
 {
-	class GameObjectFactory
+	class EntityFactory
 	{
 		public static Bomb MakeBomb(Point o, Size d, Point des, PType p, ETag a)
 		{

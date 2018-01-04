@@ -49,7 +49,7 @@ namespace missile_command
 
 			// Maximize and hide everything else
 			StartPosition = FormStartPosition.Manual;
-			FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+			FormBorderStyle = FormBorderStyle.None;
 
 			ClientSize = new Size(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
 		}
@@ -68,8 +68,14 @@ namespace missile_command
 
 			for (int i = 0; i < 3; i++)
 			{
-				Point p = new Point(Utils.HILL_POSITIONS_X[i], lm.TopLeft().Y);
+				Point p = new Point(Utils.HILL_POSITIONS_X[i], lm.Top());
 				lEntities[(int)ETag.SYSTEM].Add(new LandMass(p, new Size(Utils.HILL_MASS_WIDTH, Utils.HILL_MASS_HEIGHT)));
+			}
+
+			for (int i =0; i < 6; i++)
+			{
+				City c = new City(PType.PLAYER, ETag.SYSTEM);
+				lEntities[(int)ETag.SYSTEM].Add(c);
 			}
 
 			lPlayer = new List<Player>();
@@ -80,11 +86,11 @@ namespace missile_command
 			{
 				Point ori = new Point((Utils.gameBounds.Width / 3) * (i + 1), 200);
 				PType pt = PType.PLAYER;
-				ETag ap = missile_command.ETag.P1;
+				ETag ap = ETag.P1;
 				if (i == 1)
-					ap = missile_command.ETag.P2;
+					ap = ETag.P2;
 				else if (i == 2)
-					ap = missile_command.ETag.P3;
+					ap = ETag.P3;
 
 				Player p = new Player(ori, pt, ap);
 				lPlayer.Add(p);
@@ -101,8 +107,8 @@ namespace missile_command
 				else if (numPlayers == 3)
 					currentPlayer = lPlayer[i];
 
-				Size size = Config.Instance().TowerSize();
-				Turret t = GameObjectFactory.MakeTurret(lEntities[(int)ETag.SYSTEM][i + 1].TopMiddle(), size, PType.PLAYER, currentPlayer.GetTag());
+				Size size = new Size(Config.Instance().TurretRadius(), Config.Instance().TurretRadius());
+				Turret t = EntityFactory.MakeTurret(lEntities[(int)ETag.SYSTEM][i + 1].TopMiddle(), size, PType.PLAYER, currentPlayer.GetTag());
 				t.TurretShoot += P_TurretShoot;
 				lEntities[(int)currentPlayer.GetTag()].Add(t);
 				currentPlayer.AttachTurret(t);
@@ -137,15 +143,6 @@ namespace missile_command
 			{
 				// TODO uncomment
 				//SpawnEnemies();
-				//for (int i = 0; i < lObject.Count; i++)
-				//	lObject[i].Draw(e.Graphics);
-				//for (int i = 0; i < lPlayer.Count; i++)
-				//	lPlayer[i].Draw(e.Graphics);
-				//CollisionDetector();
-
-				//lm.Draw(e.Graphics);
-				//for (int i = 0; i < lHill.Count; i++)
-				//	lHill[i].Draw(e.Graphics);
 
 				for (int i = 0; i < lPlayer.Count; i++)
 					lPlayer[i].Draw(e.Graphics);
@@ -229,7 +226,7 @@ namespace missile_command
 		{
 			// use player upgrades, if I add them, to determine the size.
 			Size size = Config.Instance().DefaultBombSize();
-			Bomb bmb = GameObjectFactory.MakeBomb(origin, size, destination, PType.PLAYER, a);
+			Bomb bmb = EntityFactory.MakeBomb(origin, size, destination, PType.PLAYER, a);
 			bmb.DestroyBomb += DestroyGameObject;
 			lEntities[(int)bmb.GetTag()].Add(bmb);
 		}
@@ -242,7 +239,7 @@ namespace missile_command
 				// TODO make a list of guaranteed points
 				Point destination = new Point(rand.Next(0, Utils.gameBounds.Width), Utils.gameBounds.Height);
 				Size size = Config.Instance().DefaultBombSize();
-				Bomb bmb = GameObjectFactory.MakeBomb(spawnPoint, size, destination, PType.ENEMY, missile_command.ETag.ENEMY);
+				Bomb bmb = EntityFactory.MakeBomb(spawnPoint, size, destination, PType.ENEMY, missile_command.ETag.ENEMY);
 				bmb.DestroyBomb += DestroyGameObject;
 				lEntities[(int)bmb.GetTag()].Add(bmb);
 			}
@@ -253,7 +250,7 @@ namespace missile_command
 			//Point destination = new Point(Utils.gameBounds.Width / 2, Utils.gameBounds.Height);
 			Point destination = new Point(spawnPoint.X, Utils.gameBounds.Height);
 			Size size = Config.Instance().DefaultBombSize();
-			Bomb bmb = GameObjectFactory.MakeBomb(spawnPoint, size, destination, PType.ENEMY, missile_command.ETag.ENEMY);
+			Bomb bmb = EntityFactory.MakeBomb(spawnPoint, size, destination, PType.ENEMY, missile_command.ETag.ENEMY);
 			bmb.DestroyBomb += DestroyGameObject;
 			lEntities[(int)bmb.GetTag()].Add(bmb);
 		}

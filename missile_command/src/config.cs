@@ -58,7 +58,7 @@ namespace missile_command
 		public Size DefaultBombSize() { return new Size(bombRadius, bombRadius); }
 		public int DefaultExplosionSize() { return explosionSize; }
 		public float DefaultBombSpeed() { return bombSpeed; }
-		public Size TowerSize() { return new Size(turretRadius, turretRadius); }
+		public int TurretRadius() { return turretRadius; }
 
 		private void LoadBasicConfig()
 		{

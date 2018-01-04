@@ -12,7 +12,9 @@ namespace missile_command
 	class City : GameObject
 	{
 		private static List<Image> lSprite = new List<Image>();
-		private static int buildingCount;
+		private static int cityCount = 0;
+
+		private Image sprite;
 
 		static City()
 		{
@@ -26,9 +28,12 @@ namespace missile_command
 				}
 			}
 		}
-		public City(Point pos, Size d, PType p, ETag a) : base(pos, d, p, a)
+		public City(PType p, ETag a) : base(p, a)
 		{
-
+			sprite = lSprite[0];
+			UpdateDimension(Utils.CITY_SIZE, Utils.CITY_SIZE);
+			UpdatePositionX(Utils.CITY_POSITIONS_X[cityCount++]);
+			UpdatePositionY(Utils.gameBounds.Height - (Utils.LAND_MASS_HEIGHT + dimension.Height));
 		}
 		public override void Collided()
 		{
@@ -36,7 +41,7 @@ namespace missile_command
 		}
 		public override void Draw(Graphics g)
 		{
-			throw new NotImplementedException();
+			g.DrawImage(sprite, position);
 		}
 		public override PType GetPlayerType()
 		{

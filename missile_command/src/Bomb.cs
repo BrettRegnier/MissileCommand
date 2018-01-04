@@ -31,11 +31,10 @@ namespace missile_command
 
 		public Bomb(Point o, Size d, Point des, PType p, ETag a) : base(o, d, p, a)
 		{
-			des.X -= dimension.Width / 2;
 			destination = des;
 			origin = position;
 
-			// Adjust the bomb so the "origin" of it is the center
+			// Adjust the bomb so the "origin" of it is the center 
 			UpdatePositionX(position.X - dimension.Width / 2);
 			circle = new Rectangle(position.X, position.Y, dimension.Width, dimension.Height);
 			explosionRadius = Config.Instance().DefaultExplosionSize() / 2;
@@ -79,7 +78,7 @@ namespace missile_command
 		{
 			// Reposition the bomb's point for the explosion
 			int explosionSize = Config.Instance().DefaultExplosionSize();
-			int meanCoorindates = ((explosionSize / 2) - Convert.ToInt32(CURSOR_OFFSET) / 2);
+			int meanCoorindates = ((explosionSize / 2) - (dimension.Width / 2));
 
 			int nX = position.X - meanCoorindates;
 			int nY = position.Y - meanCoorindates;

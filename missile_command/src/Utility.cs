@@ -26,7 +26,7 @@ namespace missile_command
 	{
 		//TODO hill sizes based on the screen
 		// landmass + 100 + hill height
-		public const int RETICLE_BOUNDS_OFFSET = LAND_MASS_HEIGHT + HILL_MASS_HEIGHT + 100;
+		public const int STAGE_BOUNDS = LAND_MASS_HEIGHT + HILL_MASS_HEIGHT + 100;
 		public const int LAND_MASS_HEIGHT = 50;
 		public const int HILL_MASS_WIDTH = 100;
 		public const int HILL_MASS_HEIGHT = 50;
@@ -40,12 +40,12 @@ namespace missile_command
 
 		// TODO test this
 		public static int[] CITY_POSITIONS_X = {
-			HILL_MASS_WIDTH + CITY_SIZE /2,
-			HILL_MASS_WIDTH + HILL_POSITIONS_X[1] - CITY_SIZE/2,
-			HILL_POSITIONS_X[1] - CITY_SIZE/2,
-			HILL_MASS_WIDTH + HILL_POSITIONS_X[1] + CITY_SIZE/2,
-			HILL_POSITIONS_X[1] + gameBounds.Width + CITY_SIZE/2,
-			HILL_POSITIONS_X[2] - CITY_SIZE
+			HILL_MASS_WIDTH + CITY_SIZE,
+			HILL_POSITIONS_X[1] / 2,
+			HILL_POSITIONS_X[1] - HILL_MASS_WIDTH - CITY_SIZE,
+			HILL_POSITIONS_X[1] + HILL_MASS_WIDTH + CITY_SIZE,
+			(HILL_POSITIONS_X[1] + HILL_POSITIONS_X[2]) / 2,
+			HILL_POSITIONS_X[2] - HILL_MASS_WIDTH - CITY_SIZE,
 		};
 
 

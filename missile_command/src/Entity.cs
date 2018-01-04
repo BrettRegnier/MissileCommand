@@ -25,6 +25,10 @@ namespace missile_command
 		{
 			Initialize(new Point(x, y), dimension = new Size(w, h), t);
 		}
+		public Entity(ETag t)
+		{
+			tag = t;
+		}
 		private void Initialize(Point o, Size d, ETag t)
 		{
 			position = o;
@@ -34,76 +38,39 @@ namespace missile_command
 
 		public abstract void Draw(Graphics g);
 
-		public Point TopLeft()
-		{
-			return position;
-		}
-		public Point TopMiddle()
-		{
-			int nX = position.X + dimension.Width / 2;
-			int nY = position.Y;
-			return new Point(nX, nY);
-		}
-		public Point TopRight()
-		{
-			int nX = position.X + dimension.Width;
-			int nY = position.Y;
-			return new Point(nX, nY);
-		}
-		public Point BottomLeft()
-		{
-			int nX = position.X;
-			int nY = position.Y + dimension.Height;
-			return new Point(nX, nY);
-		}
-		public Point BottomMiddle()
-		{
-			int nX = position.X + dimension.Width / 2;
-			int nY = position.Y + dimension.Height;
-			return new Point(nX, nY);
-		}
-		public Point BottomRight()
-		{
-			int nX = position.X + dimension.Width;
-			int nY = position.Y + dimension.Height;
-			return new Point(nX, nY);
-		}
-		public Point LeftMiddle()
-		{
-			int nX = position.X;
-			int nY = position.Y + dimension.Height / 2;
-			return new Point(nX, nY);
-		}
-		public Point RightMiddle()
-		{
-			int nX = position.X + dimension.Width;
-			int nY = position.Y + dimension.Height / 2;
-			return new Point(nX, nY);
-		}
-		public Point Center()
+		public Size Dimension() { return dimension; }
+		public ETag GetTag() { return tag; }
+
+		public int Left() { return position.X; }
+		public int Right() { return position.X + dimension.Width; }
+		public int Top() { return position.Y; }
+		public int Bottom() { return position.Y + dimension.Height; }
+		public int CenterX() { return position.X + dimension.Width / 2; }
+		public int CenterY() { return position.Y + dimension.Height / 2; }
+		public Point TopLeft() { return new Point(Left(), Top()); }
+		public Point TopMiddle() { return new Point(CenterX(), Top()); }
+		public Point TopRight() { return new Point(Right(), Top()); }
+		public Point BottomLeft() { return new Point(Left(), Bottom()); }
+		public Point BottomMiddle() { return new Point(CenterX(), Bottom()); }
+		public Point BottomRight() { return new Point(Right(), Bottom()); }
+		public Point MiddleLeft() { return new Point(Left(), CenterY()); }
+		public Point MiddleRight() { return new Point(Right(), CenterY()); }
+		public virtual Point Center()
 		{
 			int nX = position.X + dimension.Width / 2;
 			int nY = position.Y + dimension.Height / 2;
 			return new Point(nX, nY);
-		}
-		public Size Dimension()
-		{
-			return dimension;
-		}
-		public ETag GetTag()
-		{
-			return tag;
 		}
 
-		protected virtual void UpdatePosition(int x, int y)
-		{
-			position.X = x;
-			position.Y = y;
-		}
 		protected virtual void UpdateDimension(int w, int h)
 		{
 			dimension.Width = w;
 			dimension.Height = h;
+		}
+		protected virtual void UpdatePosition(int x, int y)
+		{
+			position.X = x;
+			position.Y = y;
 		}
 		protected virtual void UpdatePositionX(int x)
 		{
@@ -112,6 +79,19 @@ namespace missile_command
 		protected virtual void UpdatePositionY(int y)
 		{
 			position.Y = y;
+		}
+		protected virtual void MovePosition(int x, int y)
+		{
+			position.X += x;
+			position.Y += y;
+		}
+		protected virtual void MovePositionX(int x)
+		{
+			position.X += x;
+		}
+		protected virtual void MovePositionY(int y)
+		{
+			position.Y += y;
 		}
 	}
 }

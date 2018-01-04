@@ -23,12 +23,12 @@ namespace missile_command
 		
 		public Turret(Point o, Size d, PType p, ETag a) : base(o, d, p, a)
 		{
-			int tRadius = Config.Instance().TowerSize().Width;
+			int tRadius = Config.Instance().TurretRadius();
 			pen = new Pen(Config.Instance().GetPlayerColor(a));
 
 			// Move tower to left to position it in the center of the given origin
-			int nX = position.X - Config.Instance().TowerSize().Width / 2;
-			int nY = position.Y - Config.Instance().TowerSize().Height / 2;
+			int nX = position.X - Config.Instance().TurretRadius()/ 2;
+			int nY = position.Y - Config.Instance().TurretRadius() / 2;
 			UpdatePosition(nX, nY);
 			tower = new Rectangle(position, dimension);
 		}
@@ -43,24 +43,27 @@ namespace missile_command
 		}
 		public void TurretCalculation(Point aim)
 		{
-			int cursorTowerDiffX = aim.X - Center().X + 2;
-			int cursorTowerDiffY = Center().Y - aim.Y + 5;
-			int turretDistance = Config.Instance().TowerSize().Width / 2 + GUN_END_LENGTH;
+			// Difference between where we are aiming and the center of the turret
+			int cursorTowerDiffX = aim.X - Center().X;
+			int cursorTowerDiffY = Center().Y - aim.Y;
 
+			// This is the size of the line that is the gun
+			int gunLength = Config.Instance().TurretRadius() / 2 + GUN_END_LENGTH;
+
+			// Finds the adjecent tangent in radians.
 			double turretAngle = Math.Atan((double)cursorTowerDiffY / (double)cursorTowerDiffX);
-			int turretX;
-			int turretY;
 
-			if (turretAngle > 0)
+			// Find Hypotenuse, 
+			int turretX = (int)(Math.Cos(turretAngle) * gunLength);
+			int turretY = (int)(Math.Sin(turretAngle) * gunLength);
+			if (turretAngle < 0)
 			{
-				turretX = (int)(((Math.Cos(turretAngle) * turretDistance)) + Center().X);
-				turretY = (int)(Center().Y - (Math.Sin(turretAngle) * turretDistance));
+				turretX *= -1;
+				turretY *= -1;
 			}
-			else
-			{
-				turretX = (int)(((Math.Cos(turretAngle) * turretDistance) * -1) + Center().X);
-				turretY = (int)(Center().Y - (Math.Sin(turretAngle) * turretDistance) * -1);
-			}
+
+			turretX = Center().X + turretX;
+			turretY = Center().Y - turretY;
 
 			turretEnd = new Point(turretX, turretY);
 		}

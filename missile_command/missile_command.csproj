@@ -50,9 +50,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\Building.cs" />
+    <Compile Include="src\City.cs" />
     <Compile Include="src\Entity.cs" />
-    <Compile Include="src\GameObjectFactory.cs" />
+    <Compile Include="src\EntityFactory.cs" />
     <Compile Include="src\GameForm.cs">
       <SubType>Form</SubType>
     </Compile>

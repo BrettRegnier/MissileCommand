@@ -1,3 +1,8 @@
 ﻿// TODO Make the same thing as normal missle command for the ground with 3 specific spots.
 // TODO State pattern for, damage, death, explode, moving, etc on gameobjects. 
 Maybe make a collider object.
+
+Perhaps seperate the draw method into a different class that is a parent object,
+while making gameobjects contain a entity?
+
+// TODO make art for cities smaller

@@ -25,14 +25,14 @@ namespace missile_command
 
 		public Player(Point pos, PType p, ETag a)
 		{
-			cursor = new Reticle(new Point(Utils.gameBounds.Width/2, 200), p, a);
+			cursor = new Reticle(new Point(Utils.gameBounds.Width / 2, 200), p, a);
 			pType = p;
 			tag = a;
 		}
 		public void AttachTurret(Turret t)
 		{
 			lTurrets.Add(t);
-			t.TurretCalculation(cursor.CenterPosition());
+			t.TurretCalculation(cursor.Center());
 		}
 		public void Draw(Graphics g)
 		{
@@ -43,7 +43,7 @@ namespace missile_command
 		{
 			Point newPoint = cursor.Move(dir);
 			for (int i = 0; i < lTurrets.Count; i++)
-				lTurrets[i].TurretCalculation(cursor.CenterPosition());
+				lTurrets[i].TurretCalculation(cursor.Center());
 		}
 		public void Shoot()
 		{
@@ -55,7 +55,7 @@ namespace missile_command
 					fireCount = 0;
 
 				// TODO add logic for destroyed turrets
-				lTurrets[fireCount++].ShootTurret(cursor.CenterPosition());
+				lTurrets[fireCount++].ShootTurret(cursor.Center());
 				coolingDown = true;
 			}
 			else

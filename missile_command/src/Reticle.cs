@@ -12,21 +12,17 @@ namespace missile_command
 		private const int MOVE_VAL = 10;
 		private const int CURSOR_DIMENSION = 9;
 
-		private PType player;
-		private PictureBox sprite = new PictureBox();
+		private Image sprite;
 
-		public Reticle(Point o, PType p, ETag t, int w = CURSOR_DIMENSION, int h = CURSOR_DIMENSION) : base(o, w, h,t)
+		public Reticle(Point o, PType p, ETag t, int w = CURSOR_DIMENSION, int h = CURSOR_DIMENSION) : base(o, w, h, t)
 		{
 			UpdatePosition(position.X - CURSOR_OFFSET, position.Y);
-			sprite.Left = o.X - CURSOR_OFFSET;
-			sprite.Top = o.Y;
-
 			// TODO load cursor by config
-			sprite.Image = Properties.Resources.cursor_09;
+			sprite = Properties.Resources.cursor_09;
 		}
 		public override void Draw(Graphics g)
 		{
-			g.DrawImage(sprite.Image, new Point(sprite.Left, sprite.Top));
+			g.DrawImage(sprite, position);
 		}
 		public Point Move(Direction dir)
 		{
@@ -34,45 +30,36 @@ namespace missile_command
 			{
 				//TODO maybe move into its own collision detection?
 				case Direction.UP:
-					if (sprite.Top - MOVE_VAL > 0)
-						sprite.Top -= MOVE_VAL;
+					if (Top() - MOVE_VAL > 0)
+						MovePositionY(-MOVE_VAL);
 					else
-						sprite.Top = 0;
+						UpdatePositionY(0);
 					break;
 				case Direction.RIGHT:
-					if (sprite.Left + MOVE_VAL + CURSOR_DIMENSION < Utils.gameBounds.Width)
-						sprite.Left += MOVE_VAL;
+					if (Right() + MOVE_VAL < Utils.gameBounds.Width)
+						MovePositionX(MOVE_VAL);
 					else
-						sprite.Left = Utils.gameBounds.Width - CURSOR_DIMENSION;
+						UpdatePositionX(Utils.gameBounds.Width - dimension.Width);
 					break;
 				case Direction.DOWN:
-					if (sprite.Top + MOVE_VAL + CURSOR_DIMENSION < Utils.gameBounds.Height - Utils.RETICLE_BOUNDS_OFFSET)
-						sprite.Top += MOVE_VAL;
+					if (Bottom() + MOVE_VAL < Utils.gameBounds.Height)
+						MovePositionY(MOVE_VAL);
 					else
-						sprite.Top = Utils.gameBounds.Height - (CURSOR_DIMENSION + Utils.RETICLE_BOUNDS_OFFSET);
+						UpdatePositionY(Utils.gameBounds.Height - (CURSOR_DIMENSION + Utils.STAGE_BOUNDS));
 					break;
 				case Direction.LEFT:
-					if (sprite.Left - MOVE_VAL > 0)
-						sprite.Left -= MOVE_VAL;
+					if (Left() - MOVE_VAL > 0)
+						MovePositionX(-MOVE_VAL);
 					else
-						sprite.Left = 0;
+						UpdatePositionX(0);
 					break;
 			}
-			return CenterPosition();
+			return Center();
 		}
-		public Point CenterPosition()
+		public override Point Center()
 		{
-			// Returns the center of the reticle
-			int Left = sprite.Left + CURSOR_OFFSET;
-			int Top = sprite.Top + CURSOR_OFFSET;
-			Point center = new Point(Left, Top);
-			return center;
-		}
-		protected override void UpdatePosition(int x, int y)
-		{
-			sprite.Left = x;
-			sprite.Top = y;
-			base.UpdatePosition(x, y);
+			// Honestly not sure why this works the way it does, but for some reason this centers the bombs.
+			return new Point(position.X + 3, position.Y + 3);
 		}
 	}
 }
