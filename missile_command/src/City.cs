@@ -9,12 +9,12 @@ using System.Windows.Forms;
 
 namespace missile_command
 {
-	class Building : GameObject
+	class City : GameObject
 	{
 		private static List<Image> lSprite = new List<Image>();
 		private static int buildingCount;
 
-		static Building()
+		static City()
 		{
 			if (lSprite.Count == 0)
 			{
@@ -26,7 +26,7 @@ namespace missile_command
 				}
 			}
 		}
-		public Building(Point pos, Size d, PType p, ETag a) : base(pos, d, p, a)
+		public City(Point pos, Size d, PType p, ETag a) : base(pos, d, p, a)
 		{
 
 		}
