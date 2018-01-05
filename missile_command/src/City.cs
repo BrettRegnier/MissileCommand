@@ -16,14 +16,14 @@ namespace missile_command
 			ALIVE = 0,
 			DEAD
 		};
-
-		private bool isDestroyed;
-
+		
 		private static List<Image> lSprite = new List<Image>();
 		private static int cityCount = 0;
 		private static int aliveCities = 0;
 
 		private Image sprite;
+		private bool isDestroyed;
+		private Shield shield;
 
 		static City()
 		{
@@ -45,6 +45,11 @@ namespace missile_command
 			UpdatePositionY(Utils.gameBounds.Height - (Utils.LAND_MASS_HEIGHT + dimension.Height));
 			aliveCities++;
 			isDestroyed = false;
+
+			Size shieldSize = Dimension();
+			shieldSize.Width += Utils.CITY_TRUE_SIZE*2;
+			shieldSize.Height += Utils.CITY_TRUE_SIZE*2;
+			shield = new Shield(BottomLeft(), TopCenter(), shieldSize, ETag.SYSTEM);
 		}
 		public override void Collided()
 		{
@@ -54,6 +59,8 @@ namespace missile_command
 		public override void Draw(Graphics g)
 		{
 			g.DrawImage(sprite, position);
+			//g.DrawRectangle(Pens.Yellow, new Rectangle(position, dimension));
+			shield.Draw(g);
 		}
 		public override int Top()
 		{

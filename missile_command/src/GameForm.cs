@@ -53,7 +53,7 @@ namespace missile_command
 			StartPosition = FormStartPosition.Manual;
 			FormBorderStyle = FormBorderStyle.None;
 
-			ClientSize = new Size(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
+			ClientSize = Utils.gameBounds;
 		}
 		private void InitGame()
 		{
@@ -110,7 +110,7 @@ namespace missile_command
 					currentPlayer = lPlayer[i];
 
 				Size size = new Size(Config.Instance().TurretRadius(), Config.Instance().TurretRadius());
-				Turret t = EntityFactory.MakeTurret(lEntities[(int)ETag.SYSTEM][i + 1].TopMiddle(), size, PType.PLAYER, currentPlayer.GetTag());
+				Turret t = EntityFactory.MakeTurret(lEntities[(int)ETag.SYSTEM][i + 1].TopCenter(), size, PType.PLAYER, currentPlayer.GetTag());
 				t.TurretShoot += P_TurretShoot;
 				lEntities[(int)currentPlayer.GetTag()].Add(t);
 				currentPlayer.AttachTurret(t);

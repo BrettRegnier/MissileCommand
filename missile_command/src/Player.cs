@@ -61,9 +61,9 @@ namespace missile_command
 				{
 					int cycleCount = 0;
 					int curIndex = fireCount;
-					while (lTurrets[curIndex++].IsDestroyed && !noActiveTurrets)
+					while (lTurrets[curIndex].IsDestroyed && !noActiveTurrets)
 					{
-						if (curIndex >= lTurrets.Count)
+						if (++curIndex >= lTurrets.Count)
 							curIndex = 0;
 
 						if (++cycleCount >= lTurrets.Count)

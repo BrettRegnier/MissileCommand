@@ -48,13 +48,13 @@ namespace missile_command
 		public virtual int CenterX() { return position.X + dimension.Width / 2; }
 		public virtual int CenterY() { return position.Y + dimension.Height / 2; }
 		public virtual Point TopLeft() { return new Point(Left(), Top()); }
-		public virtual Point TopMiddle() { return new Point(CenterX(), Top()); }
+		public virtual Point TopCenter() { return new Point(CenterX(), Top()); }
 		public virtual Point TopRight() { return new Point(Right(), Top()); }
 		public virtual Point BottomLeft() { return new Point(Left(), Bottom()); }
-		public virtual Point BottomMiddle() { return new Point(CenterX(), Bottom()); }
+		public virtual Point BottomCenter() { return new Point(CenterX(), Bottom()); }
 		public virtual Point BottomRight() { return new Point(Right(), Bottom()); }
-		public virtual Point MiddleLeft() { return new Point(Left(), CenterY()); }
-		public virtual Point MiddleRight() { return new Point(Right(), CenterY()); }
+		public virtual Point CenterLeft() { return new Point(Left(), CenterY()); }
+		public virtual Point CenterRight() { return new Point(Right(), CenterY()); }
 		public virtual Point Center()
 		{
 			int nX = position.X + dimension.Width / 2;
