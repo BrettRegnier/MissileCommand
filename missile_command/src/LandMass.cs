@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace missile_command
 {
-	class LandMass : Entity
+	class LandMass : Body
 	{
 		private Rectangle land;
 		private SolidBrush brush;
@@ -17,9 +17,9 @@ namespace missile_command
 		{
 			// TODO maybe for hills chop it up so that it makes a hill ish? Perhaps make a new class for it.
 			// adjust the origin for the height, good ole microsoft windows and stuff
-			UpdatePositionY(position.Y - (dimension.Height - 5));
+			UpdatePositionY(Top - (Dimension.Height - 5));
 
-			land = new Rectangle(position, dimension);
+			land = new Rectangle(TopLeft, Dimension);
 			brush = new SolidBrush(Config.Instance().GetPlayerColor(ETag.SYSTEM));
 			account = a;
 		}

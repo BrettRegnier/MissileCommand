@@ -24,7 +24,7 @@ namespace missile_command
 		List<GameObject> lObject;
 		List<Player> lPlayer;
 
-		List<List<Entity>> lEntities;
+		List<List<Body>> lEntities;
 
 		// Methods
 		public GameForm()
@@ -57,10 +57,10 @@ namespace missile_command
 		}
 		private void InitGame()
 		{
-			lEntities = new List<List<Entity>>();
+			lEntities = new List<List<Body>>();
 			// 5 Types of entites based on accounts enum
 			for (int i = 0; i < 5; i++)
-				lEntities.Add(new List<Entity>());
+				lEntities.Add(new List<Body>());
 
 			// Create landmasses
 			Point baseLand = new Point(0, Utils.gameBounds.Height);
@@ -70,11 +70,11 @@ namespace missile_command
 
 			for (int i = 0; i < 3; i++)
 			{
-				Point p = new Point(Utils.HILL_POSITIONS_X[i], lm.Top());
+				Point p = new Point(Utils.HILL_POSITIONS_X[i], lm.Top);
 				lEntities[(int)ETag.SYSTEM].Add(new LandMass(p, new Size(Utils.HILL_MASS_WIDTH, Utils.HILL_MASS_HEIGHT)));
 			}
 
-			for (int i =0; i < 6; i++)
+			for (int i = 0; i < 6; i++)
 			{
 				City c = new City(PType.PLAYER, ETag.SYSTEM);
 				lEntities[(int)ETag.SYSTEM].Add(c);
@@ -110,7 +110,7 @@ namespace missile_command
 					currentPlayer = lPlayer[i];
 
 				Size size = new Size(Config.Instance().TurretRadius(), Config.Instance().TurretRadius());
-				Turret t = EntityFactory.MakeTurret(lEntities[(int)ETag.SYSTEM][i + 1].TopCenter(), size, PType.PLAYER, currentPlayer.GetTag());
+				Turret t = EntityFactory.MakeTurret(lEntities[(int)ETag.SYSTEM][i + 1].TopCenter, size, PType.PLAYER, currentPlayer.GetTag());
 				t.TurretShoot += P_TurretShoot;
 				lEntities[(int)currentPlayer.GetTag()].Add(t);
 				currentPlayer.AttachTurret(t);
@@ -208,18 +208,18 @@ namespace missile_command
 				}
 			}
 		}
-		private bool CheckCollision(Entity collider, Entity collidee)
+		private bool CheckCollision(Body collider, Body collidee)
 		{
 			// TODO maybe make specific calculations in this?
 			// If this was viewed as a square,
 			// the way to view it is checks in this order of collider right, left, bottom, top
-			if (collider.TopRight().X < collidee.TopLeft().X)
+			if (collider.Right < collidee.Left)
 				return false;
-			if (collidee.TopRight().X < collider.TopLeft().X)
+			if (collidee.Right < collider.Left)
 				return false;
-			if (collider.BottomLeft().Y < collidee.TopLeft().Y)
+			if (collider.Bottom < collidee.Top)
 				return false;
-			if (collidee.BottomLeft().Y < collider.TopLeft().Y)
+			if (collidee.Bottom < collider.Top)
 				return false;
 
 			return true;
@@ -231,7 +231,7 @@ namespace missile_command
 			Bomb bmb = EntityFactory.MakeBomb(origin, size, destination, PType.PLAYER, a);
 			bmb.DestroyBomb += DestroyGameObject;
 			bmb.AddScore += AddScore;
-			lEntities[(int)bmb.GetTag()].Add(bmb);
+			lEntities[(int)bmb.Tag].Add(bmb);
 		}
 		private void SpawnEnemies()
 		{
@@ -245,7 +245,7 @@ namespace missile_command
 				Bomb bmb = EntityFactory.MakeBomb(spawnPoint, size, destination, PType.ENEMY, missile_command.ETag.ENEMY);
 				bmb.DestroyBomb += DestroyGameObject;
 				bmb.AddScore += AddScore;
-				lEntities[(int)bmb.GetTag()].Add(bmb);
+				lEntities[(int)bmb.Tag].Add(bmb);
 			}
 		}
 		private void SpawnTest()
@@ -257,7 +257,7 @@ namespace missile_command
 			Bomb bmb = EntityFactory.MakeBomb(spawnPoint, size, destination, PType.ENEMY, missile_command.ETag.ENEMY);
 			bmb.DestroyBomb += DestroyGameObject;
 			bmb.AddScore += AddScore;
-			lEntities[(int)bmb.GetTag()].Add(bmb);
+			lEntities[(int)bmb.Tag].Add(bmb);
 		}
 		private void MassTest()
 		{
@@ -278,9 +278,9 @@ namespace missile_command
 		{
 			KeypressHandler.Instance().KeyUp(e);
 		}
-		private void DestroyGameObject(Entity gameObject)
+		private void DestroyGameObject(Body gameObject)
 		{
-			lEntities[(int)gameObject.GetTag()].Remove(gameObject);
+			lEntities[(int)gameObject.Tag].Remove(gameObject);
 		}
 		private void AddScore(int score)
 		{

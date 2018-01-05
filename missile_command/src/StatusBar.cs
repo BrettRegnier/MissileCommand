@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace missile_command
 {
-	abstract class StatusBar : Entity
+	abstract class StatusBar : Body
 	{
 		private const int OUTLINE_OFFSET = 1;
 
@@ -33,18 +33,18 @@ namespace missile_command
 		{
 			outlinePen = new Pen(Color.Black);
 
-			MovePositionY(dimension.Height);
+			MovePositionY(Dimension.Height);
 
 			// 2 pixels on all sides
-			int nX = Left() - OUTLINE_OFFSET;
-			int nY = Top() - OUTLINE_OFFSET;
-			int nW = dimension.Width + OUTLINE_OFFSET;
-			int nH = dimension.Height + OUTLINE_OFFSET;
+			int nX = Left - OUTLINE_OFFSET;
+			int nY = Top - OUTLINE_OFFSET;
+			int nW = Dimension.Width + OUTLINE_OFFSET;
+			int nH = Dimension.Height + OUTLINE_OFFSET;
 			outlineBar = new Rectangle(nX, nY, nW, nH);
 
 			maxHP = d.Width;
 			curHP = maxHP;
-			UpdateDimension(curHP, dimension.Height);
+			UpdateDimension(curHP, Dimension.Height);
 
 			replishTick = 0;
 			isAlive = true;
@@ -52,7 +52,7 @@ namespace missile_command
 		public override void Draw(Graphics g)
 		{
 			g.DrawRectangle(outlinePen, outlineBar);
-			g.FillRectangle(innerBrush, Left(), Top(), dimension.Width, dimension.Height);
+			g.FillRectangle(innerBrush, Left, Top, Dimension.Width, Dimension.Height);
 			Replenish();
 		}
 		private void UpdateBarWidth()
@@ -75,7 +75,7 @@ namespace missile_command
 					// TODO animate it so its smoother when its > 1
 					curHP += REPLENISH_AMOUNT;
 				}
-				UpdateDimension(curHP, dimension.Height);
+				UpdateDimension(curHP, Dimension.Height);
 				replishTick = REPLENISH_TICK_SETTING % 10;
 			}
 			else

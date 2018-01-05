@@ -42,14 +42,14 @@ namespace missile_command
 			sprite = lSprite[(int)SpriteType.ALIVE];
 			UpdateDimension(Utils.CITY_SIZE, Utils.CITY_SIZE);
 			UpdatePositionX(Utils.CITY_POSITIONS_X[cityCount++]);
-			UpdatePositionY(Utils.gameBounds.Height - (Utils.LAND_MASS_HEIGHT + dimension.Height));
+			UpdatePositionY(Utils.gameBounds.Height - (Utils.LAND_MASS_HEIGHT + Dimension.Height));
 			aliveCities++;
 			isDestroyed = false;
 
-			Size shieldSize = Dimension();
+			Size shieldSize = Dimension;
 			shieldSize.Width += Utils.CITY_TRUE_SIZE*2;
 			shieldSize.Height += Utils.CITY_TRUE_SIZE*2;
-			shield = new Shield(BottomLeft(), TopCenter(), shieldSize, ETag.SYSTEM);
+			shield = new Shield(BottomLeft, TopCenter, shieldSize, ETag.SYSTEM);
 		}
 		public override void Collided()
 		{
@@ -61,18 +61,21 @@ namespace missile_command
 		}
 		public override void Draw(Graphics g)
 		{
-			g.DrawImage(sprite, position);
+			g.DrawImage(sprite, TopLeft);
 			if (!isDestroyed)
 			{
 				shield.Draw(g);
 			}
 		}
-		public override int Top()
+		public override int Top
 		{
-			if (isDestroyed)
-				return base.Top() + Utils.DESTROYED_CITY_SIZE_OFFSET;
-			else
-				return base.Top();
+			get
+			{
+				if (isDestroyed)
+					return base.Top + Utils.DESTROYED_CITY_SIZE_OFFSET;
+				else
+					return base.Top;
+			}
 		}
 		public static int NumCitiesAlive()
 		{

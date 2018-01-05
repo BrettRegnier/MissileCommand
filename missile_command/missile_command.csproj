@@ -51,9 +51,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\City.cs" />
+    <Compile Include="src\Collider.cs" />
+    <Compile Include="src\Entity.cs" />
     <Compile Include="src\StatusBar.cs" />
     <Compile Include="src\Shield.cs" />
-    <Compile Include="src\Entity.cs" />
+    <Compile Include="src\Body.cs" />
     <Compile Include="src\EntityFactory.cs" />
     <Compile Include="src\GameForm.cs">
       <SubType>Form</SubType>

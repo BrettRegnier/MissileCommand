@@ -5,7 +5,7 @@ using System.Text;
 
 namespace missile_command
 {
-	abstract class GameObject : Entity
+	abstract class GameObject : Body
 	{
 		protected PType pType;
 

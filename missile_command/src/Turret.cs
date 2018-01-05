@@ -28,10 +28,10 @@ namespace missile_command
 			pen = new Pen(Config.Instance().GetPlayerColor(a));
 
 			// Move tower to left to position it in the center of the given origin
-			int nX = position.X - Config.Instance().TurretRadius() / 2;
-			int nY = position.Y - Config.Instance().TurretRadius() / 2;
+			int nX = Left - Config.Instance().TurretRadius() / 2;
+			int nY = Top - Config.Instance().TurretRadius() / 2;
 			UpdatePosition(nX, nY);
-			tower = new Rectangle(position, dimension);
+			tower = new Rectangle(TopLeft, Dimension);
 			isDestroyed = false;
 		}
 		public override void Collided()
@@ -74,7 +74,7 @@ namespace missile_command
 		}
 		public void ShootTurret(Point destination)
 		{
-			TurretShoot(turretEnd, destination, tag);
+			TurretShoot(turretEnd, destination, Tag);
 		}
 
 		public bool IsDestroyed { get { return isDestroyed; } }

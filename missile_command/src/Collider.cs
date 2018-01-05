@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace missile_command
 {
-	class Entity
+	class Collider
 	{
-		protected Body Body { get; private set; }
-		protected Collider Collider { get; private set; }
 	}
 }

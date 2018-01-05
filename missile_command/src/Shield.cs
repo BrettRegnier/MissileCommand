@@ -24,7 +24,7 @@ namespace missile_command
 			// Reposition the shield due to the fact that microsoft drawing has some weird dimension things going on.
 			MovePositionX(-(Utils.CITY_TRUE_SIZE + 12));
 			MovePositionY(-POSITION_Y_OFFSET);
-			shield = new Rectangle(position, dimension);
+			shield = new Rectangle(TopLeft, Dimension);
 		}
 		public override void Collided()
 		{
