@@ -19,20 +19,28 @@ namespace missile_command
 		private PType pType;
 		private ETag tag;
 
-		private int fireCount = 0;
-		private int coolingDownCount = 0;
-		private bool coolingDown = false;
+		private int fireCount;
+		private int coolingDownCount;
+		private bool coolingDown;
+		private bool noActiveTurrets;
+
 
 		public Player(Point pos, PType p, ETag a)
 		{
 			cursor = new Reticle(new Point(Utils.gameBounds.Width / 2, 200), p, a);
 			pType = p;
 			tag = a;
+
+			fireCount = 0;
+			coolingDownCount = 0;
+			coolingDown = false;
+			noActiveTurrets = true;
 		}
 		public void AttachTurret(Turret t)
 		{
 			lTurrets.Add(t);
 			t.TurretCalculation(cursor.Center());
+			noActiveTurrets = false;
 		}
 		public void Draw(Graphics g)
 		{
@@ -47,28 +55,54 @@ namespace missile_command
 		}
 		public void Shoot()
 		{
-			if (coolingDown == false)
+			if (!noActiveTurrets)
 			{
-				// TODO add logic to shoot from a tower based on the position of the cursor, if its closer
-				// it should fire first, if ammo is 0 then the next closest should fire.
-				if (fireCount == lTurrets.Count)
-					fireCount = 0;
+				if (lTurrets[fireCount].IsDestroyed)
+				{
+					int cycleCount = 0;
+					int curIndex = fireCount;
+					while (lTurrets[curIndex++].IsDestroyed && !noActiveTurrets)
+					{
+						if (curIndex >= lTurrets.Count)
+							curIndex = 0;
 
-				// TODO add logic for destroyed turrets
-				lTurrets[fireCount++].ShootTurret(cursor.Center());
-				coolingDown = true;
-			}
-			else
-			{
-				coolingDownCount++;
-			}
+						if (++cycleCount >= lTurrets.Count)
+						{
+							noActiveTurrets = true;
+							return;
+						}
+					}
+					fireCount = curIndex;
+				}
+				if (coolingDown == false)
+				{
+					// TODO add logic to shoot from a tower based on the position of the cursor, if its closer
+					// it should fire first, if ammo is 0 then the next closest should fire.
 
-			if (coolingDownCount == 10)
-			{
-				coolingDown = false;
-				coolingDownCount = 0;
+					// TODO add logic for destroyed turrets
+					lTurrets[fireCount++].ShootTurret(cursor.Center());
+
+					// TODO move into turret?
+					coolingDown = true;
+
+					if (fireCount >= lTurrets.Count)
+						fireCount = 0;
+
+				}
+				else
+				{
+					coolingDownCount++;
+				}
+
+				if (coolingDownCount == 10)
+				{
+					coolingDown = false;
+					coolingDownCount = 0;
+
+				}
 			}
 		}
+
 		public ETag GetTag() { return tag; }
 		public PType GetPType() { return pType; }
 	}

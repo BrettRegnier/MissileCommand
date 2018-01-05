@@ -17,29 +17,34 @@ namespace missile_command
 
 		private const int GUN_END_LENGTH = 5;
 
+		private bool isDestroyed;
 		private Pen pen;
 		private Rectangle tower;
 		private Point turretEnd;
-		
+
 		public Turret(Point o, Size d, PType p, ETag a) : base(o, d, p, a)
 		{
 			int tRadius = Config.Instance().TurretRadius();
 			pen = new Pen(Config.Instance().GetPlayerColor(a));
 
 			// Move tower to left to position it in the center of the given origin
-			int nX = position.X - Config.Instance().TurretRadius()/ 2;
+			int nX = position.X - Config.Instance().TurretRadius() / 2;
 			int nY = position.Y - Config.Instance().TurretRadius() / 2;
 			UpdatePosition(nX, nY);
 			tower = new Rectangle(position, dimension);
+			isDestroyed = false;
 		}
 		public override void Collided()
 		{
-			//throw new NotImplementedException();
+			// TODO for survival add hp?
+			isDestroyed = true;
 		}
 		public override void Draw(Graphics g)
 		{
 			g.DrawEllipse(pen, tower);
-			g.DrawLine(pen, Center(), turretEnd);
+
+			if (!isDestroyed)
+				g.DrawLine(pen, Center(), turretEnd);
 		}
 		public void TurretCalculation(Point aim)
 		{
@@ -71,5 +76,7 @@ namespace missile_command
 		{
 			TurretShoot(turretEnd, destination, tag);
 		}
+
+		public bool IsDestroyed { get { return isDestroyed; } }
 	}
 }
