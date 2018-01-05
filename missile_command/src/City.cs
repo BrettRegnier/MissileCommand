@@ -53,14 +53,19 @@ namespace missile_command
 		}
 		public override void Collided()
 		{
-			sprite = lSprite[(int)SpriteType.DEAD];
-			isDestroyed = true;
+			if (!shield.Active())
+			{
+				sprite = lSprite[(int)SpriteType.DEAD];
+				isDestroyed = true;
+			}
 		}
 		public override void Draw(Graphics g)
 		{
 			g.DrawImage(sprite, position);
-			//g.DrawRectangle(Pens.Yellow, new Rectangle(position, dimension));
-			shield.Draw(g);
+			if (!isDestroyed)
+			{
+				shield.Draw(g);
+			}
 		}
 		public override int Top()
 		{

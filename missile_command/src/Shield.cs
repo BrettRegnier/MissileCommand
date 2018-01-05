@@ -7,27 +7,41 @@ using System.Threading.Tasks;
 
 namespace missile_command
 {
-	class Shield : Entity
+	class Shield : GameObject
 	{
-		private const int OUTLINE_OFFSET = 4;		
-		
+		private const int OUTLINE_OFFSET = 4;
+		private const int POSITION_Y_OFFSET = 21;
+
 		private Rectangle shield;
 		private ShieldBar hpBar;
 
-		public Shield(Point cityBottom, Point o, Size d, ETag t) : base(o, d, t)
+		public Shield(Point cityBottom, Point o, Size d, ETag t, PType p = PType.PLAYER) : base(o, d, p, t)
 		{
 			// TODO add utility setting for the size of the bar
-			hpBar = new ShieldBar(cityBottom, new Size(200, 200), ETag.SYSTEM);
+			hpBar = new ShieldBar(cityBottom, new Size(40, 10), ETag.SYSTEM);
 
+
+			// Reposition the shield due to the fact that microsoft drawing has some weird dimension things going on.
 			MovePositionX(-(Utils.CITY_TRUE_SIZE + 12));
-			MovePositionY(-dimension.Height/3);
+			MovePositionY(-POSITION_Y_OFFSET);
 			shield = new Rectangle(position, dimension);
+		}
+		public override void Collided()
+		{
+			hpBar.Damage();
 		}
 		public override void Draw(Graphics g)
 		{
+			// TODO Animate the shield, by uh growing? or by flashing a lighter blue.
 			hpBar.Draw(g);
-			// Use draw arc instead
-			g.DrawEllipse(Pens.Blue, shield);
+			if (hpBar.IsAlive())
+			{
+				g.DrawArc(Pens.Blue, shield, 180, 180);
+			}
+		}
+		public bool Active()
+		{
+			return hpBar.IsAlive();
 		}
 	}
 }
