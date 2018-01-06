@@ -9,6 +9,9 @@ namespace missile_command
 {
 	abstract class StatusBar : UserInterface
 	{
+		public delegate void Heal();
+		public event Heal Healed;
+
 		private const int OUTLINE_OFFSET = 1;
 
 		// TODO move this into an upgrades class
@@ -64,6 +67,7 @@ namespace missile_command
 				{
 					curHP = maxHP;
 					isAlive = true;
+					Healed();
 				}
 				else
 				{

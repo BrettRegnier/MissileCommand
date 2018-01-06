@@ -16,7 +16,7 @@ namespace missile_command
 			ALIVE = 0,
 			DEAD
 		};
-		
+
 		private static List<Image> lSprite = new List<Image>();
 		private static int cityCount = 0;
 		private static int aliveCities = 0;
@@ -24,6 +24,9 @@ namespace missile_command
 		private Image sprite;
 		private bool isDestroyed;
 		private Shield shield;
+
+		private Body collidedBody;
+		private Collider cHolder;
 
 		static City()
 		{
@@ -37,7 +40,7 @@ namespace missile_command
 				}
 			}
 		}
-		public City(ETag t = ETag.SYSTEM) : base (t)
+		public City(ETag t = ETag.SYSTEM) : base(t)
 		{
 			sprite = lSprite[(int)SpriteType.ALIVE];
 			Body.UpdateDimension(Utils.CITY_SIZE, Utils.CITY_SIZE);
@@ -47,16 +50,33 @@ namespace missile_command
 			isDestroyed = false;
 
 			Size shieldSize = Body.Dimension;
-			shieldSize.Width += Utils.CITY_TRUE_SIZE*2;
-			shieldSize.Height += Utils.CITY_TRUE_SIZE*2;
+			shieldSize.Width += Utils.CITY_TRUE_SIZE * 2;
+			shieldSize.Height += Utils.CITY_TRUE_SIZE * 2;
 			shield = new Shield(Body.Left, Body.Bottom, Body.CenterX, Body.Top, shieldSize.Width, shieldSize.Height, Tag);
+			shield.Replished += ShieldReplished;
+			shield.Lowered += ShieldLowered;
+
+			cHolder = Collider;
+			Collider = shield.Collider;
+		}
+		private void ShieldLowered()
+		{
+			Collider = cHolder;
+		}
+		private void ShieldReplished()
+		{
+			Collider = shield.Collider;
 		}
 		protected override void Collided(Body collider)
 		{
-			if (!shield.Active())
+			if (shield.CollidedBody() != collider && collider != collidedBody)
 			{
-				sprite = lSprite[(int)SpriteType.DEAD];
-				isDestroyed = true;
+				if (!shield.Active())
+				{
+					sprite = lSprite[(int)SpriteType.DEAD];
+					isDestroyed = true;
+					collidedBody = collider;
+				}
 			}
 		}
 		public override void Draw(Graphics g)

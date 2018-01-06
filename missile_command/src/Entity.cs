@@ -8,8 +8,8 @@ namespace missile_command
 {
 	abstract class Entity
 	{
-		public Body Body { get; private set; }
-		public Collider Collider { get; private set; }
+		public Body Body { get; protected set; }
+		public Collider Collider { get; protected set; }
 		public ETag Tag { get; private set; }
 
 		public Entity(int x, int y, int w, int h, ETag t)
@@ -24,6 +24,7 @@ namespace missile_command
 			//Might have to pass by reference
 			Body = new Body();
 			Collider = new Collider(Body);
+			Collider.OnCollision += Collided;
 			Tag = t;
 		}
 

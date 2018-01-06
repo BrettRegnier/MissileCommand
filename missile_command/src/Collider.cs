@@ -22,8 +22,8 @@ namespace missile_command
 		{
 			if (Colliding(collidee.Body))
 			{
-				collidee.OnCollision(collidee.Body);
-				OnCollision(Body);
+				collidee.OnCollision(Body);
+				OnCollision(collidee.Body);
 			}
 		}
 
