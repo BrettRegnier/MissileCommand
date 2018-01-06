@@ -53,6 +53,7 @@
     <Compile Include="src\City.cs" />
     <Compile Include="src\Collider.cs" />
     <Compile Include="src\Entity.cs" />
+    <Compile Include="src\UserInterface.cs" />
     <Compile Include="src\StatusBar.cs" />
     <Compile Include="src\Shield.cs" />
     <Compile Include="src\Body.cs" />
@@ -64,7 +65,6 @@
       <DependentUpon>GameForm.cs</DependentUpon>
     </Compile>
     <Compile Include="src\Bomb.cs" />
-    <Compile Include="src\GameObject.cs" />
     <Compile Include="src\LandMass.cs" />
     <Compile Include="src\Player.cs" />
     <Compile Include="src\Reticle.cs" />

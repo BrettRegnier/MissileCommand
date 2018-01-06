@@ -2,102 +2,88 @@
 
 namespace missile_command
 {
-	// TODO rename to collider? Perhaps everything shouldn't inherit it, but is composed of it.
-	abstract class Body
+	class Body
 	{
 		private Point position;
 		private Size dimension;
-		private ETag tag;
 
-		public Body(Point o, Size d, ETag t)
-		{
-			Initialize(o, d, t);
-		}
-		public Body(Point o, int w, int h, ETag t)
-		{
-			Initialize(o, new Size(w, h), t);
-		}
-		public Body(int x, int y, Size d, ETag t)
-		{
-			Initialize(new Point(x, y), d, t);
-		}
-		public Body(int x, int y, int w, int h, ETag t)
-		{
-			Initialize(new Point(x, y), dimension = new Size(w, h), t);
-		}
-		public Body(ETag t)
-		{
-			tag = t;
-		}
-		private void Initialize(Point o, Size d, ETag t)
-		{
-			position = o;
-			dimension = d;
-			tag = t;
-		}
+		// TODO perhaps integer values that are offsets. For things like Reticle.
 
-		public abstract void Draw(Graphics g);
+		public Body(int x, int y, int w, int h)
+		{
+			position = new Point(x, y);
+			dimension = new Size(w, h);
+		}
+		public Body()
+		{
+			position = new Point();
+			dimension = new Size();
+		}
 
 		public Size Dimension { get { return dimension; } }
-		public ETag Tag { get { return tag; } }
-
-		public virtual int Left { get { return position.X; } }
-		public virtual int Right { get { return position.X + dimension.Width; } }
-		public virtual int Top { get { return position.Y; } }
-		public virtual int Bottom { get { return position.Y + dimension.Height; } }
-		public virtual int CenterX { get { return position.X + dimension.Width / 2; } }
-		public virtual int CenterY { get { return position.Y + dimension.Height / 2; } }
-		public virtual Point TopLeft { get { return new Point(Left, Top); } }
-		public virtual Point TopCenter { get { return new Point(CenterX, Top); } }
-		public virtual Point TopRight { get { return new Point(Right, Top); } }
-		public virtual Point BottomLeft { get { return new Point(Left, Bottom); } }
-		public virtual Point BottomCenter { get { return new Point(CenterX, Bottom); } }
-		public virtual Point BottomRight { get { return new Point(Right, Bottom); } }
-		public virtual Point CenterLeft { get { return new Point(Left, CenterY); } }
-		public virtual Point CenterRight { get { return new Point(Right, CenterY); } }
-		public virtual Point Center()
+		public int Left { get { return position.X; } }
+		public int Right { get { return position.X + dimension.Width; } }
+		public int Top { get { return position.Y; } }
+		public int Bottom { get { return position.Y + dimension.Height; } }
+		public int CenterX { get { return position.X + dimension.Width / 2; } }
+		public int CenterY { get { return position.Y + dimension.Height / 2; } }
+		public Point TopLeft { get { return new Point(Left, Top); } }
+		public Point TopCenter { get { return new Point(CenterX, Top); } }
+		public Point TopRight { get { return new Point(Right, Top); } }
+		public Point BottomLeft { get { return new Point(Left, Bottom); } }
+		public Point BottomCenter { get { return new Point(CenterX, Bottom); } }
+		public Point BottomRight { get { return new Point(Right, Bottom); } }
+		public Point CenterLeft { get { return new Point(Left, CenterY); } }
+		public Point CenterRight { get { return new Point(Right, CenterY); } }
+		public int Width {  get { return dimension.Width; } }
+		public int Height {  get { return dimension.Height; } }
+		public Point Center
 		{
-			int nX = position.X + dimension.Width / 2;
-			int nY = position.Y + dimension.Height / 2;
-			return new Point(nX, nY);
+			get
+			{
+
+				int nX = position.X + dimension.Width / 2;
+				int nY = position.Y + dimension.Height / 2;
+				return new Point(nX, nY);
+			}
 		}
 
-		protected virtual void UpdateDimension(int w, int h)
+		public void UpdateDimension(int w, int h)
 		{
 			dimension.Width = w;
 			dimension.Height = h;
 		}
-		protected virtual void UpdateWidth(int w)
+		public void UpdateWidth(int w)
 		{
 			dimension.Width = w;
 		}
-		protected virtual void UpdateHeight(int h)
+		public void UpdateHeight(int h)
 		{
 			dimension.Height = h;
 		}
-		protected virtual void UpdatePosition(int x, int y)
+		public void UpdatePosition(int x, int y)
 		{
 			position.X = x;
 			position.Y = y;
 		}
-		protected virtual void UpdatePositionX(int x)
+		public void UpdatePositionX(int x)
 		{
 			position.X = x;
 		}
-		protected virtual void UpdatePositionY(int y)
+		public void UpdatePositionY(int y)
 		{
 			position.Y = y;
 		}
-		protected virtual void MovePosition(int x, int y)
+		public void MovePosition(int x, int y)
 		{
 			position.X += x;
 			position.Y += y;
 		}
-		protected virtual void MovePositionX(int x)
+		public void MovePositionX(int x)
 		{
 			position.X += x;
 		}
-		protected virtual void MovePositionY(int y)
+		public void MovePositionY(int y)
 		{
 			position.Y += y;
 		}

@@ -13,7 +13,7 @@ namespace missile_command
 		}
 		public static Turret MakeTurret(Point o, Size d, PType p, ETag a)
 		{
-			return new Turret(o, d, p, a);
+			return new Turret(o.X, o.Y, d.Width, d.Height, p, a);
 		}
 	}
 }

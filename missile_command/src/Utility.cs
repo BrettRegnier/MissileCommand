@@ -27,7 +27,7 @@
 		public const int STAGE_BOUND_HEIGHT = LAND_MASS_HEIGHT + HILL_MASS_HEIGHT + 100;
 		public const int LAND_MASS_HEIGHT = 50;
 		public const int HILL_MASS_WIDTH = 100;
-		public const int HILL_MASS_HEIGHT = 50;
+		public const int HILL_MASS_HEIGHT = 70;
 		public const int SCREEN_OFFSET = 0;
 
 		// the dimensions of this image is being drawn as 40x40

@@ -25,9 +25,9 @@ namespace missile_command
 		private bool noActiveTurrets;
 
 
-		public Player(Point pos, PType p, ETag a)
+		public Player(PType p, ETag a)
 		{
-			cursor = new Reticle(new Point(Utils.gameBounds.Width / 2, 200), p, a);
+			cursor = new Reticle(Utils.gameBounds.Width / 2, 200, p, a);
 			pType = p;
 			tag = a;
 
@@ -39,7 +39,7 @@ namespace missile_command
 		public void AttachTurret(Turret t)
 		{
 			lTurrets.Add(t);
-			t.TurretCalculation(cursor.Center());
+			t.TurretCalculation(cursor.Body.Center);
 			noActiveTurrets = false;
 		}
 		public void Draw(Graphics g)
@@ -51,7 +51,7 @@ namespace missile_command
 		{
 			Point newPoint = cursor.Move(dir);
 			for (int i = 0; i < lTurrets.Count; i++)
-				lTurrets[i].TurretCalculation(cursor.Center());
+				lTurrets[i].TurretCalculation(cursor.Body.Center);
 		}
 		public void Shoot()
 		{
@@ -80,7 +80,7 @@ namespace missile_command
 					// it should fire first, if ammo is 0 then the next closest should fire.
 
 					// TODO add logic for destroyed turrets
-					lTurrets[fireCount++].ShootTurret(cursor.Center());
+					lTurrets[fireCount++].ShootTurret(cursor.Body.Center);
 
 					// TODO move into turret?
 					coolingDown = true;

@@ -7,25 +7,26 @@ using System.Threading.Tasks;
 
 namespace missile_command
 {
-	class LandMass : Body
+	class LandMass : Entity
 	{
-		private Rectangle land;
 		private SolidBrush brush;
-		private ETag account;
 
-		public LandMass(Point o, Size d, ETag a = ETag.SYSTEM) : base(o, d, a)
+		public LandMass(int x, int y, int w, int h, ETag t = ETag.SYSTEM) : base(x, y, w, h, t)
 		{
 			// TODO maybe for hills chop it up so that it makes a hill ish? Perhaps make a new class for it.
 			// adjust the origin for the height, good ole microsoft windows and stuff
-			UpdatePositionY(Top - (Dimension.Height - 5));
-
-			land = new Rectangle(TopLeft, Dimension);
+			Body.MovePositionY(-(Body.Dimension.Height - 5));
+			
 			brush = new SolidBrush(Config.Instance().GetPlayerColor(ETag.SYSTEM));
-			account = a;
 		}
 		public override void Draw(Graphics g)
 		{
-			g.FillRectangle(brush, land);
+			g.FillRectangle(brush, Body.Left, Body.Top, Body.Width, Body.Height);
+		}
+
+		protected override void Collided(Body body)
+		{
+
 		}
 	}
 }

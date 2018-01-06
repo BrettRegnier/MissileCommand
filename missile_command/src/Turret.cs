@@ -10,7 +10,7 @@ namespace missile_command
 {
 	// TODO add ammo, each turret has a certain amount of ammo to use.
 	// TODO make cooldown and ready state for turret, on update(draw) game will update on the cooldown
-	class Turret : GameObject
+	class Turret : Entity
 	{
 		public delegate void Fire(Point origin, Point destination, ETag a);
 		public event Fire TurretShoot;
@@ -19,38 +19,37 @@ namespace missile_command
 
 		private bool isDestroyed;
 		private Pen pen;
-		private Rectangle tower;
 		private Point turretEnd;
 
-		public Turret(Point o, Size d, PType p, ETag a) : base(o, d, p, a)
+		public Turret(int x, int y, int w, int h, PType p, ETag t) : base(x, y, w, h, t)
 		{
 			int tRadius = Config.Instance().TurretRadius();
-			pen = new Pen(Config.Instance().GetPlayerColor(a));
+			pen = new Pen(Config.Instance().GetPlayerColor(t));
 
 			// Move tower to left to position it in the center of the given origin
-			int nX = Left - Config.Instance().TurretRadius() / 2;
-			int nY = Top - Config.Instance().TurretRadius() / 2;
-			UpdatePosition(nX, nY);
-			tower = new Rectangle(TopLeft, Dimension);
+			int nX = Body.Left - Config.Instance().TurretRadius() / 2;
+			int nY = Body.Top - Config.Instance().TurretRadius() / 2;
+			Body.UpdatePosition(nX, nY);
 			isDestroyed = false;
 		}
-		public override void Collided()
+		protected override void Collided(Body collider)
 		{
 			// TODO for survival add hp?
 			isDestroyed = true;
 		}
 		public override void Draw(Graphics g)
 		{
-			g.DrawEllipse(pen, tower);
+			//g.DrawEllipse(pen, tower);
+			g.DrawArc(pen, Body.Left, Body.Top, Body.Width, Body.Height, 180, 180);
 
 			if (!isDestroyed)
-				g.DrawLine(pen, Center(), turretEnd);
+				g.DrawLine(pen, Body.Center, turretEnd);
 		}
 		public void TurretCalculation(Point aim)
 		{
 			// Difference between where we are aiming and the center of the turret
-			int cursorTowerDiffX = aim.X - Center().X;
-			int cursorTowerDiffY = Center().Y - aim.Y;
+			int cursorTowerDiffX = aim.X - Body.CenterX;
+			int cursorTowerDiffY = Body.CenterY - aim.Y;
 
 			// This is the size of the line that is the gun
 			int gunLength = Config.Instance().TurretRadius() / 2 + GUN_END_LENGTH;
@@ -67,8 +66,8 @@ namespace missile_command
 				turretY *= -1;
 			}
 
-			turretX = Center().X + turretX;
-			turretY = Center().Y - turretY;
+			turretX = Body.CenterX + turretX;
+			turretY = Body.CenterY - turretY;
 
 			turretEnd = new Point(turretX, turretY);
 		}

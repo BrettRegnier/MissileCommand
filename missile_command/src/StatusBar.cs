@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace missile_command
 {
-	abstract class StatusBar : Body
+	abstract class StatusBar : UserInterface
 	{
 		private const int OUTLINE_OFFSET = 1;
 
@@ -21,7 +21,6 @@ namespace missile_command
 		protected Brush innerBrush;
 		protected Pen outlinePen;
 
-		protected Rectangle innerBar;
 		protected Rectangle outlineBar;
 
 		protected int curHP;
@@ -29,22 +28,22 @@ namespace missile_command
 		protected int replishTick;
 		protected bool isAlive;
 
-		public StatusBar(Point o, Size d, ETag t) : base(o, d, t)
+		public StatusBar(int x, int y, int w, int h) : base(x, y, w, h)
 		{
 			outlinePen = new Pen(Color.Black);
 
-			MovePositionY(Dimension.Height);
+			Body.MovePositionY(Body.Dimension.Height);
 
 			// 2 pixels on all sides
-			int nX = Left - OUTLINE_OFFSET;
-			int nY = Top - OUTLINE_OFFSET;
-			int nW = Dimension.Width + OUTLINE_OFFSET;
-			int nH = Dimension.Height + OUTLINE_OFFSET;
+			int nX = Body.Left - OUTLINE_OFFSET;
+			int nY = Body.Top - OUTLINE_OFFSET;
+			int nW = Body.Width + OUTLINE_OFFSET;
+			int nH = Body.Height + OUTLINE_OFFSET;
 			outlineBar = new Rectangle(nX, nY, nW, nH);
 
-			maxHP = d.Width;
+			maxHP = Body.Width;
 			curHP = maxHP;
-			UpdateDimension(curHP, Dimension.Height);
+			Body.UpdateDimension(curHP, Body.Height);
 
 			replishTick = 0;
 			isAlive = true;
@@ -52,12 +51,8 @@ namespace missile_command
 		public override void Draw(Graphics g)
 		{
 			g.DrawRectangle(outlinePen, outlineBar);
-			g.FillRectangle(innerBrush, Left, Top, Dimension.Width, Dimension.Height);
+			g.FillRectangle(innerBrush, Body.Left, Body.Top, Body.Width, Body.Height);
 			Replenish();
-		}
-		private void UpdateBarWidth()
-		{
-			innerBar.Width = curHP;
 		}
 		private void Replenish()
 		{
@@ -75,7 +70,7 @@ namespace missile_command
 					// TODO animate it so its smoother when its > 1
 					curHP += REPLENISH_AMOUNT;
 				}
-				UpdateDimension(curHP, Dimension.Height);
+				Body.UpdateDimension(curHP, Body.Height);
 				replishTick = REPLENISH_TICK_SETTING % 10;
 			}
 			else
@@ -91,7 +86,7 @@ namespace missile_command
 	}
 	class ShieldBar : StatusBar
 	{
-		public ShieldBar(Point o, Size d, ETag t) : base(o, d, t)
+		public ShieldBar(int x, int y, int w, int h) : base(x, y, w, h)
 		{
 			innerBrush = Brushes.Blue;
 		}
@@ -103,7 +98,7 @@ namespace missile_command
 	}
 	class HealthBar : StatusBar
 	{
-		public HealthBar(Point o, Size d, ETag t) : base(o, d, t)
+		public HealthBar(int x, int y, int w, int h) : base(x, y, w, h)
 		{
 			innerBrush = Brushes.Red;
 		}

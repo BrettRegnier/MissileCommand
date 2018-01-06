@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace missile_command
 {
-	class Shield : GameObject
+	class Shield : Entity
 	{
 		private const int OUTLINE_OFFSET = 4;
 		private const int POSITION_Y_OFFSET = 21;
@@ -15,18 +15,21 @@ namespace missile_command
 		private Rectangle shield;
 		private ShieldBar hpBar;
 
-		public Shield(Point cityBottom, Point o, Size d, ETag t, PType p = PType.PLAYER) : base(o, d, p, t)
+		// TODO rethink the logic for shield's positioning it might fix the problems I am having with all the magic numbers
+		// Expects to get the BottomLeft for the hpbar, and the TopCenter for the shield
+		public Shield(int bottomX, int bottomY, int center, int top, int w, int h, ETag t) : base(center, top, w, h, t)
 		{
 			// TODO add utility setting for the size of the bar
-			hpBar = new ShieldBar(cityBottom, new Size(40, 10), ETag.SYSTEM);
+			// Set the hp bar to be below the city
+			hpBar = new ShieldBar(bottomX, bottomY, 40, 10);
 
 
 			// Reposition the shield due to the fact that microsoft drawing has some weird dimension things going on.
-			MovePositionX(-(Utils.CITY_TRUE_SIZE + 12));
-			MovePositionY(-POSITION_Y_OFFSET);
-			shield = new Rectangle(TopLeft, Dimension);
+			Body.MovePositionX(-(Utils.CITY_TRUE_SIZE + 12));
+			Body.MovePositionY(-POSITION_Y_OFFSET);
+			shield = new Rectangle(Body.TopLeft, Body.Dimension);
 		}
-		public override void Collided()
+		protected override void Collided(Body collider)
 		{
 			hpBar.Damage();
 		}

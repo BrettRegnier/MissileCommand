@@ -6,23 +6,25 @@ using System.Windows.Forms;
 
 namespace missile_command
 {
-	class Reticle : Body
+	class Reticle : UserInterface
 	{
 		private const int CURSOR_OFFSET = 5;
 		private const int MOVE_VAL = 10;
 		private const int CURSOR_DIMENSION = 9;
 
+		private ETag tag;
 		private Image sprite;
 
-		public Reticle(Point o, PType p, ETag t, int w = CURSOR_DIMENSION, int h = CURSOR_DIMENSION) : base(o, w, h, t)
+		public Reticle(int x, int y, PType p, ETag t, int w = CURSOR_DIMENSION, int h = CURSOR_DIMENSION) : base(x, y, w, h)
 		{
-			UpdatePosition(Left - CURSOR_OFFSET, Top);
+			Body.UpdatePosition(Body.Left - CURSOR_OFFSET, Body.Top);
 			// TODO load cursor by config
 			sprite = Properties.Resources.cursor_09;
+			tag = t;
 		}
 		public override void Draw(Graphics g)
 		{
-			g.DrawImage(sprite, TopLeft);
+			g.DrawImage(sprite, Body.TopLeft);
 		}
 		public Point Move(Direction dir)
 		{
@@ -30,36 +32,36 @@ namespace missile_command
 			{
 				//TODO maybe move into its own collision detection?
 				case Direction.UP:
-					if (Top - MOVE_VAL > 0)
-						MovePositionY(-MOVE_VAL);
+					if (Body.Top - MOVE_VAL > 0)
+						Body.MovePositionY(-MOVE_VAL);
 					else
-						UpdatePositionY(0);
+						Body.UpdatePositionY(0);
 					break;
 				case Direction.RIGHT:
-					if (Right + MOVE_VAL < Utils.gameBounds.Width)
-						MovePositionX(MOVE_VAL);
+					if (Body.Right + MOVE_VAL < Utils.gameBounds.Width)
+						Body.MovePositionX(MOVE_VAL);
 					else
-						UpdatePositionX(Utils.gameBounds.Width - Dimension.Width);
+						Body.UpdatePositionX(Utils.gameBounds.Width - Body.Width);
 					break;
 				case Direction.DOWN:
-					if (Bottom + MOVE_VAL < Utils.gameBounds.Height - Utils.STAGE_BOUND_HEIGHT)
-						MovePositionY(MOVE_VAL);
+					if (Body.Bottom + MOVE_VAL < Utils.gameBounds.Height - Utils.STAGE_BOUND_HEIGHT)
+						Body.MovePositionY(MOVE_VAL);
 					else
-						UpdatePositionY(Utils.gameBounds.Height - (CURSOR_DIMENSION + Utils.STAGE_BOUND_HEIGHT));
+						Body.UpdatePositionY(Utils.gameBounds.Height - (CURSOR_DIMENSION + Utils.STAGE_BOUND_HEIGHT));
 					break;
 				case Direction.LEFT:
-					if (Left - MOVE_VAL > 0)
-						MovePositionX(-MOVE_VAL);
+					if (Body.Left - MOVE_VAL > 0)
+						Body.MovePositionX(-MOVE_VAL);
 					else
-						UpdatePositionX(0);
+						Body.UpdatePositionX(0);
 					break;
 			}
-			return Center();
+			return Body.Center;
 		}
-		public override Point Center()
-		{
-			// Honestly not sure why this works the way it does, but for some reason this centers the bombs.
-			return new Point(Left + 3, Top + 3);
-		}
+		//public Point Center()
+		//{
+		//	// Honestly not sure why this works the way it does, but for some reason this centers the bombs.
+		//	return new Point(Body.Left + 3, Body.Top + 3);
+		//}
 	}
 }

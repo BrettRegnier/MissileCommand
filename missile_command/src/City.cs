@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace missile_command
 {
-	class City : GameObject
+	class City : Entity
 	{
 		private enum SpriteType
 		{
@@ -37,21 +37,21 @@ namespace missile_command
 				}
 			}
 		}
-		public City(PType p, ETag a) : base(p, a)
+		public City(ETag t = ETag.SYSTEM) : base (t)
 		{
 			sprite = lSprite[(int)SpriteType.ALIVE];
-			UpdateDimension(Utils.CITY_SIZE, Utils.CITY_SIZE);
-			UpdatePositionX(Utils.CITY_POSITIONS_X[cityCount++]);
-			UpdatePositionY(Utils.gameBounds.Height - (Utils.LAND_MASS_HEIGHT + Dimension.Height));
+			Body.UpdateDimension(Utils.CITY_SIZE, Utils.CITY_SIZE);
+			Body.UpdatePositionX(Utils.CITY_POSITIONS_X[cityCount++]);
+			Body.UpdatePositionY(Utils.gameBounds.Height - (Utils.LAND_MASS_HEIGHT + Body.Height));
 			aliveCities++;
 			isDestroyed = false;
 
-			Size shieldSize = Dimension;
+			Size shieldSize = Body.Dimension;
 			shieldSize.Width += Utils.CITY_TRUE_SIZE*2;
 			shieldSize.Height += Utils.CITY_TRUE_SIZE*2;
-			shield = new Shield(BottomLeft, TopCenter, shieldSize, ETag.SYSTEM);
+			shield = new Shield(Body.Left, Body.Bottom, Body.CenterX, Body.Top, shieldSize.Width, shieldSize.Height, Tag);
 		}
-		public override void Collided()
+		protected override void Collided(Body collider)
 		{
 			if (!shield.Active())
 			{
@@ -61,20 +61,10 @@ namespace missile_command
 		}
 		public override void Draw(Graphics g)
 		{
-			g.DrawImage(sprite, TopLeft);
+			g.DrawImage(sprite, Body.TopLeft);
 			if (!isDestroyed)
 			{
 				shield.Draw(g);
-			}
-		}
-		public override int Top
-		{
-			get
-			{
-				if (isDestroyed)
-					return base.Top + Utils.DESTROYED_CITY_SIZE_OFFSET;
-				else
-					return base.Top;
 			}
 		}
 		public static int NumCitiesAlive()
