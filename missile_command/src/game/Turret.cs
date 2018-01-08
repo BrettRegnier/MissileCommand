@@ -42,10 +42,13 @@ namespace missile_command
 		}
 		protected override void Collided(Body collider)
 		{
-			if (hpBar.IsAlive())
-				hpBar.Damage();
-			else
-				isDestroyed = true;
+			if (collider.Top < Body.CenterY)
+			{
+				if (hpBar.IsAlive())
+					hpBar.Damage();
+				else
+					isDestroyed = true;
+			}
 		}
 		public override void Draw(Graphics g)
 		{
