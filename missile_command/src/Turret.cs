@@ -20,6 +20,7 @@ namespace missile_command
 		private bool isDestroyed;
 		private Pen pen;
 		private Point turretEnd;
+		private StatusBar hpBar;
 
 		public Turret(int x, int y, int w, int h, PType p, ETag t) : base(x, y, w, h, t)
 		{
@@ -31,15 +32,24 @@ namespace missile_command
 			int nY = Body.Top - Config.Instance().TurretRadius() / 2;
 			Body.UpdatePosition(nX, nY);
 			isDestroyed = false;
+
+			hpBar = new HealthBar(Body.CenterX, Body.CenterY, 50, 10);
+			hpBar.Healed += HpBar_Healed;
+		}
+		private void HpBar_Healed()
+		{
+			isDestroyed = false;
 		}
 		protected override void Collided(Body collider)
 		{
-			// TODO for survival add hp?
-			isDestroyed = true;
+			if (hpBar.IsAlive())
+				hpBar.Damage();
+			else
+				isDestroyed = true;
 		}
 		public override void Draw(Graphics g)
 		{
-			//g.DrawEllipse(pen, tower);
+			hpBar.Draw(g);
 			g.DrawArc(pen, Body.Left, Body.Top, Body.Width, Body.Height, 180, 180);
 
 			if (!isDestroyed)
