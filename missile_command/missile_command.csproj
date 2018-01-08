@@ -50,26 +50,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\City.cs" />
-    <Compile Include="src\Collider.cs" />
-    <Compile Include="src\Entity.cs" />
-    <Compile Include="src\UserInterface.cs" />
-    <Compile Include="src\StatusBar.cs" />
-    <Compile Include="src\Shield.cs" />
-    <Compile Include="src\Body.cs" />
-    <Compile Include="src\EntityFactory.cs" />
+    <Compile Include="src\game\City.cs" />
+    <Compile Include="src\game\Collider.cs" />
+    <Compile Include="src\game\Entity.cs" />
+    <Compile Include="src\game\_GameManager.cs" />
+    <Compile Include="src\ui\Menu.cs" />
+    <Compile Include="src\ui\UserInterface.cs" />
+    <Compile Include="src\ui\StatusBar.cs" />
+    <Compile Include="src\game\Shield.cs" />
+    <Compile Include="src\game\Body.cs" />
+    <Compile Include="src\factories\EntityFactory.cs" />
     <Compile Include="src\GameForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\GameForm.Designer.cs">
       <DependentUpon>GameForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\Bomb.cs" />
-    <Compile Include="src\LandMass.cs" />
-    <Compile Include="src\Player.cs" />
-    <Compile Include="src\Reticle.cs" />
-    <Compile Include="src\Turret.cs" />
-    <Compile Include="src\KeypressHandler.cs" />
+    <Compile Include="src\game\Bomb.cs" />
+    <Compile Include="src\game\LandMass.cs" />
+    <Compile Include="src\game\Player.cs" />
+    <Compile Include="src\game\Reticle.cs" />
+    <Compile Include="src\game\Turret.cs" />
+    <Compile Include="src\game\KeypressHandler.cs" />
+    <Compile Include="src\ui\_UIManager.cs" />
     <Compile Include="src\Utility.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
