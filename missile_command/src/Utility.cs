@@ -7,11 +7,11 @@
 	};
 	public enum ETag
 	{
-		ENEMY,
+		SYSTEM,
 		P1,
 		P2,
 		P3,
-		SYSTEM
+		ENEMY
 	}
 	public enum Direction
 	{
@@ -32,6 +32,7 @@
 
 		// the dimensions of this image is being drawn as 40x40
 		public const int CITY_SIZE = 30;
+		public const int CITY_TRUE_OFFSET = 10;
 		// stupid windows drawing
 		public const int CITY_TRUE_SIZE = 40;
 		public const int DESTROYED_CITY_SIZE_OFFSET = 15;

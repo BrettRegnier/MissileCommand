@@ -154,14 +154,13 @@ namespace missile_command
 						lEntities[i][j].Draw(e.Graphics);
 
 				// :O almost n^3
-				// TODO maybe make "entity" into collider and use composition
-				for (int i = 1; i < lEntities.Count; i++)
+				for (int i = 0; i < lEntities.Count - 1; i++)
 				{
 					for (int j = 0; j < lEntities[(int)ETag.ENEMY].Count; j++)
 					{
 						for (int k = 0; k < lEntities[i].Count; k++)
 						{
-							lEntities[(int)ETag.ENEMY][j].Collider.CollisionDetection(lEntities[i][k].Collider);							
+							lEntities[(int)ETag.ENEMY][j].Collider.CollisionDetection(lEntities[i][k].Collider);
 						}
 					}
 				}

@@ -55,51 +55,47 @@ namespace missile_command
 		}
 		public void Shoot()
 		{
-			if (!noActiveTurrets)
+			if (lTurrets[fireCount].IsDestroyed)
 			{
-				if (lTurrets[fireCount].IsDestroyed)
+				int cycleCount = 0;
+				int curIndex = fireCount;
+				while (lTurrets[curIndex].IsDestroyed && !noActiveTurrets)
 				{
-					int cycleCount = 0;
-					int curIndex = fireCount;
-					while (lTurrets[curIndex].IsDestroyed && !noActiveTurrets)
+					if (++curIndex >= lTurrets.Count)
+						curIndex = 0;
+
+					if (++cycleCount >= lTurrets.Count)
 					{
-						if (++curIndex >= lTurrets.Count)
-							curIndex = 0;
-
-						if (++cycleCount >= lTurrets.Count)
-						{
-							noActiveTurrets = true;
-							return;
-						}
+						return;
 					}
-					fireCount = curIndex;
 				}
-				if (coolingDown == false)
-				{
-					// TODO add logic to shoot from a tower based on the position of the cursor, if its closer
-					// it should fire first, if ammo is 0 then the next closest should fire.
+				fireCount = curIndex;
+			}
+			if (coolingDown == false)
+			{
+				// TODO add logic to shoot from a tower based on the position of the cursor, if its closer
+				// it should fire first, if ammo is 0 then the next closest should fire.
 
-					// TODO add logic for destroyed turrets
-					lTurrets[fireCount++].ShootTurret(cursor.Body.Center);
+				// TODO add logic for destroyed turrets
+				lTurrets[fireCount++].ShootTurret(cursor.Body.Center);
 
-					// TODO move into turret?
-					coolingDown = true;
+				// TODO move into turret?
+				coolingDown = true;
 
-					if (fireCount >= lTurrets.Count)
-						fireCount = 0;
+				if (fireCount >= lTurrets.Count)
+					fireCount = 0;
 
-				}
-				else
-				{
-					coolingDownCount++;
-				}
+			}
+			else
+			{
+				coolingDownCount++;
+			}
 
-				if (coolingDownCount == 10)
-				{
-					coolingDown = false;
-					coolingDownCount = 0;
+			if (coolingDownCount == 10)
+			{
+				coolingDown = false;
+				coolingDownCount = 0;
 
-				}
 			}
 		}
 

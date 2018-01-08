@@ -52,7 +52,9 @@ namespace missile_command
 			Size shieldSize = Body.Dimension;
 			shieldSize.Width += Utils.CITY_TRUE_SIZE * 2;
 			shieldSize.Height += Utils.CITY_TRUE_SIZE * 2;
-			shield = new Shield(Body.Left, Body.Bottom, Body.CenterX, Body.Top, shieldSize.Width, shieldSize.Height, Tag);
+
+			// I need to pass in the city true size /2, since that would be the TRUE center (windows drawing issues)
+			shield = new Shield(Body.CenterX+Utils.CITY_TRUE_OFFSET/2, Body.Bottom, Body.CenterX, Body.Top, shieldSize.Width, shieldSize.Height, Tag);
 			shield.Replished += ShieldReplished;
 			shield.Lowered += ShieldLowered;
 

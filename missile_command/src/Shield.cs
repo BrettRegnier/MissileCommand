@@ -24,11 +24,11 @@ namespace missile_command
 
 		// TODO rethink the logic for shield's positioning it might fix the problems I am having with all the magic numbers
 		// Expects to get the BottomLeft for the hpbar, and the TopCenter for the shield
-		public Shield(int bottomX, int bottomY, int center, int top, int w, int h, ETag t) : base(center, top, w, h, t)
+		public Shield(int CenterX, int bottomY, int center, int top, int w, int h, ETag t) : base(center, top, w, h, t)
 		{
-			// TODO add utility setting for the size of the bar
+			// TODO I think the size of the bar should match the width of the city
 			// Set the hp bar to be below the city
-			hpBar = new ShieldBar(bottomX, bottomY, 40, 10);
+			hpBar = new ShieldBar(CenterX, bottomY, 40, 10);
 			hpBar.Healed += HpBar_Healed;
 
 			// Reposition the shield due to the fact that microsoft drawing has some weird dimension things going on.

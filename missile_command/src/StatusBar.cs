@@ -35,7 +35,8 @@ namespace missile_command
 		{
 			outlinePen = new Pen(Color.Black);
 
-			Body.MovePositionY(Body.Dimension.Height);
+			Body.MovePositionY(Body.Dimension.Height + OUTLINE_OFFSET);
+			Body.MovePositionX(-Body.Dimension.Width / 2);
 
 			// 2 pixels on all sides
 			int nX = Body.Left - OUTLINE_OFFSET;
