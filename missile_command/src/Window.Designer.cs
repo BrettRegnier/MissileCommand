@@ -1,6 +1,6 @@
 ﻿namespace missile_command
 {
-	partial class GameForm
+	partial class Window
 	{
 		/// <summary>
 		/// Required designer variable.

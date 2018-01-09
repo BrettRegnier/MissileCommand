@@ -7,6 +7,7 @@ using System.Windows.Forms;
 
 namespace missile_command
 {
+	// TODO switch to async states like mouse.
 	class KeypressHandler
 	{
 		private enum KPressBits

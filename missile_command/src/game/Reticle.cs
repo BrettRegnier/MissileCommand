@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace missile_command
 {
-	class Reticle : UserInterface
+	class Reticle : Component
 	{
 		private const int CURSOR_OFFSET = 5;
 		private const int MOVE_VAL = 10;
@@ -58,10 +58,15 @@ namespace missile_command
 			}
 			return Body.Center;
 		}
-		//public Point Center()
-		//{
-		//	// Honestly not sure why this works the way it does, but for some reason this centers the bombs.
-		//	return new Point(Body.Left + 3, Body.Top + 3);
-		//}
+
+		public override void PostUpdate()
+		{
+			throw new NotImplementedException();
+		}
+
+		public override void Update()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
