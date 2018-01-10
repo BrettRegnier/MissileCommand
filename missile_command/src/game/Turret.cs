@@ -21,6 +21,7 @@ namespace missile_command
 		private Pen pen;
 		private Point turretEnd;
 		private StatusBar hpBar;
+		private Body aim;
 
 		public Turret(int x, int y, int w, int h, PType p, ETag t) : base(x, y, w, h, t)
 		{
@@ -34,17 +35,17 @@ namespace missile_command
 			isDestroyed = false;
 
 			hpBar = new HealthBar(Body.Center.X, Body.Center.Y, 50, 10);
-			hpBar.Healed += HpBar_Healed;
 		}
-		private void HpBar_Healed()
+		public void AttachReticleBody(Body r)
 		{
-			isDestroyed = false;
+			aim = r;
 		}
-		protected override void Collided(Body collider)
+		protected override void Collided(Collider collider)
 		{
-			if (collider.Top < Body.Center.Y)
+			// Need to check to see if the last collider is the same as the one now.
+			if (collider.Body.Top < Body.Center.Y)
 			{
-				if (hpBar.IsAlive())
+				if (hpBar.IsAlive)
 					hpBar.Damage();
 				else
 					isDestroyed = true;
@@ -58,11 +59,16 @@ namespace missile_command
 			if (!isDestroyed)
 				g.DrawLine(pen, Body.Center, turretEnd);
 		}
-		public void TurretCalculation(Point aim)
+		public void ShootTurret()
 		{
+			TurretShoot(turretEnd, aim.Center, Tag);
+		}
+		public override void Update(long gameTime)
+		{
+			hpBar.Update(gameTime);
 			// Difference between where we are aiming and the center of the turret
-			int cursorTowerDiffX = aim.X - Body.Center.X;
-			int cursorTowerDiffY = Body.Center.Y - aim.Y;
+			int cursorTowerDiffX = aim.Center.X - Body.Center.X;
+			int cursorTowerDiffY = Body.Center.Y - aim.Center.Y;
 
 			// This is the size of the line that is the gun
 			int gunLength = Config.Instance.TurretRadius() / 2 + GUN_END_LENGTH;
@@ -84,17 +90,14 @@ namespace missile_command
 
 			turretEnd = new Point(turretX, turretY);
 		}
-		public void ShootTurret(Point destination)
-		{
-			TurretShoot(turretEnd, destination, Tag);
-		}
-
-		public override void Update(long gameTIme)
-		{
-		}
 
 		public override void PostUpdate(long gameTime)
 		{
+			hpBar.PostUpdate(gameTime);
+			if (hpBar.IsAlive)
+			{
+				isDestroyed = false;
+			}
 		}
 
 		public bool IsDestroyed { get { return isDestroyed; } }

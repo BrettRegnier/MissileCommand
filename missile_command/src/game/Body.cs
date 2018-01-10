@@ -72,16 +72,16 @@ namespace missile_command
 		{
 			position.Y = y;
 		}
-		public void MovePosition(int x, int y)
+		public void AdjustPosition(int x, int y)
 		{
 			position.X += x;
 			position.Y += y;
 		}
-		public void MovePositionX(int x)
+		public void AdjustX(int x)
 		{
 			position.X += x;
 		}
-		public void MovePositionY(int y)
+		public void AdjustY(int y)
 		{
 			position.Y += y;
 		}

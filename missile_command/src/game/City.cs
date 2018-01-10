@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace missile_command
 {
@@ -18,14 +17,13 @@ namespace missile_command
 		};
 
 		private static List<Image> lSprite = new List<Image>();
-		private static int cityCount = 0;
 		private static int aliveCities = 0;
 
 		private Image sprite;
 		private bool isDestroyed;
 		private Shield shield;
 
-		private Body collidedBody;
+		private Collider prevCollider;
 		private Collider cHolder;
 
 		static City()
@@ -43,33 +41,28 @@ namespace missile_command
 		public City(int x, int y, int w, int h, ETag t = ETag.SYSTEM) : base(x, y, w, h, t)
 		{
 			sprite = lSprite[(int)SpriteType.ALIVE];
-			Body.UpdateDimension(Utils.CITY_SIZE, Utils.CITY_SIZE);
-			Body.UpdatePositionX(Utils.CITY_POSITIONS_X[cityCount++]);
-			Body.UpdatePositionY(Utils.gameBounds.Height - (Utils.LAND_MASS_HEIGHT + Body.Height));
 			aliveCities++;
 			isDestroyed = false;
 
 			Size shieldSize = Body.Dimension;
-			shieldSize.Width += Utils.CITY_TRUE_SIZE * 2;
+			shieldSize.Width += Utils.CITY_TRUE_SIZE;
 			shieldSize.Height += Utils.CITY_TRUE_SIZE * 2;
 
 			// I need to pass in the city true size /2, since that would be the TRUE center (windows drawing issues)
-			shield = new Shield(Body.Center.X+Utils.CITY_TRUE_OFFSET/2, Body.Bottom, Body.Center.X, Body.Top, shieldSize.Width, shieldSize.Height, Tag);
-			shield.Replished += ShieldReplished;
-			shield.Lowered += ShieldLowered;
+			shield = new Shield(Body.Center.X, Body.Bottom, Body.Center.X, Body.Top, shieldSize.Width, shieldSize.Height, Tag);
 
 			cHolder = Collider;
 			Collider = shield.Collider;
 		}
-		protected override void Collided(Body collider)
+		protected override void Collided(Collider collider)
 		{
-			if (shield.CollidedBody != collider && collider != collidedBody)
+			if (shield.PreviousCollider != collider && collider != prevCollider)
 			{
 				if (!shield.Active)
 				{
 					sprite = lSprite[(int)SpriteType.DEAD];
 					isDestroyed = true;
-					collidedBody = collider;
+					prevCollider = collider;
 				}
 			}
 		}
@@ -93,12 +86,18 @@ namespace missile_command
 		{
 			Collider = shield.Collider;
 		}
-		public override void PostUpdate(long gameTime)
+		public override void Update(long gameTime)
 		{
+			shield.Update(gameTime);
+			if (shield.Active)
+				Collider = shield.Collider;
+			else
+				Collider = cHolder;
 
 		}
-		public override void Update(long gameTIme)
+		public override void PostUpdate(long gameTime)
 		{
+			shield.PostUpdate(gameTime);
 		}
 	}
 }

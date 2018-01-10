@@ -44,8 +44,8 @@ namespace missile_command
 			outlineColor = Pens.Green;
 			textColor = Color.Green;
 
-			Body.MovePositionY(Body.Dimension.Height + OUTLINE_OFFSET);
-			Body.MovePositionX(-Body.Dimension.Width / 2);
+			Body.AdjustY(Body.Dimension.Height + OUTLINE_OFFSET);
+			Body.AdjustX(-Body.Dimension.Width / 2);
 
 			innerRect = new Rectangle(Body.TopLeft, Body.Dimension);
 

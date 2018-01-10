@@ -38,19 +38,13 @@ namespace missile_command
 		}
 		public void AttachTurret(Turret t)
 		{
+			t.AttachReticleBody(cursor.Body);
 			lTurrets.Add(t);
-			t.TurretCalculation(cursor.Body.Center);
 			noActiveTurrets = false;
 		}
 		public void Draw(Graphics g)
 		{
 			cursor.Draw(g);
-		}
-		private void MoveReticle(Direction dir)
-		{
-			Point newPoint = cursor.Move(dir);
-			for (int i = 0; i < lTurrets.Count; i++)
-				lTurrets[i].TurretCalculation(cursor.Body.Center);
 		}
 		private void Shoot()
 		{
@@ -76,7 +70,7 @@ namespace missile_command
 				// it should fire first, if ammo is 0 then the next closest should fire.
 
 				// TODO add logic for destroyed turrets
-				lTurrets[fireCount++].ShootTurret(cursor.Body.Center);
+				lTurrets[fireCount++].ShootTurret();
 				//lTurrets[1].ShootTurret(cursor.Body.Center);
 
 				// TODO move into turret?
@@ -103,20 +97,21 @@ namespace missile_command
 			// Determine the keys pressed.
 			KPress keysPressed = KeypressHandler.Instance.PlayerKeyState(this);
 			if ((keysPressed & KPress.UP) == KPress.UP)
-				MoveReticle(Direction.UP);
+				cursor.Move(Direction.UP);
 			if ((keysPressed & KPress.RIGHT) == KPress.RIGHT)
-				MoveReticle(Direction.RIGHT);
+				cursor.Move(Direction.RIGHT);
 			if ((keysPressed & KPress.DOWN) == KPress.DOWN)
-				MoveReticle(Direction.DOWN);
+				cursor.Move(Direction.DOWN);
 			if ((keysPressed & KPress.LEFT) == KPress.LEFT)
-				MoveReticle(Direction.LEFT);
+				cursor.Move(Direction.LEFT);
 			if ((keysPressed & KPress.SHOOT) == KPress.SHOOT)
 				Shoot();
 
+			cursor.Update(gameTime);
 		}
 		public void PostUpdate(long gameTime)
 		{
-
+			cursor.PostUpdate(gameTime);
 		}
 	}
 }

@@ -58,7 +58,7 @@
     <Compile Include="src\State.cs" />
     <Compile Include="src\ui\Button.cs" />
     <Compile Include="src\ui\Component.cs" />
-    <Compile Include="src\ui\StatusBar.cs" />
+    <Compile Include="src\game\StatusBar.cs" />
     <Compile Include="src\game\Shield.cs" />
     <Compile Include="src\game\Body.cs" />
     <Compile Include="src\factories\EntityFactory.cs" />
