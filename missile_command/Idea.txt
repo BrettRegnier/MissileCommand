@@ -7,7 +7,5 @@ while making gameobjects contain a entity?
 
 // TODO make art for cities smaller
 // TODO add deconstructors for starting the game over.
-// TODO maybe make a game controller class
-// TODO turn methods that don't need to be methods into properties
-// Give cities a shield (blue ring)
-// Can replace rectangles with the position and dimension properties
+// TODO seperate update, draw, and post update.
+// TODO state for upgrading, pause, highscore.

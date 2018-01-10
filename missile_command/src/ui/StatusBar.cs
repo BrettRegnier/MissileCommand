@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace missile_command
 {
-	abstract class StatusBar : UserInterface
+	abstract class StatusBar : Component
 	{
 		public delegate void Heal();
 		public event Heal Healed;
@@ -57,6 +57,14 @@ namespace missile_command
 			g.DrawRectangle(outlinePen, outlineBar);
 			g.FillRectangle(innerBrush, Body.Left, Body.Top, Body.Width, Body.Height);
 			Replenish();
+		}
+		public override void Update()
+		{
+			throw new NotImplementedException();
+		}
+		public override void PostUpdate()
+		{
+			throw new NotImplementedException();
 		}
 		private void Replenish()
 		{

@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace missile_command
 {
-	public partial class GameForm : Form
+	public partial class Window : Form
 	{
 		// TODO make wave game mode
 
@@ -26,10 +26,12 @@ namespace missile_command
 
 		List<List<Entity>> lEntities;
 
+		State ms;
+
 		// Methods
-		public GameForm()
+		public Window()
 		{
-			InitializeComponent();
+			this.InitializeComponent();
 			Main();
 		}
 
@@ -38,8 +40,14 @@ namespace missile_command
 			// TODO make menu
 			// TODO make pause menu
 			InitForm();
-			InitGame();
-			InitPlayers(1);
+
+			// TODO switch to using a component list.
+			lEntities = new List<List<Entity>>();
+			lPlayer = new List<Player>();
+
+			//InitGame();
+			//InitPlayers(1);
+			ms = new MenuState(this);
 			this.Invalidate(); // Start the game.
 		}
 		private void InitForm()
@@ -57,7 +65,7 @@ namespace missile_command
 		}
 		private void InitGame()
 		{
-			lEntities = new List<List<Entity>>();
+			//lEntities = new List<List<Entity>>();
 			// 5 Types of entites based on accounts enum
 			for (int i = 0; i < 5; i++)
 				lEntities.Add(new List<Entity>());
@@ -79,8 +87,6 @@ namespace missile_command
 				City c = new City();
 				lEntities[(int)ETag.SYSTEM].Add(c);
 			}
-
-			lPlayer = new List<Player>();
 		}
 		private void InitPlayers(int numPlayers)
 		{
@@ -143,6 +149,9 @@ namespace missile_command
 		{
 			try
 			{
+				ms.Draw(e.Graphics);
+
+				
 				// TODO uncomment
 				//SpawnEnemies();
 
@@ -166,7 +175,7 @@ namespace missile_command
 				}
 
 				frames++;
-				KeypressHandler.Instance().MoveCursor();
+				//KeypressHandler.Instance().MoveCursor();
 
 				// Update after drawing
 				Loop();
@@ -174,50 +183,9 @@ namespace missile_command
 			catch (Exception ex)
 			{
 				MessageBox.Show(ex.Message);
+				this.Invalidate();
 			}
 		}
-
-		// OLD
-		//private void CollisionDetector()
-		//{
-		//	// TODO collisions for the ground and buildings
-		//	for (int i = 0; i < lObject.Count; i++)
-		//	{
-		//		for (int j = 0; j < lObject.Count; j++)
-		//		{
-		//			if (lObject[i] != lObject[j])
-		//			{
-		//				// if i is enemy and j is not or if i is not enemy and j is
-		//				bool IandJ = lObject[i].GetPlayerType() == PType.ENEMY && lObject[j].GetPlayerType() != PType.ENEMY;
-		//				bool JandI = lObject[i].GetPlayerType() != PType.ENEMY && lObject[j].GetPlayerType() == PType.ENEMY;
-		//				if (IandJ || JandI)
-		//				{
-		//					bool collided = CheckCollision(lObject[i], lObject[j]);
-		//					if (collided)
-		//					{
-		//						lObject[i].Collided();
-		//					}
-		//				}
-		//			}
-		//		}
-		//	}
-		//}
-		//private bool CheckCollision(Collider collider, Collider collidee)
-		//{
-		//	// TODO maybe make specific calculations in this?
-		//	// If this was viewed as a square,
-		//	// the way to view it is checks in this order of collider right, left, bottom, top
-		//	if (collider.Right < collidee.Left)
-		//		return false;
-		//	if (collidee.Right < collider.Left)
-		//		return false;
-		//	if (collider.Bottom < collidee.Top)
-		//		return false;
-		//	if (collidee.Bottom < collider.Top)
-		//		return false;
-
-		//	return true;
-		//}
 		private void P_TurretShoot(Point origin, Point destination, ETag a)
 		{
 			// use player upgrades, if I add them, to determine the size.
