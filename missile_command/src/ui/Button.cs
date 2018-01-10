@@ -63,8 +63,6 @@ namespace missile_command
 		}
 		public override void Draw(Graphics g)
 		{
-			Update(); // For now until I update the engine.
-
 			innerColor = new SolidBrush(Color.FromArgb(20, 20, 20));
 			if (isHovering)
 				innerColor = new SolidBrush(Color.FromArgb(40, 40, 40));
@@ -87,14 +85,12 @@ namespace missile_command
 			{
 				g.DrawString(Text, new Font("Times New Roman", fontSize), new SolidBrush(textColor), innerRect, sf);
 			}
-
-			PostUpdate(); // for now until I update the engine.
 		}
-		public override void Update()
+		public override void Update(long gameTime)
 		{
 			// true is clicked, false is not clicked
 			previousMouse = currentMouse;
-			currentMouse = MouseHandler.Instance().MouseState(MOUSE_BUTTONS.VK_LBUTTON);
+			currentMouse = MouseHandler.Instance.MouseState(MOUSE_BUTTONS.VK_LBUTTON);
 			mousePosition = System.Windows.Forms.Cursor.Position;
 
 			Rectangle mouseRectangle = new Rectangle(mousePosition.X, mousePosition.Y, 1, 1);
@@ -110,7 +106,7 @@ namespace missile_command
 				}
 			}
 		}
-		public override void PostUpdate()
+		public override void PostUpdate(long gameTime)
 		{
 
 		}

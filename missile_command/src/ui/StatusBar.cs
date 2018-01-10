@@ -58,11 +58,11 @@ namespace missile_command
 			g.FillRectangle(innerBrush, Body.Left, Body.Top, Body.Width, Body.Height);
 			Replenish();
 		}
-		public override void Update()
+		public override void Update(long gameTIme)
 		{
 			throw new NotImplementedException();
 		}
-		public override void PostUpdate()
+		public override void PostUpdate(long gameTime)
 		{
 			throw new NotImplementedException();
 		}

@@ -6,10 +6,8 @@ using System.Windows.Forms;
 
 namespace missile_command
 {
-	// TODO take player out of gameobjects, it isn't one, it controls gameobjects but isn't a gameobject
 	class Player
 	{
-		// TODO make turret into its own class and add them to a player.
 		// TODO move delegates to turret
 		// TODO Add ammo
 
@@ -24,6 +22,8 @@ namespace missile_command
 		private bool coolingDown;
 		private bool noActiveTurrets;
 
+		public ETag GetTag() { return tag; }
+		public PType GetPType() { return pType; }
 
 		public Player(PType p, ETag a)
 		{
@@ -44,16 +44,15 @@ namespace missile_command
 		}
 		public void Draw(Graphics g)
 		{
-			// TODO maybe add statistics into drawing just like cursors.
 			cursor.Draw(g);
 		}
-		public void MoveReticle(Direction dir)
+		private void MoveReticle(Direction dir)
 		{
 			Point newPoint = cursor.Move(dir);
 			for (int i = 0; i < lTurrets.Count; i++)
 				lTurrets[i].TurretCalculation(cursor.Body.Center);
 		}
-		public void Shoot()
+		private void Shoot()
 		{
 			if (lTurrets[fireCount].IsDestroyed)
 			{
@@ -78,6 +77,7 @@ namespace missile_command
 
 				// TODO add logic for destroyed turrets
 				lTurrets[fireCount++].ShootTurret(cursor.Body.Center);
+				//lTurrets[1].ShootTurret(cursor.Body.Center);
 
 				// TODO move into turret?
 				coolingDown = true;
@@ -98,8 +98,25 @@ namespace missile_command
 
 			}
 		}
+		public void Update(long gameTime)
+		{
+			// Determine the keys pressed.
+			KPress keysPressed = KeypressHandler.Instance.PlayerKeyState(this);
+			if ((keysPressed & KPress.UP) == KPress.UP)
+				MoveReticle(Direction.UP);
+			if ((keysPressed & KPress.RIGHT) == KPress.RIGHT)
+				MoveReticle(Direction.RIGHT);
+			if ((keysPressed & KPress.DOWN) == KPress.DOWN)
+				MoveReticle(Direction.DOWN);
+			if ((keysPressed & KPress.LEFT) == KPress.LEFT)
+				MoveReticle(Direction.LEFT);
+			if ((keysPressed & KPress.SHOOT) == KPress.SHOOT)
+				Shoot();
 
-		public ETag GetTag() { return tag; }
-		public PType GetPType() { return pType; }
+		}
+		public void PostUpdate(long gameTime)
+		{
+
+		}
 	}
 }

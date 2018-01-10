@@ -29,6 +29,17 @@ namespace missile_command
 		private int explosionSize = 100;
 		private int turretRadius = 50;
 
+		public static Config Instance
+		{
+			get
+			{
+				if (instance == null)
+					instance = new Config();
+
+				return instance;
+			}
+		}
+
 		// TODO figure out how to select the image for a cursor, maybe a string that will load it?
 		// TODO Pretty much this whole class.
 		// TODO decide on how many players... leaning towards 3
@@ -37,13 +48,6 @@ namespace missile_command
 			LoadBasicConfig();
 			LoadColorConfig();
 			LoadPlayerKeys();
-		}
-		public static Config Instance()
-		{
-			if (instance == null)
-				instance = new Config();
-
-			return instance;
 		}
 		public Color GetPlayerColor(ETag p)
 		{

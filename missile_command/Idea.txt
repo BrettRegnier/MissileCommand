@@ -8,4 +8,4 @@ while making gameobjects contain a entity?
 // TODO make art for cities smaller
 // TODO add deconstructors for starting the game over.
 // TODO seperate update, draw, and post update.
-// TODO state for upgrading, pause, highscore.
+// TODO state inside of he game (playstate.cs maybe)

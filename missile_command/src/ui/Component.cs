@@ -14,8 +14,8 @@ namespace missile_command
 			Body = new Body(x, y, w, h);
 		}
 
-		public abstract void Update();
-		public abstract void PostUpdate();
+		public abstract void Update(long gameTime);
+		public abstract void PostUpdate(long gameTime);
 		public abstract void Draw(System.Drawing.Graphics g);
 	}
 }
