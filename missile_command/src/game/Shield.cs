@@ -22,6 +22,9 @@ namespace missile_command
 		private ShieldBar hpBar;
 		private Body collidedBody;
 
+		public bool Active { get { return hpBar.IsAlive(); } }
+		public Body CollidedBody { get { return collidedBody; } }
+
 		// TODO rethink the logic for shield's positioning it might fix the problems I am having with all the magic numbers
 		// Expects to get the BottomLeft for the hpbar, and the TopCenter for the shield
 		public Shield(int CenterX, int bottomY, int center, int top, int w, int h, ETag t) : base(center, top, w, h, t)
@@ -35,10 +38,6 @@ namespace missile_command
 			Body.MovePositionX(-(Utils.CITY_TRUE_SIZE + 12));
 			Body.MovePositionY(-POSITION_Y_OFFSET);
 			shield = new Rectangle(Body.TopLeft, Body.Dimension);
-		}
-		private void HpBar_Healed()
-		{
-			Replished();
 		}
 		protected override void Collided(Body collider)
 		{
@@ -58,13 +57,18 @@ namespace missile_command
 				g.DrawArc(Pens.Blue, shield, 180, 180);
 			}
 		}
-		public bool Active()
+		private void HpBar_Healed()
 		{
-			return hpBar.IsAlive();
+			Replished();
 		}
-		public Body CollidedBody()
+		public override void PostUpdate(long gameTime)
 		{
-			return collidedBody;
+
 		}
+		public override void Update(long gameTIme)
+		{
+
+		}
+
 	}
 }

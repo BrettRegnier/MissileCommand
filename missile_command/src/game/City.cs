@@ -40,7 +40,7 @@ namespace missile_command
 				}
 			}
 		}
-		public City(ETag t = ETag.SYSTEM) : base(t)
+		public City(int x, int y, int w, int h, ETag t = ETag.SYSTEM) : base(x, y, w, h, t)
 		{
 			sprite = lSprite[(int)SpriteType.ALIVE];
 			Body.UpdateDimension(Utils.CITY_SIZE, Utils.CITY_SIZE);
@@ -54,26 +54,18 @@ namespace missile_command
 			shieldSize.Height += Utils.CITY_TRUE_SIZE * 2;
 
 			// I need to pass in the city true size /2, since that would be the TRUE center (windows drawing issues)
-			shield = new Shield(Body.CenterX+Utils.CITY_TRUE_OFFSET/2, Body.Bottom, Body.CenterX, Body.Top, shieldSize.Width, shieldSize.Height, Tag);
+			shield = new Shield(Body.Center.X+Utils.CITY_TRUE_OFFSET/2, Body.Bottom, Body.Center.X, Body.Top, shieldSize.Width, shieldSize.Height, Tag);
 			shield.Replished += ShieldReplished;
 			shield.Lowered += ShieldLowered;
 
 			cHolder = Collider;
 			Collider = shield.Collider;
 		}
-		private void ShieldLowered()
-		{
-			Collider = cHolder;
-		}
-		private void ShieldReplished()
-		{
-			Collider = shield.Collider;
-		}
 		protected override void Collided(Body collider)
 		{
-			if (shield.CollidedBody() != collider && collider != collidedBody)
+			if (shield.CollidedBody != collider && collider != collidedBody)
 			{
-				if (!shield.Active())
+				if (!shield.Active)
 				{
 					sprite = lSprite[(int)SpriteType.DEAD];
 					isDestroyed = true;
@@ -92,6 +84,21 @@ namespace missile_command
 		public static int NumCitiesAlive()
 		{
 			return aliveCities;
+		}
+		private void ShieldLowered()
+		{
+			Collider = cHolder;
+		}
+		private void ShieldReplished()
+		{
+			Collider = shield.Collider;
+		}
+		public override void PostUpdate(long gameTime)
+		{
+
+		}
+		public override void Update(long gameTIme)
+		{
 		}
 	}
 }

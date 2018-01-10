@@ -20,6 +20,15 @@
 		DOWN = 2,
 		LEFT = 3
 	};
+	public enum KPress
+	{
+		NONE = 0,
+		UP = 1,
+		RIGHT = 2,
+		DOWN = 4,
+		LEFT = 8,
+		SHOOT = 16
+	};
 	public static class Utils
 	{
 		//TODO hill sizes based on the screen

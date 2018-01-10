@@ -24,13 +24,15 @@ namespace missile_command
 			exitButton.Click += ExitButton_Click;
 			lComponents.Add(exitButton);
 		}
-		public override void Update()
+		public override void Update(long gameTime)
 		{
-			throw new NotImplementedException();
+			foreach (Component component in lComponents)
+				component.Update(gameTime);
 		}
-		public override void PostUpdate()
+		public override void PostUpdate(long gameTime)
 		{
-			throw new NotImplementedException();
+			foreach (Component component in lComponents)
+				component.PostUpdate(gameTime);
 		}
 		public override void Draw(Graphics g)
 		{
@@ -40,7 +42,7 @@ namespace missile_command
 
 		private void NewGameButton_Click(object sender, EventArgs e)
 		{
-			throw new NotImplementedException();
+			game.NextState(new GameState(game));
 		}
 		private void HighScoresButton_Click(object sender, EventArgs e)
 		{

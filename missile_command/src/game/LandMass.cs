@@ -17,14 +17,22 @@ namespace missile_command
 			// adjust the origin for the height, good ole microsoft windows and stuff
 			Body.MovePositionY(-(Body.Dimension.Height - 5));
 			
-			brush = new SolidBrush(Config.Instance().GetPlayerColor(ETag.SYSTEM));
+			brush = new SolidBrush(Config.Instance.GetPlayerColor(ETag.SYSTEM));
+		}
+
+		protected override void Collided(Body body)
+		{
+
 		}
 		public override void Draw(Graphics g)
 		{
 			g.FillRectangle(brush, Body.Left, Body.Top, Body.Width, Body.Height);
 		}
+		public override void PostUpdate(long gameTime)
+		{
 
-		protected override void Collided(Body body)
+		}
+		public override void Update(long gameTIme)
 		{
 
 		}

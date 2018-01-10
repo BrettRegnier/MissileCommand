@@ -14,14 +14,16 @@ namespace missile_command
 
 		private static MouseHandler instance;
 
-		public static MouseHandler Instance()
+		public static MouseHandler Instance
 		{
-			if (instance == null)
+			get
 			{
-				instance = new MouseHandler();
+				if (instance == null)
+				{
+					instance = new MouseHandler();
+				}
+				return instance;
 			}
-
-			return instance;
 		}
 		public bool MouseState(MOUSE_BUTTONS button)
 		{

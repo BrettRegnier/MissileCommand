@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace missile_command
 {
-	abstract class State
+	public abstract class State
 	{
 		protected Window game;
 		public State(Window g)
 		{
 			game = g;
 		}
-		public abstract void Update();
-		public abstract void PostUpdate();
 		public abstract void Draw(Graphics g);
+		public abstract void Update(long gameTime);
+		public abstract void PostUpdate(long gameTime);
 	}
 }

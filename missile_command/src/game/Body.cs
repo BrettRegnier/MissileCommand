@@ -25,16 +25,14 @@ namespace missile_command
 		public int Right { get { return position.X + dimension.Width; } }
 		public int Top { get { return position.Y; } }
 		public int Bottom { get { return position.Y + dimension.Height; } }
-		public int CenterX { get { return position.X + dimension.Width / 2; } }
-		public int CenterY { get { return position.Y + dimension.Height / 2; } }
 		public Point TopLeft { get { return new Point(Left, Top); } }
-		public Point TopCenter { get { return new Point(CenterX, Top); } }
+		public Point TopCenter { get { return new Point(Center.X, Top); } }
 		public Point TopRight { get { return new Point(Right, Top); } }
 		public Point BottomLeft { get { return new Point(Left, Bottom); } }
-		public Point BottomCenter { get { return new Point(CenterX, Bottom); } }
+		public Point BottomCenter { get { return new Point(Center.X, Bottom); } }
 		public Point BottomRight { get { return new Point(Right, Bottom); } }
-		public Point CenterLeft { get { return new Point(Left, CenterY); } }
-		public Point CenterRight { get { return new Point(Right, CenterY); } }
+		public Point CenterLeft { get { return new Point(Left, Center.Y); } }
+		public Point CenterRight { get { return new Point(Right, Center.Y); } }
 		public int Width {  get { return dimension.Width; } }
 		public int Height {  get { return dimension.Height; } }
 		public Point Center

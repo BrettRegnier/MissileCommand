@@ -8,7 +8,7 @@ namespace missile_command
 {
 	class Reticle : Component
 	{
-		private const int CURSOR_OFFSET = 5;
+		private const int CURSOR_OFFSET = 6;
 		private const int MOVE_VAL = 10;
 		private const int CURSOR_DIMENSION = 9;
 
@@ -28,9 +28,9 @@ namespace missile_command
 		}
 		public Point Move(Direction dir)
 		{
+			// TODO could just pass in x and y values of 1, -1
 			switch (dir)
 			{
-				//TODO maybe move into its own collision detection?
 				case Direction.UP:
 					if (Body.Top - MOVE_VAL > 0)
 						Body.MovePositionY(-MOVE_VAL);
@@ -58,15 +58,13 @@ namespace missile_command
 			}
 			return Body.Center;
 		}
-
-		public override void PostUpdate()
+		public override void Update(long gameTIme)
 		{
-			throw new NotImplementedException();
+
 		}
-
-		public override void Update()
+		public override void PostUpdate(long gameTime)
 		{
-			throw new NotImplementedException();
+
 		}
 	}
 }

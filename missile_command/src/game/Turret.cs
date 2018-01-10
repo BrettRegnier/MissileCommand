@@ -24,16 +24,16 @@ namespace missile_command
 
 		public Turret(int x, int y, int w, int h, PType p, ETag t) : base(x, y, w, h, t)
 		{
-			int tRadius = Config.Instance().TurretRadius();
-			pen = new Pen(Config.Instance().GetPlayerColor(t));
+			int tRadius = Config.Instance.TurretRadius();
+			pen = new Pen(Config.Instance.GetPlayerColor(t));
 
 			// Move tower to left to position it in the center of the given origin
-			int nX = Body.Left - Config.Instance().TurretRadius() / 2;
-			int nY = Body.Top - Config.Instance().TurretRadius() / 2;
+			int nX = Body.Left - Config.Instance.TurretRadius() / 2;
+			int nY = Body.Top - Config.Instance.TurretRadius() / 2;
 			Body.UpdatePosition(nX, nY);
 			isDestroyed = false;
 
-			hpBar = new HealthBar(Body.CenterX, Body.CenterY, 50, 10);
+			hpBar = new HealthBar(Body.Center.X, Body.Center.Y, 50, 10);
 			hpBar.Healed += HpBar_Healed;
 		}
 		private void HpBar_Healed()
@@ -42,7 +42,7 @@ namespace missile_command
 		}
 		protected override void Collided(Body collider)
 		{
-			if (collider.Top < Body.CenterY)
+			if (collider.Top < Body.Center.Y)
 			{
 				if (hpBar.IsAlive())
 					hpBar.Damage();
@@ -61,11 +61,11 @@ namespace missile_command
 		public void TurretCalculation(Point aim)
 		{
 			// Difference between where we are aiming and the center of the turret
-			int cursorTowerDiffX = aim.X - Body.CenterX;
-			int cursorTowerDiffY = Body.CenterY - aim.Y;
+			int cursorTowerDiffX = aim.X - Body.Center.X;
+			int cursorTowerDiffY = Body.Center.Y - aim.Y;
 
 			// This is the size of the line that is the gun
-			int gunLength = Config.Instance().TurretRadius() / 2 + GUN_END_LENGTH;
+			int gunLength = Config.Instance.TurretRadius() / 2 + GUN_END_LENGTH;
 
 			// Finds the adjecent tangent in radians.
 			double turretAngle = Math.Atan((double)cursorTowerDiffY / (double)cursorTowerDiffX);
@@ -79,14 +79,22 @@ namespace missile_command
 				turretY *= -1;
 			}
 
-			turretX = Body.CenterX + turretX;
-			turretY = Body.CenterY - turretY;
+			turretX = Body.Center.X + turretX;
+			turretY = Body.Center.Y - turretY;
 
 			turretEnd = new Point(turretX, turretY);
 		}
 		public void ShootTurret(Point destination)
 		{
 			TurretShoot(turretEnd, destination, Tag);
+		}
+
+		public override void Update(long gameTIme)
+		{
+		}
+
+		public override void PostUpdate(long gameTime)
+		{
 		}
 
 		public bool IsDestroyed { get { return isDestroyed; } }
