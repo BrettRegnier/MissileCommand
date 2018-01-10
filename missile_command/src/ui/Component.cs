@@ -6,14 +6,16 @@ using System.Threading.Tasks;
 
 namespace missile_command
 {
-	abstract class UserInterface
+	abstract class Component
 	{
 		public Body Body { get; private set; }
-		public UserInterface(int x, int y, int w, int h)
+		public Component(int x, int y, int w, int h)
 		{
 			Body = new Body(x, y, w, h);
 		}
 
+		public abstract void Update();
+		public abstract void PostUpdate();
 		public abstract void Draw(System.Drawing.Graphics g);
 	}
 }

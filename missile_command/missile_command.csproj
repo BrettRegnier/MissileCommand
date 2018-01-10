@@ -53,31 +53,33 @@
     <Compile Include="src\game\City.cs" />
     <Compile Include="src\game\Collider.cs" />
     <Compile Include="src\game\Entity.cs" />
-    <Compile Include="src\game\_GameManager.cs" />
-    <Compile Include="src\ui\Menu.cs" />
-    <Compile Include="src\ui\UserInterface.cs" />
-    <Compile Include="src\game\StatusBar.cs" />
+    <Compile Include="src\game\_GameState.cs" />
+    <Compile Include="src\MouseHandler.cs" />
+    <Compile Include="src\State.cs" />
+    <Compile Include="src\ui\Button.cs" />
+    <Compile Include="src\ui\Component.cs" />
+    <Compile Include="src\ui\StatusBar.cs" />
     <Compile Include="src\game\Shield.cs" />
     <Compile Include="src\game\Body.cs" />
     <Compile Include="src\factories\EntityFactory.cs" />
-    <Compile Include="src\GameForm.cs">
+    <Compile Include="src\Window.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\GameForm.Designer.cs">
-      <DependentUpon>GameForm.cs</DependentUpon>
+    <Compile Include="src\Window.Designer.cs">
+      <DependentUpon>Window.cs</DependentUpon>
     </Compile>
     <Compile Include="src\game\Bomb.cs" />
     <Compile Include="src\game\LandMass.cs" />
     <Compile Include="src\game\Player.cs" />
     <Compile Include="src\game\Reticle.cs" />
     <Compile Include="src\game\Turret.cs" />
-    <Compile Include="src\game\KeypressHandler.cs" />
-    <Compile Include="src\ui\_UIManager.cs" />
+    <Compile Include="src\KeypressHandler.cs" />
+    <Compile Include="src\ui\_MenuState.cs" />
     <Compile Include="src\Utility.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="src\GameForm.resx">
-      <DependentUpon>GameForm.cs</DependentUpon>
+    <EmbeddedResource Include="src\Window.resx">
+      <DependentUpon>Window.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
