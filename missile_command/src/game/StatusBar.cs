@@ -9,8 +9,7 @@ namespace missile_command
 {
 	abstract class StatusBar : Component
 	{
-		//public delegate void Heal();
-		//public event Heal Healed;
+		public event EventHandler Healed;
 
 		private const int OUTLINE_OFFSET = 1;
 
@@ -32,6 +31,7 @@ namespace missile_command
 
 		protected bool isAlive;
 		protected bool isDamaged;
+		protected bool isRestored;
 
 		public StatusBar(int x, int y, int w, int h) : base(x, y, w, h)
 		{
@@ -88,6 +88,11 @@ namespace missile_command
 			{
 				curHP = maxHP;
 				isAlive = true;
+				if (!isRestored)
+				{
+					isRestored = true;
+					Healed?.Invoke(this, new EventArgs());
+				}
 			}
 		}
 		public bool IsAlive
@@ -110,6 +115,7 @@ namespace missile_command
 			curHP = 0;
 			isAlive = false;
 			isDamaged = true;
+			isRestored = false;
 		}
 	}
 	class HealthBar : StatusBar
@@ -130,6 +136,7 @@ namespace missile_command
 			{
 				curHP = 0;
 				isAlive = false;
+				isRestored = false;
 			}
 			isDamaged = true;
 		}

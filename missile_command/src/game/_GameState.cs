@@ -13,15 +13,17 @@ namespace missile_command
 		private List<Player> lPlayer;
 		private List<List<Entity>> lEntities;
 		private Random rand = new Random();
+		private GameMode mode;
 
-		public GameState(Window g) : base(g)
+		public GameState(int numPlayers, GameMode m, Window g) : base(g)
 		{
 			// TODO switch to using a component list.
 			lEntities = new List<List<Entity>>();
 			lPlayer = new List<Player>();
+			mode = mode;
 
 			InitGame();
-			InitPlayers(1);
+			InitPlayers(numPlayers);
 		}
 		private void InitGame()
 		{

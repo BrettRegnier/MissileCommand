@@ -45,7 +45,7 @@ namespace missile_command
 			isDestroyed = false;
 
 			Size shieldSize = Body.Dimension;
-			shieldSize.Width += Utils.CITY_TRUE_SIZE;
+			shieldSize.Width += Utils.CITY_TRUE_SIZE + 6;
 			shieldSize.Height += Utils.CITY_TRUE_SIZE * 2;
 
 			// I need to pass in the city true size /2, since that would be the TRUE center (windows drawing issues)
