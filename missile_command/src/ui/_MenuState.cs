@@ -17,41 +17,40 @@ namespace missile_command
 			int numButton = 0;
 			int startX = Utils.gameBounds.Width / 2;
 			int startY = 200;
-			int variableHeight = 40;
 			int btnWidth = 100;
 			int btnHeight = 30;
 
-			Dropdown newGameButton = new Dropdown("New Game", startX, startY + variableHeight * numButton, btnWidth, btnHeight);
+			Dropdown newGameButton = new Dropdown("New Game", startX, startY + Utils.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
 			newGameButton.Click += NewGameButton_Click;
 
 			// Move the button slightly to the right.
-			GameButton OnePlayer = new GameButton("1 Player", startX + 5, startY + variableHeight * numButton, btnWidth - 10, btnHeight);
+			DropdownButton OnePlayer = new DropdownButton("1 Player", startX + 5, startY + Utils.SEPERATION_VALUE * numButton, btnWidth - 10, btnHeight);
 			OnePlayer.Click += (sender, e) => { players = 1; };
 			OnePlayer.IsVisible = false;
 			OnePlayer.PrevButton = newGameButton;
 
 			// Move the button slightly to the right.
-			GameButton TwoPlayers = new GameButton("2 Players", startX + 5, startY + variableHeight * numButton, btnWidth - 10, btnHeight);
+			DropdownButton TwoPlayers = new DropdownButton("2 Players", startX + 5, startY + Utils.SEPERATION_VALUE * numButton, btnWidth - 10, btnHeight);
 			TwoPlayers.Click += (sender, e) => { players = 2; };
 			TwoPlayers.IsVisible = false;
 			TwoPlayers.PrevButton = OnePlayer;
 			OnePlayer.NextButton = TwoPlayers;
 
 			// Move the button slightly to the right.
-			GameButton ThreePlayers = new GameButton("3 Players",  startX + 5, startY + variableHeight * numButton, btnWidth - 10, btnHeight);
+			DropdownButton ThreePlayers = new DropdownButton("3 Players",  startX + 5, startY + Utils.SEPERATION_VALUE * numButton, btnWidth - 10, btnHeight);
 			ThreePlayers.Click += (sender, e) => { players = 3; };
 			ThreePlayers.IsVisible = false;
 			ThreePlayers.PrevButton = TwoPlayers;
 			TwoPlayers.NextButton = ThreePlayers;
 			numButton++;
 
-			GameButton highScoresButton = new GameButton("Highscores", startX, startY + variableHeight * numButton, btnWidth, btnHeight);
+			GameButton highScoresButton = new GameButton("Highscores", startX, startY + Utils.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
 			highScoresButton.Click += HighScoresButton_Click;
 			highScoresButton.PrevButton = ThreePlayers;
 			ThreePlayers.NextButton = highScoresButton;
 			numButton++;
 
-			GameButton exitButton = new GameButton("Exit", startX, startY + variableHeight * numButton, btnWidth, btnHeight);
+			GameButton exitButton = new GameButton("Exit", startX, startY + Utils.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
 			exitButton.Click += ExitButton_Click;
 			exitButton.PrevButton = highScoresButton;
 			highScoresButton.NextButton = exitButton;
@@ -87,7 +86,7 @@ namespace missile_command
 		private void NewGameButton_Click(object sender, EventArgs e)
 		{
 			((Dropdown)sender).DropDown();
-			game.NextState(new GameState(1, new GameMode(), game));
+			//game.NextState(new GameState(1, new GameMode(), game));
 		}
 		private void HighScoresButton_Click(object sender, EventArgs e)
 		{

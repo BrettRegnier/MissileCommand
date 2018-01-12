@@ -15,7 +15,7 @@ namespace missile_command
 		public event EventHandler Click;
 
 		private bool currentMouse;
-		private bool previousMouse;		
+		private bool previousMouse;
 		private bool isHovering;
 
 		private Point mousePosition;
@@ -27,15 +27,11 @@ namespace missile_command
 		private StringFormat sf;
 
 		public String Text { get; set; }
-		public bool IsHiding { get; set; }
-		public bool IsHidden { get; set; }
-		public bool IsRevealing { get; set; }
-		public bool IsRevealed { get; set; }
 		public bool IsVisible { get; set; }
+		public bool IsEnabled { get; set; }
 		public GameButton NextButton { get; set; }
 		public GameButton PrevButton { get; set; }
 		public int MovePosition { get; set; }
-
 
 		public GameButton(int x, int y, int w, int h) : base(x, y, w, h)
 		{
@@ -50,9 +46,8 @@ namespace missile_command
 		{
 			outlineColor = Pens.Green;
 			textColor = Color.Green;
-			IsHiding = false;
-			IsRevealing = false;
 			IsVisible = true;
+			IsEnabled = true;
 
 			Body.AdjustY(Body.Dimension.Height + OUTLINE_OFFSET);
 			Body.AdjustX(-Body.Dimension.Width / 2);
@@ -63,6 +58,20 @@ namespace missile_command
 				Alignment = StringAlignment.Center
 			};
 			fontSize = 10;
+		}
+		protected virtual void CheckPosition()
+		{
+			if (PrevButton != null)
+			{
+				if (Body.Top < PrevButton.Body.Top + Utils.SEPERATION_VALUE)
+				{
+					Body.UpdatePositionY(PrevButton.Body.Top + Utils.SEPERATION_VALUE);
+				}
+				if (Body.Top >= PrevButton.Body.Top + Utils.SEPERATION_VALUE)
+				{
+					Body.UpdatePositionY(PrevButton.Body.Top + Utils.SEPERATION_VALUE);
+				}
+			}
 		}
 		public override void Draw(Graphics g)
 		{
@@ -82,6 +91,12 @@ namespace missile_command
 					textColor = Color.Green;
 					fontSize = 10;
 				}
+				if (!IsEnabled)
+				{
+					innerColor = new SolidBrush(Color.FromArgb(20, 20, 20));
+					textColor = Color.Green;
+					fontSize = 10;
+				}
 
 				int nX = Body.Left - OUTLINE_OFFSET;
 				int nY = Body.Top - OUTLINE_OFFSET;
@@ -96,15 +111,6 @@ namespace missile_command
 				}
 			}
 		}
-		public void MoveDown()
-		{
-			IsRevealing = true;
-			NextButton.IsRevealing = true;
-		}
-		public void MoveUp()
-		{
-
-		}
 		public override void Update(long gameTime)
 		{
 			// true is clicked, false is not clicked
@@ -118,37 +124,13 @@ namespace missile_command
 			if (mouseRectangle.IntersectsWith(new Rectangle(Body.TopLeft, Body.Dimension)))
 			{
 				isHovering = true;
-				if (currentMouse == false && previousMouse == true)
+				if (currentMouse == false && previousMouse == true && IsEnabled)
 				{
 					// Then the mouse is hovering and clicked.
 					Click?.Invoke(this, new EventArgs());
 				}
 			}
-
-			if (IsRevealing)
-			{
-				Body.AdjustY(1);
-				if (Body.Top >= PrevButton.Body.Top + 40)
-				{
-					IsRevealing = false;
-					IsRevealed = true;
-					Body.UpdatePositionY(PrevButton.Body.Top + 40);
-				}
-				if (!NextButton.IsRevealing)
-				{
-					NextButton.IsRevealing = true;
-					NextButton.IsVisible = true;
-				}
-			}
-			if (IsHiding)
-			{
-				Body.AdjustY(-1);
-				if (Body.Top <= MovePosition)
-				{
-					IsHiding = false;
-					Body.UpdatePositionY(MovePosition);
-				}
-			}
+			CheckPosition();
 		}
 		public override void PostUpdate(long gameTime)
 		{
