@@ -8,7 +8,7 @@ namespace missile_command
 {
 	class Collider
 	{
-		public delegate void Collision(Body body);
+		public delegate void Collision(Collider body);
 		public event Collision OnCollision;
 
 		public Body Body { get; set; }
@@ -22,8 +22,8 @@ namespace missile_command
 		{
 			if (Colliding(collidee.Body))
 			{
-				collidee.OnCollision(Body);
-				OnCollision(collidee.Body);
+				collidee.OnCollision(this);
+				OnCollision(collidee);
 			}
 		}
 

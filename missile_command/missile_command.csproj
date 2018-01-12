@@ -53,15 +53,18 @@
     <Compile Include="src\game\City.cs" />
     <Compile Include="src\game\Collider.cs" />
     <Compile Include="src\game\Entity.cs" />
+    <Compile Include="src\game\GameMode.cs" />
     <Compile Include="src\game\_GameState.cs" />
     <Compile Include="src\MouseHandler.cs" />
     <Compile Include="src\State.cs" />
-    <Compile Include="src\ui\Button.cs" />
+    <Compile Include="src\ui\DropdownButton.cs" />
+    <Compile Include="src\ui\GameButton.cs" />
     <Compile Include="src\ui\Component.cs" />
-    <Compile Include="src\ui\StatusBar.cs" />
+    <Compile Include="src\game\StatusBar.cs" />
     <Compile Include="src\game\Shield.cs" />
     <Compile Include="src\game\Body.cs" />
     <Compile Include="src\factories\EntityFactory.cs" />
+    <Compile Include="src\ui\Dropdown.cs" />
     <Compile Include="src\Window.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -15,12 +15,12 @@ namespace missile_command
 		{
 			// TODO maybe for hills chop it up so that it makes a hill ish? Perhaps make a new class for it.
 			// adjust the origin for the height, good ole microsoft windows and stuff
-			Body.MovePositionY(-(Body.Dimension.Height - 5));
+			Body.AdjustY(-(Body.Dimension.Height - 5));
 			
 			brush = new SolidBrush(Config.Instance.GetPlayerColor(ETag.SYSTEM));
 		}
 
-		protected override void Collided(Body body)
+		protected override void Collided(Collider body)
 		{
 
 		}
@@ -28,11 +28,11 @@ namespace missile_command
 		{
 			g.FillRectangle(brush, Body.Left, Body.Top, Body.Width, Body.Height);
 		}
-		public override void PostUpdate(long gameTime)
+		public override void Update(long gameTime)
 		{
 
 		}
-		public override void Update(long gameTIme)
+		public override void PostUpdate(long gameTime)
 		{
 
 		}

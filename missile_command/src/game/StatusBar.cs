@@ -9,8 +9,7 @@ namespace missile_command
 {
 	abstract class StatusBar : Component
 	{
-		public delegate void Heal();
-		public event Heal Healed;
+		public event EventHandler Healed;
 
 		private const int OUTLINE_OFFSET = 1;
 
@@ -29,14 +28,17 @@ namespace missile_command
 		protected int curHP;
 		protected int maxHP;
 		protected int replishTick;
+
 		protected bool isAlive;
+		protected bool isDamaged;
+		protected bool isRestored;
 
 		public StatusBar(int x, int y, int w, int h) : base(x, y, w, h)
 		{
 			outlinePen = new Pen(Color.Black);
 
-			Body.MovePositionY(Body.Dimension.Height + OUTLINE_OFFSET);
-			Body.MovePositionX(-Body.Dimension.Width / 2);
+			Body.AdjustY(Body.Dimension.Height + OUTLINE_OFFSET);
+			Body.AdjustX(-Body.Dimension.Width / 2);
 
 			// 2 pixels on all sides
 			int nX = Body.Left - OUTLINE_OFFSET;
@@ -51,34 +53,22 @@ namespace missile_command
 
 			replishTick = 0;
 			isAlive = true;
+			isDamaged = false;
 		}
+		public abstract void Damage();
+
 		public override void Draw(Graphics g)
 		{
 			g.DrawRectangle(outlinePen, outlineBar);
 			g.FillRectangle(innerBrush, Body.Left, Body.Top, Body.Width, Body.Height);
-			Replenish();
 		}
 		public override void Update(long gameTIme)
-		{
-			throw new NotImplementedException();
-		}
-		public override void PostUpdate(long gameTime)
-		{
-			throw new NotImplementedException();
-		}
-		private void Replenish()
 		{
 			// TODO rethink how I want to implement this.
 			// TODO use upgrade player values to determine the rate.
 			if (replishTick >= REPLENISH_TICK_SETTING)
 			{
-				if (curHP >= maxHP)
-				{
-					curHP = maxHP;
-					isAlive = true;
-					Healed();
-				}
-				else
+				if (isDamaged)
 				{
 					// TODO animate it so its smoother when its > 1
 					curHP += REPLENISH_AMOUNT;
@@ -90,12 +80,29 @@ namespace missile_command
 			{
 				replishTick += REPLENISH_RATE;
 			}
+
 		}
-		public bool IsAlive()
+		public override void PostUpdate(long gameTime)
 		{
-			return isAlive;
+			if (curHP >= maxHP)
+			{
+				curHP = maxHP;
+				isAlive = true;
+				if (!isRestored)
+				{
+					isRestored = true;
+					Healed?.Invoke(this, new EventArgs());
+				}
+			}
 		}
-		public abstract void Damage();
+		public bool IsAlive
+		{
+			get
+			{
+				return isAlive;
+			}
+		}
+
 	}
 	class ShieldBar : StatusBar
 	{
@@ -107,6 +114,8 @@ namespace missile_command
 		{
 			curHP = 0;
 			isAlive = false;
+			isDamaged = true;
+			isRestored = false;
 		}
 	}
 	class HealthBar : StatusBar
@@ -119,7 +128,7 @@ namespace missile_command
 		{
 			// TODO think of good way to damage health
 			// TODO animate the drain of the health
-			if (curHP > maxHP / 2)
+			if (curHP >= maxHP / 2)
 			{
 				curHP -= maxHP / 2;
 			}
@@ -127,7 +136,9 @@ namespace missile_command
 			{
 				curHP = 0;
 				isAlive = false;
+				isRestored = false;
 			}
+			isDamaged = true;
 		}
 	}
 }

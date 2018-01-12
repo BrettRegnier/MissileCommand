@@ -9,66 +9,86 @@ namespace missile_command
 {
 	class Shield : Entity
 	{
-		public delegate void Full_Health();
-		public event Full_Health Replished;
+		//public delegate void Full_Health();
+		//public event Full_Health Replished;
 
-		public delegate void Destroyed();
-		public event Destroyed Lowered;
+		//public delegate void Destroyed();
+		//public event Destroyed Lowered;
 
-		private const int OUTLINE_OFFSET = 4;
+		private const int STATUS_BAR_X_OFFSET = 5;
 		private const int POSITION_Y_OFFSET = 21;
 
-		private Rectangle shield;
-		private ShieldBar hpBar;
-		private Body collidedBody;
+		private ShieldBar spBar;
+		private Collider prevCollider;
+		private bool isAlive;
+		private bool animate;
 
-		public bool Active { get { return hpBar.IsAlive(); } }
-		public Body CollidedBody { get { return collidedBody; } }
+		private int minHeight;
+		private int maxHeight;
+
+		private int minWidth;
+		private int maxWidth;
+
+		public bool Active { get { return spBar.IsAlive; } }
+		public Collider PreviousCollider { get { return prevCollider; } }
 
 		// TODO rethink the logic for shield's positioning it might fix the problems I am having with all the magic numbers
 		// Expects to get the BottomLeft for the hpbar, and the TopCenter for the shield
-		public Shield(int CenterX, int bottomY, int center, int top, int w, int h, ETag t) : base(center, top, w, h, t)
+		public Shield(int statusBarX, int statusBarY, int x, int y, int w, int h, ETag t) : base(x, y, w, h, t)
 		{
 			// TODO I think the size of the bar should match the width of the city
 			// Set the hp bar to be below the city
-			hpBar = new ShieldBar(CenterX, bottomY, 40, 10);
-			hpBar.Healed += HpBar_Healed;
+			spBar = new ShieldBar(statusBarX + STATUS_BAR_X_OFFSET, statusBarY, 40, 10);
+			spBar.Healed += SpBar_Healed;
 
 			// Reposition the shield due to the fact that microsoft drawing has some weird dimension things going on.
-			Body.MovePositionX(-(Utils.CITY_TRUE_SIZE + 12));
-			Body.MovePositionY(-POSITION_Y_OFFSET);
-			shield = new Rectangle(Body.TopLeft, Body.Dimension);
+			Body.AdjustX(-(Body.Width / 2 - 4));
+			Body.AdjustY(-(POSITION_Y_OFFSET));
+
+			isAlive = true;
+			animate = false;
+
+			minHeight = 10;
+			maxHeight = Body.Height;
 		}
-		protected override void Collided(Body collider)
+		private void SpBar_Healed(object sender, EventArgs e)
 		{
-			hpBar.Damage();
-			if (!hpBar.IsAlive())
+			if (!animate)
 			{
-				Lowered();
+				animate = true;
+				Body.UpdateHeight(minHeight);
 			}
-			collidedBody = collider;
+		}
+		protected override void Collided(Collider collider)
+		{
+			spBar.Damage();
+			prevCollider = collider;
 		}
 		public override void Draw(Graphics g)
 		{
+			spBar.Draw(g);
 			// TODO Animate the shield, by uh growing? or by flashing a lighter blue.
-			hpBar.Draw(g);
-			if (hpBar.IsAlive())
-			{
-				g.DrawArc(Pens.Blue, shield, 180, 180);
-			}
+			if (isAlive)
+				g.DrawArc(Pens.Blue, Body.Left, Body.Top, Body.Width, Body.Height, 180, 180);
 		}
-		private void HpBar_Healed()
+		public override void Update(long gameTime)
 		{
-			Replished();
+			if (animate)
+			{
+				Body.UpdateHeight(Body.Height + 2);
+				if (Body.Height >= maxHeight)
+				{
+					Body.UpdateHeight(maxHeight);
+					animate = false;
+				}
+			}
+
+			spBar.Update(gameTime);
+			isAlive = spBar.IsAlive;
 		}
 		public override void PostUpdate(long gameTime)
 		{
-
+			spBar.PostUpdate(gameTime);
 		}
-		public override void Update(long gameTIme)
-		{
-
-		}
-
 	}
 }

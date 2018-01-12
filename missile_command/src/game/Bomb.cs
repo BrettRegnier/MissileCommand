@@ -34,7 +34,7 @@ namespace missile_command
 			lOrigin = Body.TopLeft;
 
 			// Adjust the bomb so the "origin" of it is the center 
-			Body.MovePositionX(-Body.Width / 2);
+			Body.AdjustX(-Body.Width / 2);
 			explosionRadius = Config.Instance.DefaultExplosionSize() / 2;
 
 			// Set to the current position
@@ -43,7 +43,7 @@ namespace missile_command
 			SetColor();
 			CalculateVelocity();
 		}
-		protected override void Collided(Body collider)
+		protected override void Collided(Collider collider)
 		{
 			if (!atDestination)
 				RepositionExplosion();

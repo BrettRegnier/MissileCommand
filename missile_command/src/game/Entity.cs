@@ -17,6 +17,6 @@ namespace missile_command
 			Collider.OnCollision += Collided;
 			Tag = t;
 		}
-		protected abstract void Collided(Body body);
+		protected abstract void Collided(Collider body);
 	}
 }

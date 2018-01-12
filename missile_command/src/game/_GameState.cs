@@ -13,15 +13,17 @@ namespace missile_command
 		private List<Player> lPlayer;
 		private List<List<Entity>> lEntities;
 		private Random rand = new Random();
+		private GameMode mode;
 
-		public GameState(Window g) : base(g)
+		public GameState(int numPlayers, GameMode m, Window g) : base(g)
 		{
 			// TODO switch to using a component list.
 			lEntities = new List<List<Entity>>();
 			lPlayer = new List<Player>();
+			mode = mode;
 
 			InitGame();
-			InitPlayers(1);
+			InitPlayers(numPlayers);
 		}
 		private void InitGame()
 		{
@@ -42,10 +44,13 @@ namespace missile_command
 				lEntities[(int)ETag.SYSTEM].Add(new LandMass(p.X, p.Y, Utils.HILL_MASS_WIDTH, Utils.HILL_MASS_HEIGHT));
 			}
 
+			// Build Cities
 			for (int i = 0; i < 6; i++)
 			{
-				// TODO actually fix this..
-				City c = new City(10, 10, 10, 10);
+				int w_h = Utils.CITY_SIZE;
+				int x = Utils.CITY_POSITIONS_X[i];
+				int y = Utils.gameBounds.Height - (Utils.LAND_MASS_HEIGHT + w_h);
+				City c = new City(x, y, w_h, w_h);
 				lEntities[(int)ETag.SYSTEM].Add(c);
 			}
 		}
@@ -117,16 +122,6 @@ namespace missile_command
 			bmb.DestroyBomb += DestroyGameObject;
 			lEntities[(int)bmb.Tag].Add(bmb);
 		}
-		private void SpawnTestPoint()
-		{ 
-			Point spawnPoint = new Point(683, 600);
-			//Point destination = new Point(Utils.gameBounds.Width / 2, Utils.gameBounds.Height);
-			Point destination = new Point(683, 200);
-			Size size = Config.Instance.DefaultBombSize();
-			Bomb bmb = EntityFactory.MakeBomb(spawnPoint, size, destination, PType.ENEMY, missile_command.ETag.P1);
-			bmb.DestroyBomb += DestroyGameObject;
-			lEntities[(int)bmb.Tag].Add(bmb);
-		}
 		private void MassTest()
 		{
 			for (int i = 0; i < 100; i++)
@@ -136,7 +131,6 @@ namespace missile_command
 		{
 			lEntities[(int)gameObject.Tag].Remove(gameObject);
 		}
-		// TODO move all of the game form game code to here.
 		public override void Draw(Graphics g)
 		{
 			// TODO uncomment
@@ -156,8 +150,6 @@ namespace missile_command
 				SpawnTest();
 			else if (key == System.Windows.Forms.Keys.J)
 				MassTest();
-			else if (key == System.Windows.Forms.Keys.K)
-				SpawnTestPoint();
 			else if (key == System.Windows.Forms.Keys.Escape)
 				game.Close();
 		}

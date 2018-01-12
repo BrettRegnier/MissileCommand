@@ -26,39 +26,38 @@ namespace missile_command
 		{
 			g.DrawImage(sprite, Body.TopLeft);
 		}
-		public Point Move(Direction dir)
+		public void Move(Direction dir)
 		{
 			// TODO could just pass in x and y values of 1, -1
 			switch (dir)
 			{
 				case Direction.UP:
 					if (Body.Top - MOVE_VAL > 0)
-						Body.MovePositionY(-MOVE_VAL);
+						Body.AdjustY(-MOVE_VAL);
 					else
 						Body.UpdatePositionY(0);
 					break;
 				case Direction.RIGHT:
 					if (Body.Right + MOVE_VAL < Utils.gameBounds.Width)
-						Body.MovePositionX(MOVE_VAL);
+						Body.AdjustX(MOVE_VAL);
 					else
 						Body.UpdatePositionX(Utils.gameBounds.Width - Body.Width);
 					break;
 				case Direction.DOWN:
 					if (Body.Bottom + MOVE_VAL < Utils.gameBounds.Height - Utils.STAGE_BOUND_HEIGHT)
-						Body.MovePositionY(MOVE_VAL);
+						Body.AdjustY(MOVE_VAL);
 					else
 						Body.UpdatePositionY(Utils.gameBounds.Height - (CURSOR_DIMENSION + Utils.STAGE_BOUND_HEIGHT));
 					break;
 				case Direction.LEFT:
 					if (Body.Left - MOVE_VAL > 0)
-						Body.MovePositionX(-MOVE_VAL);
+						Body.AdjustX(-MOVE_VAL);
 					else
 						Body.UpdatePositionX(0);
 					break;
 			}
-			return Body.Center;
 		}
-		public override void Update(long gameTIme)
+		public override void Update(long gameTime)
 		{
 
 		}
