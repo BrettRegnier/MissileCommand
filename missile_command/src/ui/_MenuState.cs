@@ -24,11 +24,63 @@ namespace missile_command
 
 			// declare buttons
 			SlideRightButton newGameButton;
+
+			//Player buttons
+			SlideRightButton onePlayer;
+			SlideRightButton twoPlayer;
+			SlideRightButton threePlayer;
+
+			// Mode buttons
+			GameButton survival;
+			GameButton twoSurvival;
+			GameButton threeSurvival;
+
+			GameButton wave;
+			GameButton twoWave;
+			GameButton threeWave;
+
 			GameButton highscoresButton;
 			GameButton exitButton;
 
 			newGameButton = new SlideRightButton("New Game", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
-			newGameButton.Click += (sender, e) => { };
+			newGameButton.Click += (sender, e) => { ((SlideRightButton)sender).Toggle(); };
+
+			#region PlayerButtons
+			onePlayer = new SlideRightButton("One Player", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
+			onePlayer.Click += (sender, e) => { players = 1; ((SlideRightButton)sender).Toggle(); };
+			onePlayer.IsEnabled = false;
+			onePlayer.IsVisible = false;
+
+			twoPlayer = new SlideRightButton("Two Players", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
+			twoPlayer.Click += (sender, e) => { players = 2; ((SlideRightButton)sender).Toggle(); };
+			twoPlayer.IsEnabled = false;
+			twoPlayer.IsVisible = false;
+
+			threePlayer = new SlideRightButton("Three Player", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
+			threePlayer.Click += (sender, e) => { players = 3; ((SlideRightButton)sender).Toggle(); };
+			threePlayer.IsEnabled = false;
+			threePlayer.IsVisible = false;
+
+			//Attach the buttons.
+			newGameButton.AddButton(onePlayer); newGameButton.AddButton(twoPlayer); newGameButton.AddButton(threePlayer);
+			#endregion
+
+			#region ModeButtons
+			wave = new GameButton("Wave Mode", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
+			wave.Click += (sender, e) => { game.NextState(new GameState(players, GameModes.WAVE, game)); };
+			wave.IsEnabled = false;
+			wave.IsVisible = false;
+
+			survival = new GameButton("Survival Mode", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
+			survival.Click += (sender, e) => { game.NextState(new GameState(players, GameModes.SURVIVAL, game)); };
+			survival.IsEnabled = false;
+			survival.IsVisible = false;
+
+			onePlayer.AddButton(wave); onePlayer.AddButton(survival);
+			twoPlayer.AddButton(wave); twoPlayer.AddButton(survival);
+			threePlayer.AddButton(wave); threePlayer.AddButton(survival);
+			#endregion
+
 			numButton++;
 
 			highscoresButton = new GameButton("Highscores", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
