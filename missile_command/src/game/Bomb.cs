@@ -35,7 +35,7 @@ namespace missile_command
 
 			// Adjust the bomb so the "origin" of it is the center 
 			Body.AdjustX(-Body.Width / 2);
-			explosionRadius = Config.Instance.DefaultExplosionSize() / 2;
+			explosionRadius = Config.Instance.DefaultExplosionSize / 2;
 
 			// Set to the current position
 			fNextPosition = Body.TopLeft;
@@ -50,7 +50,7 @@ namespace missile_command
 		}
 		private void CalculateVelocity()
 		{
-			float speed = Config.Instance.DefaultBombSpeed();
+			float speed = Config.Instance.DefaultBombSpeed;
 			// Difference between the origin and where it will hit.
 			double diffX = Body.Left - destination.X;
 			double diffY = Body.Top - destination.Y;
@@ -85,7 +85,7 @@ namespace missile_command
 		private void RepositionExplosion()
 		{
 			// Reposition the bomb's point for the explosion
-			int explosionSize = Config.Instance.DefaultExplosionSize();
+			int explosionSize = Config.Instance.DefaultExplosionSize;
 			int meanCoorindates = ((explosionSize / 2) - (Body.Width / 2));
 
 			int nX = Body.Left - meanCoorindates;

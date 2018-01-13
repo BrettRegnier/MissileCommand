@@ -59,10 +59,11 @@ namespace missile_command
 			throw new NotImplementedException();
 		}
 
-		public Size DefaultBombSize() { return new Size(bombRadius, bombRadius); }
-		public int DefaultExplosionSize() { return explosionSize; }
-		public float DefaultBombSpeed() { return bombSpeed; }
-		public int TurretRadius() { return turretRadius; }
+		public Size DefaultBombSize { get { return new Size(bombRadius, bombRadius); } }
+		public int DefaultExplosionSize { get { return explosionSize; } }
+		public float DefaultBombSpeed { get { return bombSpeed; } }
+		public Size TurretSize { get { return new Size(turretRadius, turretRadius); } }
+		public int TurretRadius { get { return turretRadius; } }
 
 		private void LoadBasicConfig()
 		{

@@ -26,12 +26,10 @@ namespace missile_command
 		private Color textColor;
 		private StringFormat sf;
 
+		public bool IsEnabled { get; set; }
+		public int MovePosition { get; set; }
 		public String Text { get; set; }
 		public bool IsVisible { get; set; }
-		public bool IsEnabled { get; set; }
-		public GameButton NextButton { get; set; }
-		public GameButton PrevButton { get; set; }
-		public int MovePosition { get; set; }
 
 		public GameButton(int x, int y, int w, int h) : base(x, y, w, h)
 		{
@@ -58,20 +56,6 @@ namespace missile_command
 				Alignment = StringAlignment.Center
 			};
 			fontSize = 10;
-		}
-		protected virtual void CheckPosition()
-		{
-			if (PrevButton != null)
-			{
-				if (Body.Top < PrevButton.Body.Top + Utils.SEPERATION_VALUE)
-				{
-					Body.UpdatePositionY(PrevButton.Body.Top + Utils.SEPERATION_VALUE);
-				}
-				if (Body.Top >= PrevButton.Body.Top + Utils.SEPERATION_VALUE)
-				{
-					Body.UpdatePositionY(PrevButton.Body.Top + Utils.SEPERATION_VALUE);
-				}
-			}
 		}
 		public override void Draw(Graphics g)
 		{
@@ -130,7 +114,6 @@ namespace missile_command
 					Click?.Invoke(this, new EventArgs());
 				}
 			}
-			CheckPosition();
 		}
 		public override void PostUpdate(long gameTime)
 		{

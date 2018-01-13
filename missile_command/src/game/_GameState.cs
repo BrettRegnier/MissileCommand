@@ -10,17 +10,22 @@ namespace missile_command
 	// TODO refactor alllll of this, and use components instead.
 	class GameState : State
 	{
+
 		private List<Player> lPlayer;
 		private List<List<Entity>> lEntities;
 		private Random rand = new Random();
 		private GameMode mode;
 
-		public GameState(int numPlayers, GameMode m, Window g) : base(g)
+		public GameState(int numPlayers, GameModes gamemode, Window g) : base(g)
 		{
 			// TODO switch to using a component list.
 			lEntities = new List<List<Entity>>();
 			lPlayer = new List<Player>();
-			mode = mode;
+
+			if (gamemode == GameModes.SURVIVAL)
+				mode = new GameMode();
+			else if (gamemode == GameModes.WAVE)
+				mode = new GameMode();
 
 			InitGame();
 			InitPlayers(numPlayers);
@@ -33,23 +38,23 @@ namespace missile_command
 				lEntities.Add(new List<Entity>());
 
 			// Create landmasses
-			Point baseLand = new Point(0, Utils.gameBounds.Height);
-			Size baseSize = new Size(Utils.gameBounds.Width, Utils.LAND_MASS_HEIGHT);
+			Point baseLand = new Point(0, Consts.gameBounds.Height);
+			Size baseSize = new Size(Consts.gameBounds.Width, Consts.LAND_MASS_HEIGHT);
 			LandMass lm = new LandMass(baseLand.X, baseLand.Y, baseSize.Width, baseSize.Height);
 			lEntities[(int)ETag.SYSTEM].Add(lm);
 
 			for (int i = 0; i < 3; i++)
 			{
-				Point p = new Point(Utils.HILL_POSITIONS_X[i], lm.Body.Top);
-				lEntities[(int)ETag.SYSTEM].Add(new LandMass(p.X, p.Y, Utils.HILL_MASS_WIDTH, Utils.HILL_MASS_HEIGHT));
+				Point p = new Point(Consts.HILL_POSITIONS_X[i], lm.Body.Top);
+				lEntities[(int)ETag.SYSTEM].Add(new LandMass(p.X, p.Y, Consts.HILL_MASS_WIDTH, Consts.HILL_MASS_HEIGHT));
 			}
 
 			// Build Cities
 			for (int i = 0; i < 6; i++)
 			{
-				int w_h = Utils.CITY_SIZE;
-				int x = Utils.CITY_POSITIONS_X[i];
-				int y = Utils.gameBounds.Height - (Utils.LAND_MASS_HEIGHT + w_h);
+				int w_h = Consts.CITY_SIZE;
+				int x = Consts.CITY_POSITIONS_X[i];
+				int y = Consts.gameBounds.Height - (Consts.LAND_MASS_HEIGHT + w_h);
 				City c = new City(x, y, w_h, w_h);
 				lEntities[(int)ETag.SYSTEM].Add(c);
 			}
@@ -58,7 +63,7 @@ namespace missile_command
 		{
 			for (int i = 0; i < numPlayers; i++)
 			{
-				Point ori = new Point((Utils.gameBounds.Width / 3) * (i + 1), 200);
+				Point ori = new Point((Consts.gameBounds.Width / 3) * (i + 1), 200);
 				PType pt = PType.PLAYER;
 				ETag ap = ETag.P1;
 				if (i == 1)
@@ -81,7 +86,7 @@ namespace missile_command
 				else if (numPlayers == 3)
 					currentPlayer = lPlayer[i];
 
-				Size size = new Size(Config.Instance.TurretRadius(), Config.Instance.TurretRadius());
+				Size size = Config.Instance.TurretSize;
 				Turret t = EntityFactory.MakeTurret(lEntities[(int)ETag.SYSTEM][i + 1].Body.TopCenter, size, PType.PLAYER, currentPlayer.GetTag());
 				t.TurretShoot += P_TurretShoot;
 				lEntities[(int)currentPlayer.GetTag()].Add(t);
@@ -93,8 +98,7 @@ namespace missile_command
 		private void P_TurretShoot(Point origin, Point destination, ETag a)
 		{
 			// use player upgrades, if I add them, to determine the size.
-			Size size = Config.Instance.DefaultBombSize();
-			Bomb bmb = EntityFactory.MakeBomb(origin, size, destination, PType.PLAYER, a);
+			Bomb bmb = EntityFactory.MakeBomb(origin, destination, PType.PLAYER, a);
 			bmb.DestroyBomb += DestroyGameObject;
 			lEntities[(int)bmb.Tag].Add(bmb);
 		}
@@ -103,22 +107,20 @@ namespace missile_command
 			// TODO complex calculation based on ticks to determine when the next spawn is.
 			if (Environment.TickCount >= gameTime + 1000)
 			{
-				Point spawnPoint = new Point(rand.Next(0, Utils.gameBounds.Width), 0);
+				Point spawnPoint = new Point(rand.Next(0, Consts.gameBounds.Width), 0);
 				// TODO make a list of guaranteed points
-				Point destination = new Point(rand.Next(0, Utils.gameBounds.Width), Utils.gameBounds.Height);
-				Size size = Config.Instance.DefaultBombSize();
-				Bomb bmb = EntityFactory.MakeBomb(spawnPoint, size, destination, PType.ENEMY, missile_command.ETag.ENEMY);
+				Point destination = new Point(rand.Next(0, Consts.gameBounds.Width), Consts.gameBounds.Height);
+				Bomb bmb = EntityFactory.MakeBomb(spawnPoint, destination, PType.ENEMY, missile_command.ETag.ENEMY);
 				bmb.DestroyBomb += DestroyGameObject;
 				lEntities[(int)bmb.Tag].Add(bmb);
 			}
 		}
 		private void SpawnTest()
 		{
-			Point spawnPoint = new Point(rand.Next(0, Utils.gameBounds.Width), 0);
+			Point spawnPoint = new Point(rand.Next(0, Consts.gameBounds.Width), 0);
 			//Point destination = new Point(Utils.gameBounds.Width / 2, Utils.gameBounds.Height);
-			Point destination = new Point(spawnPoint.X, Utils.gameBounds.Height);
-			Size size = Config.Instance.DefaultBombSize();
-			Bomb bmb = EntityFactory.MakeBomb(spawnPoint, size, destination, PType.ENEMY, missile_command.ETag.ENEMY);
+			Point destination = new Point(spawnPoint.X, Consts.gameBounds.Height);
+			Bomb bmb = EntityFactory.MakeBomb(spawnPoint, destination, PType.ENEMY, missile_command.ETag.ENEMY);
 			bmb.DestroyBomb += DestroyGameObject;
 			lEntities[(int)bmb.Tag].Add(bmb);
 		}

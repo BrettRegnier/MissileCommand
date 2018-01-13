@@ -38,16 +38,16 @@ namespace missile_command
 						Body.UpdatePositionY(0);
 					break;
 				case Direction.RIGHT:
-					if (Body.Right + MOVE_VAL < Utils.gameBounds.Width)
+					if (Body.Right + MOVE_VAL < Consts.gameBounds.Width)
 						Body.AdjustX(MOVE_VAL);
 					else
-						Body.UpdatePositionX(Utils.gameBounds.Width - Body.Width);
+						Body.UpdatePositionX(Consts.gameBounds.Width - Body.Width);
 					break;
 				case Direction.DOWN:
-					if (Body.Bottom + MOVE_VAL < Utils.gameBounds.Height - Utils.STAGE_BOUND_HEIGHT)
+					if (Body.Bottom + MOVE_VAL < Consts.gameBounds.Height - Consts.STAGE_BOUND_HEIGHT)
 						Body.AdjustY(MOVE_VAL);
 					else
-						Body.UpdatePositionY(Utils.gameBounds.Height - (CURSOR_DIMENSION + Utils.STAGE_BOUND_HEIGHT));
+						Body.UpdatePositionY(Consts.gameBounds.Height - (CURSOR_DIMENSION + Consts.STAGE_BOUND_HEIGHT));
 					break;
 				case Direction.LEFT:
 					if (Body.Left - MOVE_VAL > 0)
