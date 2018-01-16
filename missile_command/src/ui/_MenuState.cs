@@ -9,13 +9,30 @@ namespace missile_command
 {
 	class MenuState : State
 	{
-		private int players = 0;
-		private long elapsedTime = 0;
-		List<Component> lComponents = new List<Component>();
-		List<Component> lBombs = new List<Component>();
+		private List<Component> bombs;
+		private List<Component> components;
+		private long elapsedTime;
+		private int players;
+		private StringFormat sf;
+		private int titleX;
+		private int titleY;
 
 		public MenuState(Window g) : base(g)
 		{
+			// Init fields
+			bombs = new List<Component>();
+			components = new List<Component>();
+			elapsedTime = 0;
+			players = 0;
+
+			sf = new StringFormat
+			{
+				LineAlignment = StringAlignment.Center,
+				Alignment = StringAlignment.Center
+			};
+			titleX = Consts.gameBounds.Width / 2;
+			titleY = 150;
+
 			int numButton = 0;
 			int startX = Consts.gameBounds.Width / 2;
 			int startY = 200;
@@ -32,12 +49,7 @@ namespace missile_command
 
 			// Mode buttons
 			GameButton survival;
-			GameButton twoSurvival;
-			GameButton threeSurvival;
-
 			GameButton wave;
-			GameButton twoWave;
-			GameButton threeWave;
 
 			GameButton highscoresButton;
 			GameButton exitButton;
@@ -45,7 +57,6 @@ namespace missile_command
 			newGameButton = new SlideRightButton("New Game", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
 			newGameButton.Click += (sender, e) => { ((SlideRightButton)sender).Toggle(); };
 
-			#region PlayerButtons
 			onePlayer = new SlideRightButton("One Player", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
 			onePlayer.Click += (sender, e) => { players = 1; ((SlideRightButton)sender).Toggle(); };
 			onePlayer.IsEnabled = false;
@@ -63,9 +74,7 @@ namespace missile_command
 
 			//Attach the buttons.
 			newGameButton.AddButton(onePlayer); newGameButton.AddButton(twoPlayer); newGameButton.AddButton(threePlayer);
-			#endregion
 
-			#region ModeButtons
 			wave = new GameButton("Wave Mode", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
 			wave.Click += (sender, e) => { game.NextState(new GameState(players, GameModes.WAVE, game)); };
 			wave.IsEnabled = false;
@@ -79,12 +88,11 @@ namespace missile_command
 			onePlayer.AddButton(wave); onePlayer.AddButton(survival);
 			twoPlayer.AddButton(wave); twoPlayer.AddButton(survival);
 			threePlayer.AddButton(wave); threePlayer.AddButton(survival);
-			#endregion
 
 			numButton++;
 
 			highscoresButton = new GameButton("Highscores", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
-			highscoresButton.Click += HighScoresButton_Click;
+			highscoresButton.Click += (sender, e) => { };
 			numButton++;
 
 			exitButton = new GameButton("Exit", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
@@ -93,51 +101,56 @@ namespace missile_command
 
 
 			// add buttons to components list
-			lComponents.Add(newGameButton);
-			lComponents.Add(highscoresButton);
-			lComponents.Add(exitButton);
+			components.Add(newGameButton);
+			components.Add(highscoresButton);
+			components.Add(exitButton);
 		}
 		public override void Draw(Graphics g)
 		{
-			foreach (Component component in lComponents)
-				component.Draw(g);
+			for (int i = 0; i < bombs.Count; i++)
+				bombs[i].Draw(g);
+			for (int i = 0; i < components.Count; i++)
+				components[i].Draw(g);
+
+			g.DrawString("Missile Command", new Font("Times New Roman", 30), new SolidBrush(Color.Green), titleX, titleY, sf);
 		}
 		public override void Update(long gameTime)
 		{
-			foreach (Component component in lComponents)
-				component.Update(gameTime);
+			SpawnBombs(gameTime);
 
-			elapsedTime = gameTime;
+			for (int i = 0; i < bombs.Count; i++)
+				bombs[i].Update(gameTime);
+			for (int i = 0; i < components.Count; i++)
+				components[i].Update(gameTime);
 		}
 		public override void PostUpdate(long gameTime)
 		{
-			foreach (Component component in lComponents)
-				component.PostUpdate(gameTime);
-		}
-		private void SurvivalMode_Click(object sender, EventArgs e)
-		{
-			game.NextState(new GameState(players, GameModes.SURVIVAL, game));
-		}
-		private void WaveMode_Click(object sender, EventArgs e)
-		{
-			game.NextState(new GameState(players, GameModes.WAVE, game));
-		}
-		private void HighScoresButton_Click(object sender, EventArgs e)
-		{
-			throw new NotImplementedException();
-		}
-		private void ExitButton_Click(object sender, EventArgs e)
-		{
+			for (int i = 0; i < bombs.Count; i++)
+				bombs[i].PostUpdate(gameTime);
+			for (int i = 0; i < components.Count; i++)
+				components[i].PostUpdate(gameTime);
 		}
 		private void SpawnBombs(long gameTime)
 		{
-			if (gameTime > elapsedTime + 1000)
+			if (gameTime > elapsedTime + 200)
 			{
+				elapsedTime = gameTime;
 				Random rand = new Random();
 				Point spawnPoint = new Point(rand.Next(0, Consts.gameBounds.Width), 0);
-				// TODO make a list of guaranteed points
-				Point destination = new Point(rand.Next(0, Consts.gameBounds.Width), Consts.gameBounds.Height);
-				Bomb bmb = EntityFactory.MakeBomb(spawnPoint, destination, PType.ENEMY, missile_command.ETag.ENEMY);
+				Point destination = new Point(rand.Next(spawnPoint.X, Consts.gameBounds.Width), Consts.gameBounds.Height);
+				if (spawnPoint.X < Consts.gameBounds.Width / 2)
+					destination.X = rand.Next(0, Consts.gameBounds.Width / 2);
+				Bomb bmb = EntityFactory.MakeBomb(spawnPoint, destination, PType.ENEMY, ETag.ENEMY);
+				bmb.DestroyBomb += (Entity b) => { bombs.Remove(b); };
+				bombs.Add(bmb);
+
+				spawnPoint = new Point(rand.Next(0, Consts.gameBounds.Width), Consts.gameBounds.Height);
+				destination = new Point(rand.Next(spawnPoint.X, Consts.gameBounds.Width), 0);
+				if (spawnPoint.X < Consts.gameBounds.Width / 2)
+					destination.X = rand.Next(0, Consts.gameBounds.Width / 2);
+				Bomb bmb2 = EntityFactory.MakeBomb(spawnPoint, destination, PType.ENEMY, ETag.ENEMY);
+				bmb2.DestroyBomb += (Entity b) => { bombs.Remove(b); };
+				bombs.Add(bmb2);
 			}
 		}
 	}
