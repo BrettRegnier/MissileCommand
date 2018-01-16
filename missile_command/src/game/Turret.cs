@@ -61,7 +61,9 @@ namespace missile_command
 		}
 		public void ShootTurret()
 		{
-			TurretShoot(turretEnd, aim.Center, Tag);
+			int bmbRadius = Config.Instance.DefaultBombSize.Width / 2;
+			Point origin = new Point(turretEnd.X - bmbRadius, turretEnd.Y - bmbRadius); 
+			TurretShoot(origin, aim.Center, Tag);
 		}
 		public override void Update(long gameTime)
 		{

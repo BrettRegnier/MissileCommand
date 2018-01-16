@@ -1,11 +1,7 @@
-﻿// TODO Make the same thing as normal missle command for the ground with 3 specific spots.
-// TODO State pattern for, damage, death, explode, moving, etc on gameobjects. 
-Maybe make a collider object.
+﻿// TODO maybe State pattern for, damage, death, explode, moving, etc on gameobjects. 
 
-Perhaps seperate the draw method into a different class that is a parent object,
-while making gameobjects contain a entity?
-
-// TODO make art for cities smaller
 // TODO add deconstructors for starting the game over.
-// TODO seperate update, draw, and post update.
 // TODO state inside of he game (playstate.cs maybe)
+
+// TODO Points
+//When a enemy bomb collides with the Player bomb first then it will give points on the destroy method

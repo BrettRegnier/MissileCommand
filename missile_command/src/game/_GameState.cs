@@ -10,43 +10,42 @@ namespace missile_command
 	// TODO refactor alllll of this, and use components instead.
 	class GameState : State
 	{
-
-		private List<Player> lPlayer;
-		private List<List<Entity>> lEntities;
-		private Random rand = new Random();
 		private GameMode mode;
+
+		private List<Player> players;
+		private List<Entity> components;
+		private List<Entity> eBombs;
+		private List<Entity> pBombs;
+		private Random rand = new Random();
 
 		public GameState(int numPlayers, GameModes gamemode, Window g) : base(g)
 		{
-			// TODO switch to using a component list.
-			lEntities = new List<List<Entity>>();
-			lPlayer = new List<Player>();
+			players = new List<Player>();
+			components = new List<Entity>();
+			eBombs = new List<Entity>();
+			pBombs = new List<Entity>();
 
 			if (gamemode == GameModes.SURVIVAL)
-				mode = new GameMode();
+				mode = new WaveMode();
 			else if (gamemode == GameModes.WAVE)
-				mode = new GameMode();
+				mode = new SurvivalMode();
 
 			InitGame();
 			InitPlayers(numPlayers);
 		}
 		private void InitGame()
 		{
-			//lEntities = new List<List<Entity>>();
-			// 5 Types of entites based on accounts enum
-			for (int i = 0; i < 5; i++)
-				lEntities.Add(new List<Entity>());
-
 			// Create landmasses
 			Point baseLand = new Point(0, Consts.gameBounds.Height);
 			Size baseSize = new Size(Consts.gameBounds.Width, Consts.LAND_MASS_HEIGHT);
 			LandMass lm = new LandMass(baseLand.X, baseLand.Y, baseSize.Width, baseSize.Height);
-			lEntities[(int)ETag.SYSTEM].Add(lm);
+			components.Add(lm);
 
+			// Build hills.
 			for (int i = 0; i < 3; i++)
 			{
 				Point p = new Point(Consts.HILL_POSITIONS_X[i], lm.Body.Top);
-				lEntities[(int)ETag.SYSTEM].Add(new LandMass(p.X, p.Y, Consts.HILL_MASS_WIDTH, Consts.HILL_MASS_HEIGHT));
+				components.Add(new LandMass(p.X, p.Y, Consts.HILL_MASS_WIDTH, Consts.HILL_MASS_HEIGHT));
 			}
 
 			// Build Cities
@@ -56,7 +55,7 @@ namespace missile_command
 				int x = Consts.CITY_POSITIONS_X[i];
 				int y = Consts.gameBounds.Height - (Consts.LAND_MASS_HEIGHT + w_h);
 				City c = new City(x, y, w_h, w_h);
-				lEntities[(int)ETag.SYSTEM].Add(c);
+				components.Add(c);
 			}
 		}
 		private void InitPlayers(int numPlayers)
@@ -72,35 +71,35 @@ namespace missile_command
 					ap = ETag.P3;
 
 				Player p = new Player(pt, ap);
-				lPlayer.Add(p);
+				players.Add(p);
 			}
 
-			Player currentPlayer = lPlayer[0];
+			Player currentPlayer = players[0];
 			for (int i = 0; i < 3; i++)
 			{
 				if (numPlayers == 2)
 				{
 					if (i == 1)
-						currentPlayer = lPlayer[i];
+						currentPlayer = players[i];
 				}
 				else if (numPlayers == 3)
-					currentPlayer = lPlayer[i];
+					currentPlayer = players[i];
 
 				Size size = Config.Instance.TurretSize;
-				Turret t = EntityFactory.MakeTurret(lEntities[(int)ETag.SYSTEM][i + 1].Body.TopCenter, size, PType.PLAYER, currentPlayer.GetTag());
+				Turret t = EntityFactory.MakeTurret(components[i + 1].Body.TopCenter, size, PType.PLAYER, currentPlayer.GetTag());
 				t.TurretShoot += P_TurretShoot;
-				lEntities[(int)currentPlayer.GetTag()].Add(t);
+				components.Add(t);
 				currentPlayer.AttachTurret(t);
 			}
 
-			KeypressHandler.Instance.Initialize(lPlayer);
+			KeypressHandler.Instance.Initialize(players);
 		}
 		private void P_TurretShoot(Point origin, Point destination, ETag a)
 		{
 			// use player upgrades, if I add them, to determine the size.
 			Bomb bmb = EntityFactory.MakeBomb(origin, destination, PType.PLAYER, a);
-			bmb.DestroyBomb += DestroyGameObject;
-			lEntities[(int)bmb.Tag].Add(bmb);
+			bmb.DestroyBomb += DestroyPBomb;
+			pBombs.Add(bmb);
 		}
 		private void SpawnEnemies(long gameTime)
 		{
@@ -111,40 +110,27 @@ namespace missile_command
 				// TODO make a list of guaranteed points
 				Point destination = new Point(rand.Next(0, Consts.gameBounds.Width), Consts.gameBounds.Height);
 				Bomb bmb = EntityFactory.MakeBomb(spawnPoint, destination, PType.ENEMY, missile_command.ETag.ENEMY);
-				bmb.DestroyBomb += DestroyGameObject;
-				lEntities[(int)bmb.Tag].Add(bmb);
+				bmb.DestroyBomb += DestroyEBomb;
+				eBombs.Add(bmb);
 			}
 		}
 		private void SpawnTest()
 		{
-			Point spawnPoint = new Point(rand.Next(0, Consts.gameBounds.Width), 0);
+		 Point spawnPoint = new Point(rand.Next(0, Consts.gameBounds.Width), 0);
 			//Point destination = new Point(Utils.gameBounds.Width / 2, Utils.gameBounds.Height);
 			Point destination = new Point(spawnPoint.X, Consts.gameBounds.Height);
+			//destination.X -= 2;
 			Bomb bmb = EntityFactory.MakeBomb(spawnPoint, destination, PType.ENEMY, missile_command.ETag.ENEMY);
-			bmb.DestroyBomb += DestroyGameObject;
-			lEntities[(int)bmb.Tag].Add(bmb);
+			bmb.DestroyBomb += DestroyEBomb;
+			eBombs.Add(bmb);
 		}
 		private void MassTest()
 		{
 			for (int i = 0; i < 100; i++)
 				SpawnTest();
 		}
-		private void DestroyGameObject(Entity gameObject)
-		{
-			lEntities[(int)gameObject.Tag].Remove(gameObject);
-		}
-		public override void Draw(Graphics g)
-		{
-			// TODO uncomment
-			//SpawnEnemies();
-
-			for (int i = 0; i < lPlayer.Count; i++)
-				lPlayer[i].Draw(g);
-
-			for (int i = 0; i < lEntities.Count; i++)
-				for (int j = 0; j < lEntities[i].Count; j++)
-					lEntities[i][j].Draw(g);
-		}
+		private void DestroyEBomb(Entity gameObject) { eBombs.Remove(gameObject); }
+		private void DestroyPBomb(Entity gameObject) { pBombs.Remove(gameObject); }
 		private void HotKeys()
 		{
 			System.Windows.Forms.Keys key = KeypressHandler.Instance.CurrentKey;
@@ -155,47 +141,52 @@ namespace missile_command
 			else if (key == System.Windows.Forms.Keys.Escape)
 				game.Close();
 		}
+
+		public override void Draw(Graphics g)
+		{
+			// TODO uncomment
+			//SpawnEnemies();
+			
+			for (int i = 0; i < components.Count; i++)
+				components[i].Draw(g);
+			for (int i = 0; i < eBombs.Count; i++)
+				eBombs[i].Draw(g);
+			for (int i = 0; i < pBombs.Count; i++)
+				pBombs[i].Draw(g);
+			for (int i = 0; i < players.Count; i++)
+				players[i].Draw(g);
+		}
 		public override void Update(long gameTime)
 		{
 			HotKeys();
 
-			// :O almost n^3
-			// minus 1 because I don't want to check enemy bombs twice.
-			// TODO find a better solution
-			for (int i = 0; i < lEntities.Count - 1; i++)
+			for (int i = 0; i < eBombs.Count; i++)
 			{
-				for (int j = 0; j < lEntities[(int)ETag.ENEMY].Count; j++)
-				{
-					for (int k = 0; k < lEntities[i].Count; k++)
-					{
-						lEntities[(int)ETag.ENEMY][j].Collider.CollisionDetection(lEntities[i][k].Collider);
-					}
-				}
+				for (int j = 0; j < components.Count; j++)
+					components[j].Collider.CollisionDetection(eBombs[i].Collider);
+				for (int j = 0; j < pBombs.Count; j++)
+					pBombs[j].Collider.CollisionDetection(eBombs[i].Collider);
 			}
 
-			for (int i = 0; i < lEntities.Count; i++)
-			{
-				for (int j = 0; j < lEntities[i].Count; j++)
-				{
-					lEntities[i][j].Update(gameTime);
-				}
-			}
-
-			foreach (Player p in lPlayer)
-				p.Update(gameTime);
+			for (int i = 0; i < components.Count; i++)
+				components[i].Update(gameTime);
+			for (int i = 0; i < eBombs.Count; i++)
+				eBombs[i].Update(gameTime);
+			for (int i = 0; i < pBombs.Count; i++)
+				pBombs[i].Update(gameTime);
+			for (int i = 0; i < players.Count; i++)
+				players[i].Update(gameTime);
 		}
 		public override void PostUpdate(long gameTime)
 		{
-			for (int i = 0; i < lEntities.Count; i++)
-			{
-				for (int j = 0; j < lEntities[i].Count; j++)
-				{
-					lEntities[i][j].PostUpdate(gameTime);
-				}
-			}
-
-			foreach (Player p in lPlayer)
-				p.PostUpdate(gameTime);
+			for (int i = 0; i < components.Count; i++)
+				components[i].PostUpdate(gameTime);
+			for (int i = 0; i < eBombs.Count; i++)
+				eBombs[i].PostUpdate(gameTime);
+			for (int i = 0; i < pBombs.Count; i++)
+				pBombs[i].PostUpdate(gameTime);
+			for (int i = 0; i < players.Count; i++)
+				players[i].PostUpdate(gameTime);
 		}
 	}
 }

@@ -14,39 +14,36 @@ namespace missile_command
 		public event Deconstruct DestroyBomb;
 
 		// TODO add some sort of config based settings
-		private int explosionRadius;
-		private PointF velocity;
-
-		private bool atDestination = false;
-		private Point destination;
-
+		private bool atDestination;
 		private SolidBrush brush;
-		private Pen pen;
+		private Point destination;
+		private int explosionSize;
+		private bool flash;
+		private Collider firstCollider;
 		private PointF fNextPosition; // was newX, newY
-		private bool explosionFlash = false;
-		private int flashCount = 0;
-		private int destroyCount = 0;
+		private int growthCount;
 		private Point lOrigin; // traceOrigin
+		private int oriRadius;
+		private Pen pen;
+		private PointF velocity;
 
 		public Bomb(Point o, Size d, Point des, PType p, ETag t) : base(o.X, o.Y, d.Width, d.Height, t)
 		{
-			destination = des;
-			lOrigin = Body.TopLeft;
-
 			// Adjust the bomb so the "origin" of it is the center 
-			Body.AdjustX(-Body.Width / 2);
-			explosionRadius = Config.Instance.DefaultExplosionSize / 2;
+			//Body.AdjustX(-Body.Width / 2);
 
-			// Set to the current position
+			// Set fields
+			atDestination = false;
+			destination = des;
+			explosionSize = Config.Instance.DefaultExplosionSize;
+			flash = false;
 			fNextPosition = Body.TopLeft;
-
-			SetColor();
+			growthCount = 0;
+			lOrigin = Body.Center;
+			oriRadius = Body.Dimension.Width;
+			
 			CalculateVelocity();
-		}
-		protected override void Collided(Collider collider)
-		{
-			if (!atDestination)
-				RepositionExplosion();
+			SetColor();
 		}
 		private void CalculateVelocity()
 		{
@@ -67,24 +64,25 @@ namespace missile_command
 				velocity.Y *= -1.0F;
 			}
 		}
+		protected override void Collided(Collider collider)
+		{
+			if (firstCollider == null)
+				firstCollider = collider;
+			atDestination = true;
+		}
 		public override void Draw(Graphics g)
 		{
-			if (!atDestination)
-			{
-				g.FillEllipse(brush, Body.Left, Body.Top, Body.Width, Body.Height);
-				g.DrawLine(pen, lOrigin.X, lOrigin.Y, Body.Center.X, Body.Center.Y);
-			}
+			if (flash)
+				g.DrawEllipse(pen, Body.Left, Body.Top, Body.Width, Body.Height);
 			else
-			{
-				if (explosionFlash)
-					g.DrawEllipse(pen, Body.Left, Body.Top, Body.Width, Body.Height);
-				else
-					g.FillEllipse(brush, Body.Left, Body.Top, Body.Width, Body.Height);
-			}
+				g.FillEllipse(brush, Body.Left, Body.Top, Body.Width, Body.Height);
+
+			if (!atDestination)
+				g.DrawLine(pen, lOrigin.X, lOrigin.Y, Body.Center.X, Body.Center.Y);
 		}
 		private void RepositionExplosion()
 		{
-			// Reposition the bomb's point for the explosion
+			//Reposition the bomb's point for the explosion
 			int explosionSize = Config.Instance.DefaultExplosionSize;
 			int meanCoorindates = ((explosionSize / 2) - (Body.Width / 2));
 
@@ -126,24 +124,36 @@ namespace missile_command
 				}
 				else
 				{
-					RepositionExplosion();
+					atDestination = true;
 				}
 			}
 		}
 		public override void PostUpdate(long gameTime)
 		{
-			// TODO make explosion grow
 			if (atDestination)
 			{
-				flashCount++;
-				if (flashCount % 4 == 0)
-				{
-					explosionFlash = !explosionFlash;
-					destroyCount++;
-				}
-				if (flashCount == 16)
-				{
+				if (Body.Width >= explosionSize)
 					DestroyBomb(this);
+
+				// Start growing the explosion
+				// if false then grow the size of it.
+				growthCount++;
+				if (growthCount % 4 == 0)
+				{
+					// flash the graphics
+					if (growthCount % 6 == 0)
+						flash = !flash;
+
+					int growth = explosionSize / 30;
+					// if growth is not even, then make it even.
+					if (growth % 2 != 0)
+						growth++;
+
+					if (Body.Width <= oriRadius)
+						growth = 8;
+
+					Body.UpdateDimension(Body.Width + growth, Body.Height + growth);
+					Body.AdjustPosition(-growth / 2, -growth / 2);
 				}
 			}
 		}

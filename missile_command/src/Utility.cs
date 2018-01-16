@@ -45,6 +45,7 @@
 		public const int HILL_MASS_HEIGHT = 70;
 		public const int SCREEN_OFFSET = 0;
 		public const int SEPERATION_VALUE = 34;
+		public const int POINT_VALUE = 50;
 
 		// the dimensions of this image is being drawn as 40x40
 		public const int CITY_SIZE = 30;
