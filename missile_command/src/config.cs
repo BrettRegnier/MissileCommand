@@ -24,8 +24,10 @@ namespace missile_command
 		private List<List<Keys>> lPKeys = new List<List<Keys>>();
 		private List<Color> lAccountColors;
 		// TODO Remove magic numbers
-		private int bombRadius = 4;
-		private float bombSpeed = 4f;
+		private int eBombRadius = 4;
+		private int pBombRadius = 4;
+		private float eBombSpeed = 1f;
+		private float pBombSpeed = 10f;
 		private int explosionSize = 100;
 		private int turretRadius = 50;
 
@@ -58,10 +60,12 @@ namespace missile_command
 		{
 			throw new NotImplementedException();
 		}
-
-		public Size DefaultBombSize { get { return new Size(bombRadius, bombRadius); } }
+		
+		public int EnemyBombDiameter { get { return eBombRadius; } }
+		public int PlayerBombDiameter { get { return pBombRadius; } }
+		public float EnemyBombSpeed { get { return eBombSpeed; } }
+		public float PlayerBombSpeed { get { return pBombSpeed; } }
 		public int DefaultExplosionSize { get { return explosionSize; } }
-		public float DefaultBombSpeed { get { return bombSpeed; } }
 		public Size TurretSize { get { return new Size(turretRadius, turretRadius); } }
 		public int TurretRadius { get { return turretRadius; } }
 

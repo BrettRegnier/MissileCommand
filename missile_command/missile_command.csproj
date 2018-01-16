@@ -53,7 +53,9 @@
     <Compile Include="src\game\City.cs" />
     <Compile Include="src\game\Collider.cs" />
     <Compile Include="src\game\Entity.cs" />
-    <Compile Include="src\game\GameMode.cs" />
+    <Compile Include="src\game\Mode.cs" />
+    <Compile Include="src\game\SurvivalMode.cs" />
+    <Compile Include="src\game\WaveMode.cs" />
     <Compile Include="src\game\_GameState.cs" />
     <Compile Include="src\MouseHandler.cs" />
     <Compile Include="src\State.cs" />

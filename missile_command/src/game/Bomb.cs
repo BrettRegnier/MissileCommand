@@ -25,13 +25,14 @@ namespace missile_command
 		private Point lOrigin; // traceOrigin
 		private int oriRadius;
 		private Pen pen;
+		private float speed;
 		private PointF velocity;
 
-		public Bomb(Point o, Size d, Point des, PType p, ETag t) : base(o.X, o.Y, d.Width, d.Height, t)
-		{
-			// Adjust the bomb so the "origin" of it is the center 
-			//Body.AdjustX(-Body.Width / 2);
+		public PType PlayerType { get; private set; }
+		public bool GivePoints { get; private set; }
 
+		public Bomb(int x, int y, int w, int h, Point des, PType p, ETag t) : base(x, y, w, h, t)
+		{
 			// Set fields
 			atDestination = false;
 			destination = des;
@@ -41,13 +42,19 @@ namespace missile_command
 			growthCount = 0;
 			lOrigin = Body.Center;
 			oriRadius = Body.Dimension.Width;
-			
+			PlayerType = p;
+			GivePoints = false;
+
+			if (p == PType.ENEMY)
+				speed = Config.Instance.EnemyBombSpeed;
+			else
+				speed = Config.Instance.PlayerBombSpeed;
+
 			CalculateVelocity();
 			SetColor();
 		}
 		private void CalculateVelocity()
 		{
-			float speed = Config.Instance.DefaultBombSpeed;
 			// Difference between the origin and where it will hit.
 			double diffX = Body.Left - destination.X;
 			double diffY = Body.Top - destination.Y;
@@ -133,7 +140,12 @@ namespace missile_command
 			if (atDestination)
 			{
 				if (Body.Width >= explosionSize)
+				{
+					if (firstCollider != null && firstCollider.Owner is Bomb)
+						if (((Bomb)firstCollider.Owner).PlayerType == PType.PLAYER)
+							GivePoints = true;
 					DestroyBomb(this);
+				}
 
 				// Start growing the explosion
 				// if false then grow the size of it.

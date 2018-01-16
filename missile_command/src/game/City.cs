@@ -20,7 +20,6 @@ namespace missile_command
 		private static int aliveCities = 0;
 
 		private Image sprite;
-		private bool isDestroyed;
 		private Shield shield;
 
 		private Collider prevCollider;
@@ -42,7 +41,6 @@ namespace missile_command
 		{
 			sprite = lSprite[(int)SpriteType.ALIVE];
 			aliveCities++;
-			isDestroyed = false;
 
 			Size shieldSize = Body.Dimension;
 			shieldSize.Width += Consts.CITY_TRUE_SIZE + 6;
@@ -61,7 +59,7 @@ namespace missile_command
 				if (!shield.Active)
 				{
 					sprite = lSprite[(int)SpriteType.DEAD];
-					isDestroyed = true;
+					Alive = false;
 					prevCollider = collider;
 				}
 			}
@@ -69,7 +67,7 @@ namespace missile_command
 		public override void Draw(Graphics g)
 		{
 			g.DrawImage(sprite, Body.TopLeft);
-			if (!isDestroyed)
+			if (Alive)
 			{
 				shield.Draw(g);
 			}

@@ -16,8 +16,7 @@ namespace missile_command
 		public event Fire TurretShoot;
 
 		private const int GUN_END_LENGTH = 5;
-
-		private bool isDestroyed;
+		
 		private Pen pen;
 		private Point turretEnd;
 		private StatusBar hpBar;
@@ -32,7 +31,6 @@ namespace missile_command
 			int nX = Body.Left - Config.Instance.TurretRadius / 2;
 			int nY = Body.Top - Config.Instance.TurretRadius / 2;
 			Body.UpdatePosition(nX, nY);
-			isDestroyed = false;
 
 			hpBar = new HealthBar(Body.Center.X, Body.Center.Y, 50, 10);
 		}
@@ -48,7 +46,7 @@ namespace missile_command
 				if (hpBar.IsAlive)
 					hpBar.Damage();
 				else
-					isDestroyed = true;
+					Alive = false;
 			}
 		}
 		public override void Draw(Graphics g)
@@ -56,12 +54,12 @@ namespace missile_command
 			hpBar.Draw(g);
 			g.DrawArc(pen, Body.Left, Body.Top, Body.Width, Body.Height, 180, 180);
 
-			if (!isDestroyed)
+			if (Alive)
 				g.DrawLine(pen, Body.Center, turretEnd);
 		}
 		public void ShootTurret()
 		{
-			int bmbRadius = Config.Instance.DefaultBombSize.Width / 2;
+			int bmbRadius = Config.Instance.PlayerBombDiameter / 2;
 			Point origin = new Point(turretEnd.X - bmbRadius, turretEnd.Y - bmbRadius); 
 			TurretShoot(origin, aim.Center, Tag);
 		}
@@ -98,10 +96,8 @@ namespace missile_command
 			hpBar.PostUpdate(gameTime);
 			if (hpBar.IsAlive)
 			{
-				isDestroyed = false;
+				Alive = true;
 			}
 		}
-
-		public bool IsDestroyed { get { return isDestroyed; } }
 	}
 }

@@ -18,6 +18,7 @@ namespace missile_command
 		private const int REPLENISH_TICK_SETTING = 10;
 		private const int REPLENISH_RATE = 2;
 		private const int REPLENISH_AMOUNT = 1;
+		private const int HEAL_AMOUNT = 1;
 		#endregion
 
 		protected Brush innerBrush;
@@ -27,7 +28,10 @@ namespace missile_command
 
 		protected int curHP;
 		protected int maxHP;
-		protected int replishTick;
+		protected int replenishTick;
+		// The replish require needs to reach a certain value before curHP can be increased
+		protected int replenishValue;
+		protected int replenishRequire; //TODO player upgrades
 
 		protected bool isAlive;
 		protected bool isDamaged;
@@ -49,11 +53,16 @@ namespace missile_command
 
 			maxHP = Body.Width;
 			curHP = maxHP;
-			Body.UpdateDimension(curHP, Body.Height);
+			Body.UpdateWidth(curHP);
 
-			replishTick = 0;
+			replenishTick = 0;
+			replenishValue = 0;
+			// Player upgrades can alter this value.
+			replenishRequire = 60;
+
 			isAlive = true;
 			isDamaged = false;
+			isRestored = false;
 		}
 		public abstract void Damage();
 
@@ -66,19 +75,25 @@ namespace missile_command
 		{
 			// TODO rethink how I want to implement this.
 			// TODO use upgrade player values to determine the rate.
-			if (replishTick >= REPLENISH_TICK_SETTING)
+			// TODO might want to have different speeds for the Tower and the shield
+			if (replenishTick >= REPLENISH_TICK_SETTING)
 			{
 				if (isDamaged)
 				{
+						replenishValue += REPLENISH_AMOUNT;
 					// TODO animate it so its smoother when its > 1
-					curHP += REPLENISH_AMOUNT;
+					if (replenishValue >= replenishRequire)
+					{
+						replenishValue %= replenishRequire;
+						curHP += HEAL_AMOUNT;
+						Body.UpdateWidth(curHP);
+					}
 				}
-				Body.UpdateDimension(curHP, Body.Height);
-				replishTick = REPLENISH_TICK_SETTING % 10;
+				replenishTick %= REPLENISH_TICK_SETTING;
 			}
 			else
 			{
-				replishTick += REPLENISH_RATE;
+				replenishTick += REPLENISH_RATE;
 			}
 
 		}
@@ -113,6 +128,7 @@ namespace missile_command
 		public override void Damage()
 		{
 			curHP = 0;
+			Body.UpdateWidth(curHP);
 			isAlive = false;
 			isDamaged = true;
 			isRestored = false;
@@ -135,6 +151,7 @@ namespace missile_command
 			else
 			{
 				curHP = 0;
+				Body.UpdateWidth(curHP);
 				isAlive = false;
 				isRestored = false;
 			}

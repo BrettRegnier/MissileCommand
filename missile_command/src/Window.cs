@@ -59,6 +59,7 @@ namespace missile_command
 			{
 				while (true)
 				{
+					// Every 60 seconds report fps
 					if (Environment.TickCount >= elapsedTime + 1000)
 					{
 						fps = frames;
@@ -67,6 +68,7 @@ namespace missile_command
 						Console.Out.WriteLine("Frames: " + fps);
 					}
 
+					// Refresh so that there is ~60 fps
 					if (Environment.TickCount >= tickCount + 15)
 					{
 						tickCount = Environment.TickCount;
@@ -94,7 +96,7 @@ namespace missile_command
 				currState = nextState;
 				nextState = null;
 			}
-
+			
 			currState.Update(elapsedTime);
 			currState.PostUpdate(elapsedTime);
 		}
@@ -102,8 +104,6 @@ namespace missile_command
 		{
 			currState.Draw(e.Graphics);
 			frames++;
-
-			// Update after drawing
 			Loop();
 		}
 		private void GameForm_KeyDown(object sender, KeyEventArgs e)

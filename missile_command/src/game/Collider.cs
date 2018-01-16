@@ -12,10 +12,12 @@ namespace missile_command
 		public event Collision OnCollision;
 
 		public Body Body { get; set; }
+		public Entity Owner { get; private set; }
 
-		public Collider(Body b)
+		public Collider(Body b, Entity own)
 		{
 			Body = b;
+			Owner = own;
 		}
 
 		public void CollisionDetection(Collider collidee)

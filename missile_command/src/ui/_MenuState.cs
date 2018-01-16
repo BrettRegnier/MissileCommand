@@ -75,19 +75,19 @@ namespace missile_command
 			//Attach the buttons.
 			newGameButton.AddButton(onePlayer); newGameButton.AddButton(twoPlayer); newGameButton.AddButton(threePlayer);
 
+			survival = new GameButton("Survival Mode", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
+			survival.Click += (sender, e) => { game.NextState(new GameState(players, GameModes.SURVIVAL, game)); };
+			survival.IsEnabled = false;
+			survival.IsVisible = false;
 			wave = new GameButton("Wave Mode", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
 			wave.Click += (sender, e) => { game.NextState(new GameState(players, GameModes.WAVE, game)); };
 			wave.IsEnabled = false;
 			wave.IsVisible = false;
 
-			survival = new GameButton("Survival Mode", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
-			survival.Click += (sender, e) => { game.NextState(new GameState(players, GameModes.SURVIVAL, game)); };
-			survival.IsEnabled = false;
-			survival.IsVisible = false;
 
-			onePlayer.AddButton(wave); onePlayer.AddButton(survival);
-			twoPlayer.AddButton(wave); twoPlayer.AddButton(survival);
-			threePlayer.AddButton(wave); threePlayer.AddButton(survival);
+			onePlayer.AddButton(survival); onePlayer.AddButton(wave);
+			twoPlayer.AddButton(survival); twoPlayer.AddButton(wave);
+			threePlayer.AddButton(survival); threePlayer.AddButton(wave);
 
 			numButton++;
 
@@ -136,19 +136,19 @@ namespace missile_command
 			{
 				elapsedTime = gameTime;
 				Random rand = new Random();
-				Point spawnPoint = new Point(rand.Next(0, Consts.gameBounds.Width), 0);
-				Point destination = new Point(rand.Next(spawnPoint.X, Consts.gameBounds.Width), Consts.gameBounds.Height);
-				if (spawnPoint.X < Consts.gameBounds.Width / 2)
+				Point o = new Point(rand.Next(0, Consts.gameBounds.Width), 0);
+				Point destination = new Point(rand.Next(o.X, Consts.gameBounds.Width), Consts.gameBounds.Height);
+				if (o.X < Consts.gameBounds.Width / 2)
 					destination.X = rand.Next(0, Consts.gameBounds.Width / 2);
-				Bomb bmb = EntityFactory.MakeBomb(spawnPoint, destination, PType.ENEMY, ETag.ENEMY);
+				Bomb bmb = EntityFactory.MakeBomb(o.X, o.Y, destination, PType.ENEMY, ETag.ENEMY);
 				bmb.DestroyBomb += (Entity b) => { bombs.Remove(b); };
 				bombs.Add(bmb);
 
-				spawnPoint = new Point(rand.Next(0, Consts.gameBounds.Width), Consts.gameBounds.Height);
-				destination = new Point(rand.Next(spawnPoint.X, Consts.gameBounds.Width), 0);
-				if (spawnPoint.X < Consts.gameBounds.Width / 2)
+				o = new Point(rand.Next(0, Consts.gameBounds.Width), Consts.gameBounds.Height);
+				destination = new Point(rand.Next(o.X, Consts.gameBounds.Width), 0);
+				if (o.X < Consts.gameBounds.Width / 2)
 					destination.X = rand.Next(0, Consts.gameBounds.Width / 2);
-				Bomb bmb2 = EntityFactory.MakeBomb(spawnPoint, destination, PType.ENEMY, ETag.ENEMY);
+				Bomb bmb2 = EntityFactory.MakeBomb(o.X, o.Y, destination, PType.ENEMY, ETag.ENEMY);
 				bmb2.DestroyBomb += (Entity b) => { bombs.Remove(b); };
 				bombs.Add(bmb2);
 			}

@@ -7,9 +7,15 @@ namespace missile_command
 {
 	class EntityFactory
 	{
-		public static Bomb MakeBomb(Point o, Point des, PType p, ETag a)
+		public static Bomb MakeBomb(int x, int y, Point des, PType p, ETag a)
 		{
-			return new Bomb(o, Config.Instance.DefaultBombSize, des, p, a);
+			int r;
+			if (p == PType.ENEMY)
+				r = Config.Instance.EnemyBombDiameter;
+			else
+				r = Config.Instance.PlayerBombDiameter;
+
+			return new Bomb(x, y, r, r, des, p, a);
 		}
 		public static Turret MakeTurret(Point o, Size d, PType p, ETag a)
 		{

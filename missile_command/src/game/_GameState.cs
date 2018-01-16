@@ -10,25 +10,45 @@ namespace missile_command
 	// TODO refactor alllll of this, and use components instead.
 	class GameState : State
 	{
-		private GameMode mode;
+		private Mode gameMode;
 
-		private List<Player> players;
 		private List<Entity> components;
 		private List<Entity> eBombs;
+		private long elapsedTime;
 		private List<Entity> pBombs;
-		private Random rand = new Random();
+		private List<Player> players;
+		private bool paused;
+		private Random rand;
+
+		private int playTime;
+		private int playTimeX;
+		private int playTimeY;
+
+		private int score;
+		private int scoreX;
+		private int scoreY;
 
 		public GameState(int numPlayers, GameModes gamemode, Window g) : base(g)
 		{
-			players = new List<Player>();
 			components = new List<Entity>();
 			eBombs = new List<Entity>();
+			paused = false;
 			pBombs = new List<Entity>();
+			players = new List<Player>();
+			rand = new Random();
+
+			playTime = 0;
+			playTimeX = Consts.gameBounds.Width - 150;
+			playTimeY = 10;
+
+			score = 0;
+			scoreX = 10;
+			scoreY = 10;
 
 			if (gamemode == GameModes.SURVIVAL)
-				mode = new WaveMode();
+				gameMode = new SurvivalMode(this);
 			else if (gamemode == GameModes.WAVE)
-				mode = new SurvivalMode();
+				gameMode = new WaveMode(this);
 
 			InitGame();
 			InitPlayers(numPlayers);
@@ -94,43 +114,24 @@ namespace missile_command
 
 			KeypressHandler.Instance.Initialize(players);
 		}
-		private void P_TurretShoot(Point origin, Point destination, ETag a)
+		private string formatTime()
 		{
-			// use player upgrades, if I add them, to determine the size.
-			Bomb bmb = EntityFactory.MakeBomb(origin, destination, PType.PLAYER, a);
-			bmb.DestroyBomb += DestroyPBomb;
-			pBombs.Add(bmb);
+			// Format time into hrs, minutes, seconds.
+			int playTimeSec = playTime % 60;
+			int totalMinutes = playTime / 60;
+			int playTimeMinutes = totalMinutes % 60;
+			int playTimeHours = totalMinutes / 60;
+			string seconds = playTimeSec.ToString();
+			string minutes = playTimeMinutes.ToString();
+			string hours = playTimeHours.ToString();
+			if (playTimeSec < 10)
+				seconds = "0" + playTimeSec.ToString();
+			if (playTimeMinutes < 10)
+				minutes = "0" + playTimeMinutes.ToString();
+			if (playTimeHours < 10)
+				hours = "0" + playTimeHours.ToString();
+			return "Play Time: " + hours + ":" + minutes + ":" + seconds;
 		}
-		private void SpawnEnemies(long gameTime)
-		{
-			// TODO complex calculation based on ticks to determine when the next spawn is.
-			if (Environment.TickCount >= gameTime + 1000)
-			{
-				Point spawnPoint = new Point(rand.Next(0, Consts.gameBounds.Width), 0);
-				// TODO make a list of guaranteed points
-				Point destination = new Point(rand.Next(0, Consts.gameBounds.Width), Consts.gameBounds.Height);
-				Bomb bmb = EntityFactory.MakeBomb(spawnPoint, destination, PType.ENEMY, missile_command.ETag.ENEMY);
-				bmb.DestroyBomb += DestroyEBomb;
-				eBombs.Add(bmb);
-			}
-		}
-		private void SpawnTest()
-		{
-		 Point spawnPoint = new Point(rand.Next(0, Consts.gameBounds.Width), 0);
-			//Point destination = new Point(Utils.gameBounds.Width / 2, Utils.gameBounds.Height);
-			Point destination = new Point(spawnPoint.X, Consts.gameBounds.Height);
-			//destination.X -= 2;
-			Bomb bmb = EntityFactory.MakeBomb(spawnPoint, destination, PType.ENEMY, missile_command.ETag.ENEMY);
-			bmb.DestroyBomb += DestroyEBomb;
-			eBombs.Add(bmb);
-		}
-		private void MassTest()
-		{
-			for (int i = 0; i < 100; i++)
-				SpawnTest();
-		}
-		private void DestroyEBomb(Entity gameObject) { eBombs.Remove(gameObject); }
-		private void DestroyPBomb(Entity gameObject) { pBombs.Remove(gameObject); }
 		private void HotKeys()
 		{
 			System.Windows.Forms.Keys key = KeypressHandler.Instance.CurrentKey;
@@ -141,12 +142,39 @@ namespace missile_command
 			else if (key == System.Windows.Forms.Keys.Escape)
 				game.Close();
 		}
-
+		private void P_TurretShoot(Point origin, Point destination, ETag a)
+		{
+			// use player upgrades, if I add them, to determine the size.
+			Bomb bmb = EntityFactory.MakeBomb(origin.X, origin.Y, destination, PType.PLAYER, a);
+			bmb.DestroyBomb += (gameObject) => { pBombs.Remove(gameObject); };
+			pBombs.Add(bmb);
+		}
+		private void SpawnEnemies()
+		{
+			Bomb[] bombs = gameMode.SpawnEnemies();
+			for (int i = 0; i < bombs.Length; i++)
+			{
+				bombs[i].DestroyBomb += (gameObject) =>
+				{
+					eBombs.Remove(gameObject);
+					if (((Bomb)gameObject).GivePoints)
+						gameMode.AddPoints(Consts.POINT_VALUE);
+				};
+				eBombs.Add(bombs[i]);
+			}
+		}
+		public List<Entity> AliveEntities()
+		{
+			List<Entity> aliveList = new List<Entity>();
+			for (int i = 4; i< components.Count; i++)
+			{
+				if (components[i].Alive)
+					aliveList.Add(components[i]);
+			}
+			return aliveList;
+		}
 		public override void Draw(Graphics g)
 		{
-			// TODO uncomment
-			//SpawnEnemies();
-			
 			for (int i = 0; i < components.Count; i++)
 				components[i].Draw(g);
 			for (int i = 0; i < eBombs.Count; i++)
@@ -155,30 +183,48 @@ namespace missile_command
 				pBombs[i].Draw(g);
 			for (int i = 0; i < players.Count; i++)
 				players[i].Draw(g);
+			string scoreText = "Score: " + score.ToString();
+			g.DrawString(scoreText, new Font("Times New Roman", 12), new SolidBrush(Color.Green), scoreX, scoreY);
+			g.DrawString(formatTime(), new Font("Times New Roman", 12), new SolidBrush(Color.Green), playTimeX, playTimeY);
 		}
 		public override void Update(long gameTime)
 		{
-			HotKeys();
-
-			for (int i = 0; i < eBombs.Count; i++)
+			if (!paused)
 			{
-				for (int j = 0; j < components.Count; j++)
-					components[j].Collider.CollisionDetection(eBombs[i].Collider);
-				for (int j = 0; j < pBombs.Count; j++)
-					pBombs[j].Collider.CollisionDetection(eBombs[i].Collider);
-			}
+				HotKeys();
+				gameMode.Update(gameTime);
+				score += gameMode.ReceivePoints();
+				SpawnEnemies();
 
-			for (int i = 0; i < components.Count; i++)
-				components[i].Update(gameTime);
-			for (int i = 0; i < eBombs.Count; i++)
-				eBombs[i].Update(gameTime);
-			for (int i = 0; i < pBombs.Count; i++)
-				pBombs[i].Update(gameTime);
-			for (int i = 0; i < players.Count; i++)
-				players[i].Update(gameTime);
+				for (int i = 0; i < eBombs.Count; i++)
+				{
+					for (int j = 0; j < components.Count; j++)
+						components[j].Collider.CollisionDetection(eBombs[i].Collider);
+					for (int j = 0; j < pBombs.Count; j++)
+						pBombs[j].Collider.CollisionDetection(eBombs[i].Collider);
+				}
+
+				for (int i = 0; i < components.Count; i++)
+					components[i].Update(gameTime);
+				for (int i = 0; i < eBombs.Count; i++)
+					eBombs[i].Update(gameTime);
+				for (int i = 0; i < pBombs.Count; i++)
+					pBombs[i].Update(gameTime);
+				for (int i = 0; i < players.Count; i++)
+					players[i].Update(gameTime);
+
+				/// Maybe used FPS since thats more "accurate" on how long you've been "playing"
+				if (gameTime >= elapsedTime + 1000)
+				{
+					// if here, then its been 1 second.
+					elapsedTime = gameTime;
+					playTime += 1;
+				}
+			}
 		}
 		public override void PostUpdate(long gameTime)
 		{
+			gameMode.PostUpdate(gameTime);
 			for (int i = 0; i < components.Count; i++)
 				components[i].PostUpdate(gameTime);
 			for (int i = 0; i < eBombs.Count; i++)
@@ -187,6 +233,25 @@ namespace missile_command
 				pBombs[i].PostUpdate(gameTime);
 			for (int i = 0; i < players.Count; i++)
 				players[i].PostUpdate(gameTime);
+		}
+
+
+
+
+		private void SpawnTest()
+		{
+			Point o = new Point(rand.Next(0, Consts.gameBounds.Width), 0);
+			//Point destination = new Point(Utils.gameBounds.Width / 2, Utils.gameBounds.Height);
+			Point destination = new Point(o.X, Consts.gameBounds.Height);
+			//destination.X -= 2;
+			Bomb bmb = EntityFactory.MakeBomb(o.X, o.Y, destination, PType.ENEMY, missile_command.ETag.ENEMY);
+			bmb.DestroyBomb += (gameObject) => { eBombs.Remove(gameObject); };
+			eBombs.Add(bmb);
+		}
+		private void MassTest()
+		{
+			for (int i = 0; i < 100; i++)
+				SpawnTest();
 		}
 	}
 }
