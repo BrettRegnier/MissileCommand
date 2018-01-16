@@ -9,63 +9,93 @@ namespace missile_command
 {
 	class MenuState : State
 	{
-		int players = 0;
-
+		private int players = 0;
+		private long elapsedTime = 0;
 		List<Component> lComponents = new List<Component>();
+		List<Component> lBombs = new List<Component>();
+
 		public MenuState(Window g) : base(g)
 		{
 			int numButton = 0;
-			int startX = Utils.gameBounds.Width / 2;
+			int startX = Consts.gameBounds.Width / 2;
 			int startY = 200;
 			int btnWidth = 100;
 			int btnHeight = 30;
 
-			Dropdown newGameButton = new Dropdown("New Game", startX, startY + Utils.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
-			newGameButton.Click += NewGameButton_Click;
+			// declare buttons
+			SlideRightButton newGameButton;
 
-			// Move the button slightly to the right.
-			DropdownButton OnePlayer = new DropdownButton("1 Player", startX + 5, startY + Utils.SEPERATION_VALUE * numButton, btnWidth - 10, btnHeight);
-			OnePlayer.Click += (sender, e) => { players = 1; };
-			OnePlayer.IsVisible = false;
-			OnePlayer.PrevButton = newGameButton;
+			//Player buttons
+			SlideRightButton onePlayer;
+			SlideRightButton twoPlayer;
+			SlideRightButton threePlayer;
 
-			// Move the button slightly to the right.
-			DropdownButton TwoPlayers = new DropdownButton("2 Players", startX + 5, startY + Utils.SEPERATION_VALUE * numButton, btnWidth - 10, btnHeight);
-			TwoPlayers.Click += (sender, e) => { players = 2; };
-			TwoPlayers.IsVisible = false;
-			TwoPlayers.PrevButton = OnePlayer;
-			OnePlayer.NextButton = TwoPlayers;
+			// Mode buttons
+			GameButton survival;
+			GameButton twoSurvival;
+			GameButton threeSurvival;
 
-			// Move the button slightly to the right.
-			DropdownButton ThreePlayers = new DropdownButton("3 Players",  startX + 5, startY + Utils.SEPERATION_VALUE * numButton, btnWidth - 10, btnHeight);
-			ThreePlayers.Click += (sender, e) => { players = 3; };
-			ThreePlayers.IsVisible = false;
-			ThreePlayers.PrevButton = TwoPlayers;
-			TwoPlayers.NextButton = ThreePlayers;
+			GameButton wave;
+			GameButton twoWave;
+			GameButton threeWave;
+
+			GameButton highscoresButton;
+			GameButton exitButton;
+
+			newGameButton = new SlideRightButton("New Game", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
+			newGameButton.Click += (sender, e) => { ((SlideRightButton)sender).Toggle(); };
+
+			#region PlayerButtons
+			onePlayer = new SlideRightButton("One Player", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
+			onePlayer.Click += (sender, e) => { players = 1; ((SlideRightButton)sender).Toggle(); };
+			onePlayer.IsEnabled = false;
+			onePlayer.IsVisible = false;
+
+			twoPlayer = new SlideRightButton("Two Players", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
+			twoPlayer.Click += (sender, e) => { players = 2; ((SlideRightButton)sender).Toggle(); };
+			twoPlayer.IsEnabled = false;
+			twoPlayer.IsVisible = false;
+
+			threePlayer = new SlideRightButton("Three Player", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
+			threePlayer.Click += (sender, e) => { players = 3; ((SlideRightButton)sender).Toggle(); };
+			threePlayer.IsEnabled = false;
+			threePlayer.IsVisible = false;
+
+			//Attach the buttons.
+			newGameButton.AddButton(onePlayer); newGameButton.AddButton(twoPlayer); newGameButton.AddButton(threePlayer);
+			#endregion
+
+			#region ModeButtons
+			wave = new GameButton("Wave Mode", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
+			wave.Click += (sender, e) => { game.NextState(new GameState(players, GameModes.WAVE, game)); };
+			wave.IsEnabled = false;
+			wave.IsVisible = false;
+
+			survival = new GameButton("Survival Mode", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
+			survival.Click += (sender, e) => { game.NextState(new GameState(players, GameModes.SURVIVAL, game)); };
+			survival.IsEnabled = false;
+			survival.IsVisible = false;
+
+			onePlayer.AddButton(wave); onePlayer.AddButton(survival);
+			twoPlayer.AddButton(wave); twoPlayer.AddButton(survival);
+			threePlayer.AddButton(wave); threePlayer.AddButton(survival);
+			#endregion
+
 			numButton++;
 
-			GameButton highScoresButton = new GameButton("Highscores", startX, startY + Utils.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
-			highScoresButton.Click += HighScoresButton_Click;
-			highScoresButton.PrevButton = ThreePlayers;
-			ThreePlayers.NextButton = highScoresButton;
+			highscoresButton = new GameButton("Highscores", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
+			highscoresButton.Click += HighScoresButton_Click;
 			numButton++;
 
-			GameButton exitButton = new GameButton("Exit", startX, startY + Utils.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
-			exitButton.Click += ExitButton_Click;
-			exitButton.PrevButton = highScoresButton;
-			highScoresButton.NextButton = exitButton;
-			exitButton.NextButton = new GameButton(10,10,10,10);//dummy button till I have null hceking
+			exitButton = new GameButton("Exit", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
+			exitButton.Click += (sender, e) => { game.Close(); };
 			numButton++;
 
-			//highScoresButton.IsVisible = false;
-			//exitButton.IsVisible = false;
-			
-			lComponents.Add(highScoresButton);
-			lComponents.Add(exitButton);
+
+			// add buttons to components list
 			lComponents.Add(newGameButton);
-			newGameButton.AttachButton(OnePlayer);
-			newGameButton.AttachButton(TwoPlayers);
-			newGameButton.AttachButton(ThreePlayers);
+			lComponents.Add(highscoresButton);
+			lComponents.Add(exitButton);
 		}
 		public override void Draw(Graphics g)
 		{
@@ -76,17 +106,21 @@ namespace missile_command
 		{
 			foreach (Component component in lComponents)
 				component.Update(gameTime);
+
+			elapsedTime = gameTime;
 		}
 		public override void PostUpdate(long gameTime)
 		{
 			foreach (Component component in lComponents)
 				component.PostUpdate(gameTime);
 		}
-
-		private void NewGameButton_Click(object sender, EventArgs e)
+		private void SurvivalMode_Click(object sender, EventArgs e)
 		{
-			((Dropdown)sender).DropDown();
-			//game.NextState(new GameState(1, new GameMode(), game));
+			game.NextState(new GameState(players, GameModes.SURVIVAL, game));
+		}
+		private void WaveMode_Click(object sender, EventArgs e)
+		{
+			game.NextState(new GameState(players, GameModes.WAVE, game));
 		}
 		private void HighScoresButton_Click(object sender, EventArgs e)
 		{
@@ -94,7 +128,17 @@ namespace missile_command
 		}
 		private void ExitButton_Click(object sender, EventArgs e)
 		{
-			game.Close();
+		}
+		private void SpawnBombs(long gameTime)
+		{
+			if (gameTime > elapsedTime + 1000)
+			{
+				Random rand = new Random();
+				Point spawnPoint = new Point(rand.Next(0, Consts.gameBounds.Width), 0);
+				// TODO make a list of guaranteed points
+				Point destination = new Point(rand.Next(0, Consts.gameBounds.Width), Consts.gameBounds.Height);
+				Bomb bmb = EntityFactory.MakeBomb(spawnPoint, destination, PType.ENEMY, missile_command.ETag.ENEMY);
+			}
 		}
 	}
 }

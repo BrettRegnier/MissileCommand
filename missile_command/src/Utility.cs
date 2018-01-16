@@ -1,5 +1,10 @@
 ﻿namespace missile_command
 {
+	public enum GameModes
+	{
+		SURVIVAL,
+		WAVE
+	}
 	public enum PType
 	{
 		ENEMY = 0,
@@ -30,7 +35,7 @@
 		LEFT = 8,
 		SHOOT = 16
 	};
-	public static class Utils
+	public static class Consts
 	{
 		//TODO hill sizes based on the screen
 		// landmass + 100 + hill height
@@ -40,6 +45,7 @@
 		public const int HILL_MASS_HEIGHT = 70;
 		public const int SCREEN_OFFSET = 0;
 		public const int SEPERATION_VALUE = 34;
+		public const int POINT_VALUE = 50;
 
 		// the dimensions of this image is being drawn as 40x40
 		public const int CITY_SIZE = 30;
@@ -49,8 +55,8 @@
 		public const int DESTROYED_CITY_SIZE_OFFSET = 15;
 
 		public static System.Drawing.Size gameBounds = new System.Drawing.Size(
-			System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width - Utils.SCREEN_OFFSET,
-			System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height - Utils.SCREEN_OFFSET);
+			System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width - Consts.SCREEN_OFFSET,
+			System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height - Consts.SCREEN_OFFSET);
 
 		public static int[] HILL_POSITIONS_X = { 0, (gameBounds.Width / 2) - (HILL_MASS_WIDTH / 2), gameBounds.Width - HILL_MASS_WIDTH };
 

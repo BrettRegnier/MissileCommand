@@ -43,7 +43,7 @@ namespace missile_command
 			StartPosition = FormStartPosition.Manual;
 			FormBorderStyle = FormBorderStyle.None;
 
-			this.ClientSize = Utils.gameBounds;
+			this.ClientSize = Consts.gameBounds;
 		}
 		private void LoadContent()
 		{

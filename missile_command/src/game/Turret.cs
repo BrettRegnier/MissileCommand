@@ -25,12 +25,12 @@ namespace missile_command
 
 		public Turret(int x, int y, int w, int h, PType p, ETag t) : base(x, y, w, h, t)
 		{
-			int tRadius = Config.Instance.TurretRadius();
+			int tRadius = Config.Instance.TurretRadius;
 			pen = new Pen(Config.Instance.GetPlayerColor(t));
 
 			// Move tower to left to position it in the center of the given origin
-			int nX = Body.Left - Config.Instance.TurretRadius() / 2;
-			int nY = Body.Top - Config.Instance.TurretRadius() / 2;
+			int nX = Body.Left - Config.Instance.TurretRadius / 2;
+			int nY = Body.Top - Config.Instance.TurretRadius / 2;
 			Body.UpdatePosition(nX, nY);
 			isDestroyed = false;
 
@@ -61,7 +61,9 @@ namespace missile_command
 		}
 		public void ShootTurret()
 		{
-			TurretShoot(turretEnd, aim.Center, Tag);
+			int bmbRadius = Config.Instance.DefaultBombSize.Width / 2;
+			Point origin = new Point(turretEnd.X - bmbRadius, turretEnd.Y - bmbRadius); 
+			TurretShoot(origin, aim.Center, Tag);
 		}
 		public override void Update(long gameTime)
 		{
@@ -71,7 +73,7 @@ namespace missile_command
 			int cursorTowerDiffY = Body.Center.Y - aim.Center.Y;
 
 			// This is the size of the line that is the gun
-			int gunLength = Config.Instance.TurretRadius() / 2 + GUN_END_LENGTH;
+			int gunLength = Config.Instance.TurretRadius / 2 + GUN_END_LENGTH;
 
 			// Finds the adjecent tangent in radians.
 			double turretAngle = Math.Atan((double)cursorTowerDiffY / (double)cursorTowerDiffX);

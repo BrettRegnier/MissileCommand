@@ -27,7 +27,7 @@ namespace missile_command
 
 		public Player(PType p, ETag a)
 		{
-			cursor = new Reticle(Utils.gameBounds.Width / 2, 200, p, a);
+			cursor = new Reticle(Consts.gameBounds.Width / 2, 200, p, a);
 			pType = p;
 			tag = a;
 

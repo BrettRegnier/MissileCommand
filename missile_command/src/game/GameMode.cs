@@ -6,16 +6,22 @@ using System.Threading.Tasks;
 
 namespace missile_command
 {
-	class GameMode
+	abstract class GameMode
 	{
-
+		public abstract Bomb[] SpawnEnemies(long gameTime);
 	}
-	class Wave : GameMode
+	class WaveMode : GameMode
 	{
-
+		public override Bomb[] SpawnEnemies(long gameTime)
+		{
+			throw new NotImplementedException();
+		}
 	}
-	class Survival : GameMode
+	class SurvivalMode : GameMode
 	{
-
+		public override Bomb[] SpawnEnemies(long gameTime)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
