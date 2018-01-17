@@ -58,7 +58,7 @@ namespace missile_command
 			replenishTick = 0;
 			replenishValue = 0;
 			// Player upgrades can alter this value.
-			replenishRequire = 60;
+			replenishRequire = 40;
 
 			isAlive = true;
 			isDamaged = false;
@@ -80,7 +80,7 @@ namespace missile_command
 			{
 				if (isDamaged)
 				{
-						replenishValue += REPLENISH_AMOUNT;
+					replenishValue += REPLENISH_AMOUNT;
 					// TODO animate it so its smoother when its > 1
 					if (replenishValue >= replenishRequire)
 					{
@@ -146,15 +146,15 @@ namespace missile_command
 			// TODO animate the drain of the health
 			if (curHP >= maxHP / 2)
 			{
-				curHP -= maxHP / 2;
+				curHP -= maxHP / 2 + 5;
 			}
 			else
 			{
 				curHP = 0;
-				Body.UpdateWidth(curHP);
 				isAlive = false;
 				isRestored = false;
 			}
+			Body.UpdateWidth(curHP);
 			isDamaged = true;
 		}
 	}

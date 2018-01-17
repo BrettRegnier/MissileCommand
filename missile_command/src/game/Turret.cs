@@ -17,10 +17,11 @@ namespace missile_command
 
 		private const int GUN_END_LENGTH = 5;
 		
-		private Pen pen;
-		private Point turretEnd;
-		private StatusBar hpBar;
 		private Body aim;
+		private StatusBar hpBar;
+		private Pen pen;
+		private Collider prevCollider;
+		private Point turretEnd;
 
 		public Turret(int x, int y, int w, int h, PType p, ETag t) : base(x, y, w, h, t)
 		{
@@ -40,13 +41,17 @@ namespace missile_command
 		}
 		protected override void Collided(Collider collider)
 		{
-			// Need to check to see if the last collider is the same as the one now.
-			if (collider.Body.Top < Body.Center.Y)
+			if (prevCollider != collider)
 			{
-				if (hpBar.IsAlive)
-					hpBar.Damage();
-				else
-					Alive = false;
+				// Need to check to see if the last collider is the same as the one now.
+				if (collider.Body.Top < Body.Center.Y)
+				{
+					if (hpBar.IsAlive)
+						hpBar.Damage();
+					else
+						Alive = false;
+				}
+				prevCollider = collider;
 			}
 		}
 		public override void Draw(Graphics g)
