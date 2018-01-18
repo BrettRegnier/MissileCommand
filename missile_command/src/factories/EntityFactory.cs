@@ -11,9 +11,9 @@ namespace missile_command
 		{
 			int r;
 			if (p == PType.ENEMY)
-				r = Config.Instance.EnemyBombDiameter;
+				r = Config.Instance.EBombDiameter;
 			else
-				r = Config.Instance.PlayerBombDiameter;
+				r = Config.Instance.PBombDiameter;
 
 			return new Bomb(x, y, r, r, des, p, a);
 		}

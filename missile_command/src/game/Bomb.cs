@@ -36,7 +36,7 @@ namespace missile_command
 			// Set fields
 			atDestination = false;
 			destination = des;
-			explosionSize = Config.Instance.DefaultExplosionSize;
+			explosionSize = Config.Instance.ExplosionDiameter;
 			flash = false;
 			fNextPosition = Body.TopLeft;
 			growthCount = 0;
@@ -46,9 +46,9 @@ namespace missile_command
 			GivePoints = false;
 
 			if (p == PType.ENEMY)
-				speed = Config.Instance.EnemyBombSpeed;
+				speed = Config.Instance.EBombSpeed;
 			else
-				speed = Config.Instance.PlayerBombSpeed;
+				speed = Config.Instance.PBombSpeed;
 
 			CalculateVelocity();
 			SetColor();
@@ -90,7 +90,7 @@ namespace missile_command
 		private void RepositionExplosion()
 		{
 			//Reposition the bomb's point for the explosion
-			int explosionSize = Config.Instance.DefaultExplosionSize;
+			int explosionSize = Config.Instance.ExplosionDiameter;
 			int meanCoorindates = ((explosionSize / 2) - (Body.Width / 2));
 
 			int nX = Body.Left - meanCoorindates;

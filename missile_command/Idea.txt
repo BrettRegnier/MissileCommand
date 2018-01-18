@@ -1,3 +1,5 @@
 ﻿// TODO state inside of he game (playstate.cs maybe)
 
 // TODO Mouse compatibility
+
+// TODO generic save

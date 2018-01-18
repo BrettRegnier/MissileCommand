@@ -42,7 +42,7 @@ namespace missile_command
 			foreach (Player p in ps)
 			{
 				// Load here what their designated keypress is into a dictionary.
-				dlPKeys.Add(p, lk);
+				dlPKeys.Add(p, Config.Instance.GetPlayerKeys(p.GetTag()));
 				dPKPress.Add(p, KPress.NONE);
 			}
 		}

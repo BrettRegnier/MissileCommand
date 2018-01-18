@@ -84,14 +84,17 @@ namespace missile_command
 			{
 				Point ori = new Point((Consts.gameBounds.Width / 3) * (i + 1), 200);
 				PType pt = PType.PLAYER;
-				ETag ap = ETag.P1;
+				ETag ap = ETag.PLAYER1;
 				if (i == 1)
-					ap = ETag.P2;
+					ap = ETag.PLAYER2;
 				else if (i == 2)
-					ap = ETag.P3;
+					ap = ETag.PLAYER3;
 
 				Player p = new Player(pt, ap);
 				players.Add(p);
+
+				// Load the current player's config
+				Config.Instance.LoadPlayer(p.GetTag());
 			}
 
 			Player currentPlayer = players[0];
@@ -104,8 +107,8 @@ namespace missile_command
 				}
 				else if (numPlayers == 3)
 					currentPlayer = players[i];
-
-				Size size = Config.Instance.TurretSize;
+				
+				Size size = new Size(Config.Instance.TurretDiameter, Config.Instance.TurretDiameter);
 				Turret t = EntityFactory.MakeTurret(components[i + 1].Body.TopCenter, size, PType.PLAYER, currentPlayer.GetTag());
 				t.TurretShoot += P_TurretShoot;
 				components.Add(t);

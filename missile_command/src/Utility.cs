@@ -13,9 +13,9 @@
 	public enum ETag
 	{
 		SYSTEM,
-		P1,
-		P2,
-		P3,
+		PLAYER1,
+		PLAYER2,
+		PLAYER3,
 		ENEMY
 	}
 	public enum Direction
