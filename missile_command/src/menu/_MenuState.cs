@@ -40,35 +40,36 @@ namespace missile_command
 			int btnHeight = 30;
 
 			// declare buttons
-			SlideRightButton newGameButton;
+			LadderButton newGameButton;
 
 			//Player buttons
-			SlideRightButton onePlayer;
-			SlideRightButton twoPlayer;
-			SlideRightButton threePlayer;
+			LadderButton onePlayer;
+			LadderButton twoPlayer;
+			LadderButton threePlayer;
 
 			// Mode buttons
 			GameButton survival;
 			GameButton wave;
 
+			GameButton settingsButton;
 			GameButton highscoresButton;
 			GameButton exitButton;
 
-			newGameButton = new SlideRightButton("New Game", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
-			newGameButton.Click += (sender, e) => { ((SlideRightButton)sender).Toggle(); };
+			newGameButton = new LadderButton("New Game", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
+			newGameButton.Click += (sender, e) => { ((LadderButton)sender).Toggle(); };
 
-			onePlayer = new SlideRightButton("One Player", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
-			onePlayer.Click += (sender, e) => { players = 1; ((SlideRightButton)sender).Toggle(); };
+			onePlayer = new LadderButton("One Player", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
+			onePlayer.Click += (sender, e) => { players = 1; ((LadderButton)sender).Toggle(); };
 			onePlayer.IsEnabled = false;
 			onePlayer.IsVisible = false;
 
-			twoPlayer = new SlideRightButton("Two Players", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
-			twoPlayer.Click += (sender, e) => { players = 2; ((SlideRightButton)sender).Toggle(); };
+			twoPlayer = new LadderButton("Two Players", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
+			twoPlayer.Click += (sender, e) => { players = 2; ((LadderButton)sender).Toggle(); };
 			twoPlayer.IsEnabled = false;
 			twoPlayer.IsVisible = false;
 
-			threePlayer = new SlideRightButton("Three Player", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
-			threePlayer.Click += (sender, e) => { players = 3; ((SlideRightButton)sender).Toggle(); };
+			threePlayer = new LadderButton("Three Player", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
+			threePlayer.Click += (sender, e) => { players = 3; ((LadderButton)sender).Toggle(); };
 			threePlayer.IsEnabled = false;
 			threePlayer.IsVisible = false;
 
@@ -91,6 +92,10 @@ namespace missile_command
 
 			numButton++;
 
+			settingsButton = new GameButton("Settings", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
+			settingsButton.Click += (sender, e) => { new Settings().ShowDialog(); };
+			numButton++;
+
 			highscoresButton = new GameButton("Highscores", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
 			highscoresButton.Click += (sender, e) => { };
 			numButton++;
@@ -102,6 +107,7 @@ namespace missile_command
 
 			// add buttons to components list
 			components.Add(newGameButton);
+			components.Add(settingsButton);
 			components.Add(highscoresButton);
 			components.Add(exitButton);
 		}

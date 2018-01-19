@@ -57,8 +57,16 @@
     <Compile Include="src\game\SurvivalMode.cs" />
     <Compile Include="src\game\WaveMode.cs" />
     <Compile Include="src\game\_GameState.cs" />
+    <Compile Include="src\menu\Highscore.cs" />
+    <Compile Include="src\menu\_HighscoreState.cs" />
     <Compile Include="src\MouseHandler.cs" />
     <Compile Include="src\PlayerConfiguration.cs" />
+    <Compile Include="src\Settings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\Settings.Designer.cs">
+      <DependentUpon>Settings.cs</DependentUpon>
+    </Compile>
     <Compile Include="src\State.cs" />
     <Compile Include="src\menu\GameButton.cs" />
     <Compile Include="src\Component.cs" />
@@ -66,7 +74,7 @@
     <Compile Include="src\game\Shield.cs" />
     <Compile Include="src\game\Body.cs" />
     <Compile Include="src\factories\EntityFactory.cs" />
-    <Compile Include="src\menu\SlideRightButton.cs" />
+    <Compile Include="src\menu\LadderButton.cs" />
     <Compile Include="src\Window.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -83,6 +91,9 @@
     <Compile Include="src\Utility.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="src\Settings.resx">
+      <DependentUpon>Settings.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="src\Window.resx">
       <DependentUpon>Window.cs</DependentUpon>
     </EmbeddedResource>

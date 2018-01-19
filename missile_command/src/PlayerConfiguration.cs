@@ -9,24 +9,20 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 
-
-// TODO implement IXmlSerializable myself.
-// https://stackoverflow.com/questions/802711/serializing-private-member-data
-// https://www.codeproject.com/Articles/43237/How-to-Implement-IXmlSerializable-Correctly
 namespace missile_command
 {
-	[Serializable()]
+	[Serializable]
 	public class PlayerConfiguration
 	{
 		// TODO maybe move to a data serialize.
 		[XmlIgnore] private static string dir = "./config";
+		[XmlIgnore] public bool MouseEnabled { get; set; }
+		[XmlIgnore] public Color PColor { get; set; }
+		[XmlIgnore] public string PCursor { get; set; }
 		[XmlIgnore] public Dictionary<KPress, Keys> PKeys;
 		[XmlIgnore] public ETag Tag { get; private set; }
-		[XmlIgnore] public Color PColor { get; set; }
-		[XmlIgnore] public Bitmap PCursor { get; set; }
-		[XmlIgnore] public bool MouseEnabled { get; set; }
 
-		public XElement el;
+		private XElement configurations;
 
 		// Loads a playerconfiguration from storage
 		public static PlayerConfiguration Load(ETag t)
@@ -36,17 +32,22 @@ namespace missile_command
 
 			if (File.Exists(pdir))
 			{
-				StreamReader r = new StreamReader(pdir);
-				XmlSerializer xmlSerializer = new XmlSerializer(typeof(PlayerConfiguration));
-				pc = (PlayerConfiguration)xmlSerializer.Deserialize(r);
-				pc.Tag = t;
-				r.Close();
+				pc = new PlayerConfiguration();
+				pc.configurations = XElement.Load(pdir);
+				pc.PCursor = pc.configurations.Element("Cursor").Value;
+				pc.PColor = Color.FromArgb(Convert.ToInt32(pc.configurations.Element("Color").Value));
 
-				foreach (XElement elm in pc.el.Elements())
+				pc.PKeys = new Dictionary<KPress, Keys>();
+				foreach (XElement elm in pc.configurations.Element("PKeys").Elements())
 				{
-					int x = 1;
+					Enum.TryParse(elm.Attribute("KPress").Value, out KPress kPress);
+					Enum.TryParse(elm.Value, out Keys key);
+
+					pc.PKeys.Add(kPress, key);
 				}
 
+				pc.MouseEnabled = (pc.configurations.Element("MouseEnabled").Value == "true");
+				pc.Tag = (ETag)Convert.ToInt32(pc.configurations.Element("Tag").Value);
 			}
 			else
 			{
@@ -56,9 +57,9 @@ namespace missile_command
 
 				pc = new PlayerConfiguration
 				{
-					MouseEnabled = true,
-					PColor = Color.LimeGreen,
-					PCursor = Properties.Resources.cursor_00,
+					MouseEnabled = false,
+					PColor = Color.FromArgb(128, 255, 128),
+					PCursor = "cursor_09",
 					Tag = t,
 					PKeys = new Dictionary<KPress, Keys>
 					{
@@ -77,23 +78,31 @@ namespace missile_command
 		}
 		public void Save()
 		{
-			string pdir = dir + "/" + this.Tag.ToString();
+			string pdir = dir + "/" + this.Tag.ToString().ToLower();
 			bool append = true;
 			if (File.Exists(pdir))
 				append = false;
+			configurations = new XElement("Configuration");
 
-			el = new XElement("PKeys");
+			// Save the player's cursor string and color
+			configurations.Add(new XElement("Color", PColor.ToArgb().ToString()));
+			configurations.Add(new XElement("Cursor", PCursor));
+
+			// Save the player's keys
+			XElement pElement = new XElement("PKeys");
+			configurations.Add(pElement);
 			foreach (var pair in PKeys)
 			{
 				XElement tElement = new XElement("Keys", pair.Value);
 				tElement.SetAttributeValue("KPress", pair.Key);
-				el.Add(tElement);
+				pElement.Add(tElement);
 			}
 
-			XmlSerializer xmlSerializer = new XmlSerializer(typeof(PlayerConfiguration));
-			StreamWriter myWriter = new StreamWriter(pdir, append);
-			xmlSerializer.Serialize(myWriter, this);
-			myWriter.Close();
+			// Save configuration of using mouse or keyboard.
+			configurations.Add(new XElement("MouseEnabled", MouseEnabled));
+			configurations.Add(new XElement("Tag", (int)Tag));
+
+			configurations.Save(pdir);
 		}
 	}
 }

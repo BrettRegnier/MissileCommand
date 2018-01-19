@@ -2,4 +2,4 @@
 
 // TODO Mouse compatibility
 
-// TODO generic save
+// TODO Config needs to be reloaded everytime we change something in settings.

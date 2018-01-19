@@ -33,8 +33,6 @@ namespace missile_command
 				return instance;
 			}
 		}
-
-		// TODO Pretty much this whole class.
 		public Config()
 		{
 			dicPConfigs = new Dictionary<ETag, PlayerConfiguration>();
@@ -51,6 +49,10 @@ namespace missile_command
 		public Dictionary<KPress, Keys> GetPlayerKeys(ETag t)
 		{
 			return LoadPlayer(t).PKeys;
+		}
+		public Bitmap GetPlayerCursor(ETag t)
+		{
+			return (Bitmap)Properties.Resources.ResourceManager.GetObject(LoadPlayer(t).PCursor);
 		}
 
 		public static Config Load()

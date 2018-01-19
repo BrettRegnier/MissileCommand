@@ -28,14 +28,8 @@ namespace missile_command
 		static City()
 		{
 			if (lSprite.Count == 0)
-			{
 				for (int i = 0; i < 2; i++)
-				{
-					object obj = Properties.Resources.ResourceManager.GetObject("City_" + i);
-					Bitmap bm = ((System.Drawing.Bitmap)(obj));
-					lSprite.Add(bm);
-				}
-			}
+					lSprite.Add((Bitmap)Properties.Resources.ResourceManager.GetObject("City_" + i));
 		}
 		public City(int x, int y, int w, int h, ETag t = ETag.SYSTEM) : base(x, y, w, h, t)
 		{

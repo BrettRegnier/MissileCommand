@@ -18,8 +18,7 @@ namespace missile_command
 		public Reticle(int x, int y, PType p, ETag t, int w = CURSOR_DIMENSION, int h = CURSOR_DIMENSION) : base(x, y, w, h)
 		{
 			Body.UpdatePosition(Body.Left - CURSOR_OFFSET, Body.Top);
-			// TODO load cursor by config
-			sprite = Properties.Resources.cursor_09;
+			sprite = Config.Instance.GetPlayerCursor(t);
 			tag = t;
 		}
 		public override void Draw(Graphics g)
@@ -57,13 +56,7 @@ namespace missile_command
 					break;
 			}
 		}
-		public override void Update(long gameTime)
-		{
-
-		}
-		public override void PostUpdate(long gameTime)
-		{
-
-		}
+		public override void Update(long gameTime) { }
+		public override void PostUpdate(long gameTime) { }
 	}
 }
