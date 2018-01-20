@@ -7,10 +7,7 @@ using System.Windows.Forms;
 namespace missile_command
 {
 	class Player
-	{
-		// TODO move delegates to turret
-		// TODO Add ammo
-
+	{		
 		private List<Turret> lTurrets = new List<Turret>();
 
 		private Reticle cursor;
@@ -68,8 +65,7 @@ namespace missile_command
 			{
 				// TODO add logic to shoot from a tower based on the position of the cursor, if its closer
 				// it should fire first, if ammo is 0 then the next closest should fire.
-
-				// TODO add logic for destroyed turrets
+				
 				lTurrets[fireCount++].ShootTurret();
 				//lTurrets[1].ShootTurret(cursor.Body.Center);
 
@@ -95,15 +91,7 @@ namespace missile_command
 		public void Update(long gameTime)
 		{
 			// Determine the keys pressed.
-			KPress keysPressed = KeypressHandler.Instance.PlayerKeyState(this);
-			if ((keysPressed & KPress.UP) == KPress.UP)
-				cursor.Move(Direction.UP);
-			if ((keysPressed & KPress.RIGHT) == KPress.RIGHT)
-				cursor.Move(Direction.RIGHT);
-			if ((keysPressed & KPress.DOWN) == KPress.DOWN)
-				cursor.Move(Direction.DOWN);
-			if ((keysPressed & KPress.LEFT) == KPress.LEFT)
-				cursor.Move(Direction.LEFT);
+			KPress keysPressed = KeypressHandler.Instance.PlayerKeyState(tag);
 			if ((keysPressed & KPress.SHOOT) == KPress.SHOOT)
 				Shoot();
 

@@ -14,7 +14,6 @@ namespace missile_command
 	[Serializable]
 	public class PlayerConfiguration
 	{
-		// TODO maybe move to a data serialize.
 		[XmlIgnore] private static string dir = "./config";
 		[XmlIgnore] public bool MouseEnabled { get; set; }
 		[XmlIgnore] public Color PColor { get; set; }
@@ -51,15 +50,17 @@ namespace missile_command
 			}
 			else
 			{
-				// Couldn't load. 
-				MessageBox.Show("Could not load " + t.ToString().ToLower() + "'s configuration... generating to defaults, please change in config");
+				// Couldn't load
+				MessageBox.Show("Could not load configurations for " + t.ToString().ToLower() +
+					".\nGenerating defaults, please change in config",
+					"Configuration error");
 				Directory.CreateDirectory(dir);
 
 				pc = new PlayerConfiguration
 				{
 					MouseEnabled = false,
-					PColor = Color.FromArgb(128, 255, 128),
-					PCursor = "cursor_09",
+					PColor = Color.FromArgb(30, 144, 255),
+					PCursor = "cursor_08",
 					Tag = t,
 					PKeys = new Dictionary<KPress, Keys>
 					{

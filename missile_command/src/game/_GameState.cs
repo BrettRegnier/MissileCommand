@@ -4,10 +4,10 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace missile_command
 {
-	// TODO refactor alllll of this, and use components instead.
 	class GameState : State
 	{
 		private Mode gameMode;
@@ -27,6 +27,8 @@ namespace missile_command
 		private int score;
 		private int scoreX;
 		private int scoreY;
+
+		private int keyCooldown;
 
 		public GameState(int numPlayers, GameModes gamemode, Window g) : base(g)
 		{
@@ -107,7 +109,7 @@ namespace missile_command
 				}
 				else if (numPlayers == 3)
 					currentPlayer = players[i];
-				
+
 				Size size = new Size(Config.Instance.TurretDiameter, Config.Instance.TurretDiameter);
 				Turret t = EntityFactory.MakeTurret(components[i + 1].Body.TopCenter, size, PType.PLAYER, currentPlayer.GetTag());
 				t.TurretShoot += P_TurretShoot;
@@ -117,7 +119,7 @@ namespace missile_command
 
 			KeypressHandler.Instance.Initialize(players);
 		}
-		private string formatTime()
+		private string FormatTime()
 		{
 			// Format time into hrs, minutes, seconds.
 			int playTimeSec = playTime % 60;
@@ -137,13 +139,19 @@ namespace missile_command
 		}
 		private void HotKeys()
 		{
-			System.Windows.Forms.Keys key = KeypressHandler.Instance.CurrentKey;
-			if (key == System.Windows.Forms.Keys.H)
-				SpawnTest();
-			else if (key == System.Windows.Forms.Keys.J)
-				MassTest();
-			else if (key == System.Windows.Forms.Keys.Escape)
-				game.Close();
+			if (keyCooldown == 0)
+			{
+				//Keys key = KeypressHandler.Instance.CurrentKey;
+
+				if (KeypressHandler.Instance.FullPress(Keys.Escape))
+				{
+					paused = !paused;
+				}
+			}
+			else
+			{
+				keyCooldown--;
+			}
 		}
 		private void P_TurretShoot(Point origin, Point destination, ETag a)
 		{
@@ -169,7 +177,7 @@ namespace missile_command
 		public List<Entity> AliveEntities()
 		{
 			List<Entity> aliveList = new List<Entity>();
-			for (int i = 4; i< components.Count; i++)
+			for (int i = 4; i < components.Count; i++)
 			{
 				if (components[i].Alive)
 					aliveList.Add(components[i]);
@@ -188,13 +196,13 @@ namespace missile_command
 				players[i].Draw(g);
 			string scoreText = "Score: " + score.ToString();
 			g.DrawString(scoreText, new Font("Times New Roman", 12), new SolidBrush(Color.Green), scoreX, scoreY);
-			g.DrawString(formatTime(), new Font("Times New Roman", 12), new SolidBrush(Color.Green), playTimeX, playTimeY);
+			g.DrawString(FormatTime(), new Font("Times New Roman", 12), new SolidBrush(Color.Green), playTimeX, playTimeY);
 		}
 		public override void Update(long gameTime)
 		{
+			HotKeys();
 			if (!paused)
 			{
-				HotKeys();
 				gameMode.Update(gameTime);
 				score += gameMode.ReceivePoints();
 				SpawnEnemies();
@@ -227,34 +235,18 @@ namespace missile_command
 		}
 		public override void PostUpdate(long gameTime)
 		{
-			gameMode.PostUpdate(gameTime);
-			for (int i = 0; i < components.Count; i++)
-				components[i].PostUpdate(gameTime);
-			for (int i = 0; i < eBombs.Count; i++)
-				eBombs[i].PostUpdate(gameTime);
-			for (int i = 0; i < pBombs.Count; i++)
-				pBombs[i].PostUpdate(gameTime);
-			for (int i = 0; i < players.Count; i++)
-				players[i].PostUpdate(gameTime);
-		}
-
-
-
-
-		private void SpawnTest()
-		{
-			Point o = new Point(rand.Next(0, Consts.gameBounds.Width), 0);
-			//Point destination = new Point(Utils.gameBounds.Width / 2, Utils.gameBounds.Height);
-			Point destination = new Point(o.X, Consts.gameBounds.Height);
-			//destination.X -= 2;
-			Bomb bmb = EntityFactory.MakeBomb(o.X, o.Y, destination, PType.ENEMY, missile_command.ETag.ENEMY);
-			bmb.DestroyBomb += (gameObject) => { eBombs.Remove(gameObject); };
-			eBombs.Add(bmb);
-		}
-		private void MassTest()
-		{
-			for (int i = 0; i < 100; i++)
-				SpawnTest();
+			if (!paused)
+			{
+				gameMode.PostUpdate(gameTime);
+				for (int i = 0; i < components.Count; i++)
+					components[i].PostUpdate(gameTime);
+				for (int i = 0; i < eBombs.Count; i++)
+					eBombs[i].PostUpdate(gameTime);
+				for (int i = 0; i < pBombs.Count; i++)
+					pBombs[i].PostUpdate(gameTime);
+				for (int i = 0; i < players.Count; i++)
+					players[i].PostUpdate(gameTime);
+			}
 		}
 	}
 }

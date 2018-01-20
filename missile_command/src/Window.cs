@@ -13,9 +13,7 @@ namespace missile_command
 	{
 		private State currState;
 		private State nextState;
-
-		// TODO move into gameManager
-		// TODO make wave game mode
+		
 		private int fps = 0, frames = 0;
 		private long tickCount = Environment.TickCount;
 		private long elapsedTime = Environment.TickCount;

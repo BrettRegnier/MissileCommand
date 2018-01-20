@@ -12,8 +12,7 @@ namespace missile_command
 
 		public delegate void Deconstruct(Entity bomb);
 		public event Deconstruct DestroyBomb;
-
-		// TODO add some sort of config based settings
+		
 		private bool atDestination;
 		private SolidBrush brush;
 		private Point destination;

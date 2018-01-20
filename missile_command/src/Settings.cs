@@ -35,18 +35,18 @@ namespace missile_command
 			pbCursor.Left = cmbCursor.Left + cmbCursor.Width + 10;
 
 			cmbColor.Left = cmbCursor.Left;
-			cmbColor.Items.Add("01. Red");
-			cmbColor.Items.Add("02. Pink");
-			cmbColor.Items.Add("03. Orange");
-			cmbColor.Items.Add("04. Yellow");
-			cmbColor.Items.Add("05. Gold");
-			cmbColor.Items.Add("06. Silver");
-			cmbColor.Items.Add("07. Light Green");
-			cmbColor.Items.Add("08. Dark Green");
-			cmbColor.Items.Add("09. Light Blue");
-			cmbColor.Items.Add("10. Dark Blue");
-			cmbColor.Items.Add("11. Purple");
-			cmbColor.Items.Add("12. Violet");
+			cmbColor.Items.Add("00. Red");
+			cmbColor.Items.Add("01. Pink");
+			cmbColor.Items.Add("02. Orange");
+			cmbColor.Items.Add("03. Yellow");
+			cmbColor.Items.Add("04. Gold");
+			cmbColor.Items.Add("05. Silver");
+			cmbColor.Items.Add("06. Light Green");
+			cmbColor.Items.Add("07. Dark Green");
+			cmbColor.Items.Add("08. Light Blue");
+			cmbColor.Items.Add("09. Dark Blue");
+			cmbColor.Items.Add("10. Purple");
+			cmbColor.Items.Add("11. Violet");
 			lblColor.Left = cmbColor.Left + cmbColor.Width + 10;
 
 			lblControls.Left = this.Width / 2 - lblControls.Width / 2;
@@ -189,7 +189,7 @@ namespace missile_command
 		}
 		private void SaveConfig()
 		{
-			pc.MouseEnabled = chkMouse.Enabled;
+			pc.MouseEnabled = chkMouse.Checked;
 			pc.PColor = GetColor(cmbColor.SelectedIndex);
 			pc.PCursor = cmbCursor.Text.ToLower();
 

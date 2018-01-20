@@ -142,8 +142,6 @@ namespace missile_command
 		}
 		public override void Damage()
 		{
-			// TODO think of good way to damage health
-			// TODO animate the drain of the health
 			if (curHP >= maxHP / 2)
 			{
 				curHP -= maxHP / 2 + 5;

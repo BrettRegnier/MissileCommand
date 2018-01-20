@@ -31,12 +31,10 @@ namespace missile_command
 
 		public bool Active { get { return spBar.IsAlive; } }
 		public Collider PreviousCollider { get { return prevCollider; } }
-
-		// TODO rethink the logic for shield's positioning it might fix the problems I am having with all the magic numbers
+		
 		// Expects to get the BottomLeft for the hpbar, and the TopCenter for the shield
 		public Shield(int statusBarX, int statusBarY, int x, int y, int w, int h, ETag t) : base(x, y, w, h, t)
 		{
-			// TODO I think the size of the bar should match the width of the city
 			// Set the hp bar to be below the city
 			spBar = new ShieldBar(statusBarX + STATUS_BAR_X_OFFSET, statusBarY, 40, 10);
 			spBar.Healed += SpBar_Healed;
@@ -67,7 +65,6 @@ namespace missile_command
 		public override void Draw(Graphics g)
 		{
 			spBar.Draw(g);
-			// TODO Animate the shield, by uh growing? or by flashing a lighter blue.
 			if (isAlive)
 				g.DrawArc(Pens.Blue, Body.Left, Body.Top, Body.Width, Body.Height, 180, 180);
 		}

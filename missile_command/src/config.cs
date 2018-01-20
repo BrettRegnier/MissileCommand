@@ -54,6 +54,10 @@ namespace missile_command
 		{
 			return (Bitmap)Properties.Resources.ResourceManager.GetObject(LoadPlayer(t).PCursor);
 		}
+		public bool GetMouseCheck(ETag t)
+		{
+			return LoadPlayer(t).MouseEnabled;
+		}
 
 		public static Config Load()
 		{
@@ -77,7 +81,7 @@ namespace missile_command
 					EBombDiameter = 4,
 					EBombSpeed = 1f,
 					PBombDiameter = 4,
-					PBombSpeed = 10f,
+					PBombSpeed = 15f,
 					ExplosionDiameter = 100,
 					TurretDiameter = 50
 				};
