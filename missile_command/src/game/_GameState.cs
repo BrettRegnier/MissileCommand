@@ -145,7 +145,7 @@ namespace missile_command
 
 				if (KeypressHandler.Instance.FullPress(Keys.Escape))
 				{
-					paused = !paused;
+					Pause();
 				}
 			}
 			else
@@ -183,6 +183,17 @@ namespace missile_command
 					aliveList.Add(components[i]);
 			}
 			return aliveList;
+		}
+		public void Pause()
+		{
+			paused = true;
+			game.NextState(new PauseMenu(game, this));
+			Cursor.Show();
+		}
+		public void Resume()
+		{
+			paused = false;
+			Cursor.Hide();
 		}
 		public override void Draw(Graphics g)
 		{

@@ -31,9 +31,12 @@ namespace missile_command
 			// Load config of keypresses
 			foreach (Player p in ps)
 			{
-				// Load here what their designated keypress is into a dictionary.
-				dlPKeys.Add(p.GetTag(), Config.Instance.GetPlayerKeys(p.GetTag()));
-				dPKPress.Add(p.GetTag(), KPress.NONE);
+				if (!dlPKeys.ContainsKey(p.GetTag()))
+				{
+					// Load here what their designated keypress is into a dictionary.
+					dlPKeys.Add(p.GetTag(), Config.Instance.GetPlayerKeys(p.GetTag()));
+					dPKPress.Add(p.GetTag(), KPress.NONE);
+				}
 			}
 		}
 		public void KeyDown(KeyEventArgs e)
