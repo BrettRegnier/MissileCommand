@@ -80,9 +80,6 @@ namespace missile_command
 		public void Save()
 		{
 			string pdir = dir + "/" + this.Tag.ToString().ToLower();
-			bool append = true;
-			if (File.Exists(pdir))
-				append = false;
 			configurations = new XElement("Configuration");
 
 			// Save the player's cursor string and color

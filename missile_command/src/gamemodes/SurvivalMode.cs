@@ -19,6 +19,8 @@ namespace missile_command
 			rand = new Random();
 			spawnAmount = 1;
 			spawnCount = 0;
+
+			GameModeTag = GameModes.SURVIVAL;
 		}
 		public override void AddPoints(double points)
 		{

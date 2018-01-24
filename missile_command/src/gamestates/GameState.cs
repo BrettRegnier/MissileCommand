@@ -29,8 +29,6 @@ namespace missile_command
 		private int scoreX;
 		private int scoreY;
 
-		private int keyCooldown;
-
 		public GameState(int numPlayers, GameModes gamemode, Window g) : base(g)
 		{
 			components = new List<Entity>();
@@ -144,16 +142,20 @@ namespace missile_command
 		{
 			isGameOver = true;
 			Cursor.Show();
+
+			game.NextState(new GameOverState(game, this));
 		}
 		private void HotKeys()
 		{
 			//Keys key = KeypressHandler.Instance.CurrentKey;
 
-			if (KeypressHandler.Instance.FullPress(Keys.Escape))
+			if (KeypressHandler.Instance.Press(Keys.Escape))
 			{
 				if (!isPaused)
 					Pause();
 			}
+			else if (KeypressHandler.Instance.Press(Keys.Delete))
+				GameOver();
 		}
 		private void P_TurretShoot(Point origin, Point destination, ETag a)
 		{
@@ -198,16 +200,14 @@ namespace missile_command
 			isPaused = false;
 			Cursor.Hide();
 		}
+		public void Restart()
+		{
+			game.NextState(new GameState(players.Count, gameMode.GameModeTag, game));
+		}
 		public override void Draw(Graphics g)
 		{
-			if (isGameOver)
-			{
-				// Show gameover state and buttons for Restart, enter highscore, main menu, quit.
-			}
-			else
-			{
+			if (!isGameOver)
 				gameMode.Draw(g);
-			}
 
 			for (int i = 0; i < components.Count; i++)
 				components[i].Draw(g);
@@ -218,8 +218,8 @@ namespace missile_command
 			for (int i = 0; i < players.Count; i++)
 				players[i].Draw(g);
 			string scoreText = "Score: " + score.ToString();
-			g.DrawString(scoreText, new Font("Times New Roman", 12), new SolidBrush(Color.Green), scoreX, scoreY);
-			g.DrawString(FormatTime(), new Font("Times New Roman", 12), new SolidBrush(Color.Green), playTimeX, playTimeY);
+			g.DrawString(scoreText, new Font("Times New Roman", 12), new SolidBrush(Config.Instance.SystemColor), scoreX, scoreY);
+			g.DrawString(FormatTime(), new Font("Times New Roman", 12), new SolidBrush(Config.Instance.SystemColor), playTimeX, playTimeY);
 		}
 		public override void Update(long gameTime)
 		{

@@ -62,7 +62,7 @@ namespace missile_command
 		}
 
 		public Keys CurrentKey { get { return currentKey; } }
-		public bool FullPress(Keys key)
+		public bool Press(Keys key)
 		{
 			if (currentKey == Keys.None && prevKey == key)
 			{

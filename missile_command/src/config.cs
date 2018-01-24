@@ -15,6 +15,7 @@ namespace missile_command
 		[XmlIgnore()] private static Config instance;
 		[XmlIgnore()] private Dictionary<ETag, PlayerConfiguration> dicPConfigs;
 		[XmlIgnore()] private static string dir = "./config";
+		[XmlIgnore()] public Color SystemColor { get { return Color.FromArgb(Convert.ToInt32(SysColor)); } }
 
 		public int EBombDiameter { get; set; }
 		public int PBombDiameter { get; set; }
@@ -22,6 +23,7 @@ namespace missile_command
 		public float PBombSpeed { get; set; }
 		public int ExplosionDiameter { get; set; }
 		public int TurretDiameter { get; set; }
+		public string SysColor { get; set; }
 
 		public static Config Instance
 		{
@@ -83,7 +85,8 @@ namespace missile_command
 					PBombDiameter = 4,
 					PBombSpeed = 15f,
 					ExplosionDiameter = 100,
-					TurretDiameter = 50
+					TurretDiameter = 50,
+					SysColor = "-8323200"
 				};
 
 				c.Save();

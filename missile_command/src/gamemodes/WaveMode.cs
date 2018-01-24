@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace missile_command
 {
@@ -13,6 +14,8 @@ namespace missile_command
 			multiplier = 0.1;
 			pendingPoints = 0;
 			wave = 1;
+
+			GameModeTag = GameModes.WAVE;
 		}
 		public override void AddPoints(double points)
 		{
@@ -28,14 +31,17 @@ namespace missile_command
 		{
 			throw new NotImplementedException();
 		}
+		public override void Draw(Graphics g)
+		{
 
+		}
 		public override void Update(long gameTime)
 		{
-			throw new NotImplementedException();
+
 		}
 		public override void PostUpdate(long gameTime)
 		{
-			throw new NotImplementedException();
+
 		}
 	}
 }

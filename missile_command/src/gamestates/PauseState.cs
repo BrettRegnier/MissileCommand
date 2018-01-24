@@ -28,16 +28,16 @@ namespace missile_command
 			GameButton mainMenuButton;
 			GameButton exitButton;
 
-			resumeButton = new GameButton("Resume", startX, startY + Consts.SEPERATION_VALUE * ++count, btnWidth, btnHeight);
+			resumeButton = new GameButton("Resume", startX - btnWidth / 2, startY + Consts.SEPERATION_VALUE * ++count, btnWidth, btnHeight);
 			resumeButton.Click += (sender, e) => { prevState.Resume(); g.NextState(prevState); };
 
-			settingButton = new GameButton("Settings", startX, startY + Consts.SEPERATION_VALUE * ++count, btnWidth, btnHeight);
+			settingButton = new GameButton("Settings", startX - btnWidth / 2, startY + Consts.SEPERATION_VALUE * ++count, btnWidth, btnHeight);
 			settingButton.Click += (sender, e) => { new Settings().ShowDialog(); };
 
-			mainMenuButton = new GameButton("Main Menu", startX, startY + Consts.SEPERATION_VALUE * ++count, btnWidth, btnHeight);
+			mainMenuButton = new GameButton("Main Menu", startX - btnWidth / 2, startY + Consts.SEPERATION_VALUE * ++count, btnWidth, btnHeight);
 			mainMenuButton.Click += (sender, e) => { g.NextState(new MainMenuState(g)); };
 
-			exitButton = new GameButton("Exit Game", startX, startY + Consts.SEPERATION_VALUE * ++count, btnWidth, btnHeight);
+			exitButton = new GameButton("Exit Game", startX - btnWidth / 2, startY + Consts.SEPERATION_VALUE * ++count, btnWidth, btnHeight);
 			exitButton.Click += (sender, e) => { g.Close(); };
 
 			components.Add(resumeButton);

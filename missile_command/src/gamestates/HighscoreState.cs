@@ -9,8 +9,11 @@ namespace missile_command
 {
 	class HighscoreState : State
 	{
-		public HighscoreState(Window g) : base(g)
+		private State prevState;
+
+		public HighscoreState(Window g, State s) : base(g)
 		{
+			prevState = s;
 		}
 		public override void Draw(Graphics g)
 		{

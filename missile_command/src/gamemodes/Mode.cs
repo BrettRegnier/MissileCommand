@@ -7,6 +7,7 @@
 		protected double multiplier;
 		protected int pendingPoints;
 		protected GameState state;
+		public GameModes GameModeTag { get; protected set; }
 		public Mode(GameState s) { state = s; }
 		public abstract void AddPoints(double points);
 		public abstract int ReceivePoints();

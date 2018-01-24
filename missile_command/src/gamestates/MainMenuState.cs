@@ -55,20 +55,20 @@ namespace missile_command
 			GameButton highscoresButton;
 			GameButton exitButton;
 
-			newGameButton = new LadderButton("New Game", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
+			newGameButton = new LadderButton("New Game", startX - btnWidth/2, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
 			newGameButton.Click += (sender, e) => { ((LadderButton)sender).Toggle(); };
 
-			onePlayer = new LadderButton("One Player", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
+			onePlayer = new LadderButton("One Player", startX - btnWidth / 2, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
 			onePlayer.Click += (sender, e) => { players = 1; ((LadderButton)sender).Toggle(); };
 			onePlayer.IsEnabled = false;
 			onePlayer.IsVisible = false;
 
-			twoPlayer = new LadderButton("Two Players", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
+			twoPlayer = new LadderButton("Two Players", startX - btnWidth / 2, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
 			twoPlayer.Click += (sender, e) => { players = 2; ((LadderButton)sender).Toggle(); };
 			twoPlayer.IsEnabled = false;
 			twoPlayer.IsVisible = false;
 
-			threePlayer = new LadderButton("Three Player", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
+			threePlayer = new LadderButton("Three Player", startX - btnWidth / 2, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
 			threePlayer.Click += (sender, e) => { players = 3; ((LadderButton)sender).Toggle(); };
 			threePlayer.IsEnabled = false;
 			threePlayer.IsVisible = false;
@@ -76,11 +76,11 @@ namespace missile_command
 			//Attach the buttons.
 			newGameButton.AddButton(onePlayer); newGameButton.AddButton(twoPlayer); newGameButton.AddButton(threePlayer);
 
-			survival = new GameButton("Survival Mode", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
+			survival = new GameButton("Survival Mode", startX - btnWidth / 2, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
 			survival.Click += (sender, e) => { game.NextState(new GameState(players, GameModes.SURVIVAL, game)); };
 			survival.IsEnabled = false;
 			survival.IsVisible = false;
-			wave = new GameButton("Wave Mode", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
+			wave = new GameButton("Wave Mode", startX - btnWidth / 2, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
 			wave.Click += (sender, e) => { game.NextState(new GameState(players, GameModes.WAVE, game)); };
 			wave.IsEnabled = false;
 			wave.IsVisible = false;
@@ -92,15 +92,15 @@ namespace missile_command
 
 			numButton++;
 
-			settingsButton = new GameButton("Settings", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
+			settingsButton = new GameButton("Settings", startX - btnWidth / 2, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
 			settingsButton.Click += (sender, e) => { new Settings().ShowDialog(); };
 			numButton++;
 
-			highscoresButton = new GameButton("Highscores", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
+			highscoresButton = new GameButton("Highscores", startX - btnWidth / 2, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
 			highscoresButton.Click += (sender, e) => { };
 			numButton++;
 
-			exitButton = new GameButton("Exit", startX, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
+			exitButton = new GameButton("Exit", startX - btnWidth / 2, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
 			exitButton.Click += (sender, e) => { game.Close(); };
 			numButton++;
 
@@ -118,7 +118,7 @@ namespace missile_command
 			for (int i = 0; i < components.Count; i++)
 				components[i].Draw(g);
 
-			g.DrawString("Missile Command", new Font("Times New Roman", 30), new SolidBrush(Color.Green), titleX, titleY, sf);
+			g.DrawString("Missile Command", new Font("Times New Roman", 30), new SolidBrush(Config.Instance.SystemColor), titleX, titleY, sf);
 		}
 		public override void Update(long gameTime)
 		{

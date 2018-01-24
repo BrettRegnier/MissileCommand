@@ -22,8 +22,6 @@ namespace missile_command
 
 		private int fontSize;
 		private Brush innerColor;
-		private Pen outlineColor;
-		private Color textColor;
 		private StringFormat sf;
 
 		public bool IsEnabled { get; set; }
@@ -42,13 +40,10 @@ namespace missile_command
 		}
 		private void Init()
 		{
-			outlineColor = Pens.Green;
-			textColor = Color.Green;
 			IsVisible = true;
 			IsEnabled = true;
 
 			Body.AdjustY(Body.Dimension.Height + OUTLINE_OFFSET);
-			Body.AdjustX(-Body.Dimension.Width / 2);
 
 			sf = new StringFormat
 			{
@@ -66,19 +61,12 @@ namespace missile_command
 					innerColor = new SolidBrush(Color.FromArgb(40, 40, 40));
 
 				if (currentMouse == true && isHovering)
-				{
-					textColor = Color.LimeGreen;
 					fontSize = 12;
-				}
 				else
-				{
-					textColor = Color.Green;
 					fontSize = 10;
-				}
 				if (!IsEnabled)
 				{
 					innerColor = new SolidBrush(Color.FromArgb(20, 20, 20));
-					textColor = Color.Green;
 					fontSize = 10;
 				}
 
@@ -86,12 +74,12 @@ namespace missile_command
 				int nY = Body.Top - OUTLINE_OFFSET;
 				int nW = Body.Width + OUTLINE_OFFSET;
 				int nH = Body.Height + OUTLINE_OFFSET;
-				g.DrawRectangle(outlineColor, nX, nY, nW, nH);
+				g.DrawRectangle(new Pen(Config.Instance.SystemColor), nX, nY, nW, nH);
 				g.FillRectangle(innerColor, Body.Left, Body.Top, Body.Width, Body.Height);
 
 				if (!string.IsNullOrEmpty(Text))
 				{
-					g.DrawString(Text, new Font("Times New Roman", fontSize), new SolidBrush(textColor), Body.Center.X, Body.Center.Y, sf);
+					g.DrawString(Text, new Font("Times New Roman", fontSize), new SolidBrush(Config.Instance.SystemColor), Body.Center.X, Body.Center.Y, sf);
 				}
 			}
 		}
