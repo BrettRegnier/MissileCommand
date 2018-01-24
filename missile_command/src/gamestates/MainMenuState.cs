@@ -97,7 +97,7 @@ namespace missile_command
 			numButton++;
 
 			highscoresButton = new GameButton("Highscores", startX - btnWidth / 2, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
-			highscoresButton.Click += (sender, e) => { };
+			highscoresButton.Click += (sender, e) => { new HighscoresForm().ShowDialog(); };
 			numButton++;
 
 			exitButton = new GameButton("Exit", startX - btnWidth / 2, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);

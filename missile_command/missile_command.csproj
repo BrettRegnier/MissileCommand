@@ -50,6 +50,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\HighscoresForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\HighscoresForm.Designer.cs">
+      <DependentUpon>HighscoresForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="src\game\City.cs" />
     <Compile Include="src\game\Collider.cs" />
     <Compile Include="src\game\Entity.cs" />
@@ -60,7 +66,6 @@
     <Compile Include="src\gamemodes\WaveMode.cs" />
     <Compile Include="src\gamestates\GameState.cs" />
     <Compile Include="src\menu\Highscore.cs" />
-    <Compile Include="src\gamestates\HighscoreState.cs" />
     <Compile Include="src\MouseHandler.cs" />
     <Compile Include="src\PlayerConfiguration.cs" />
     <Compile Include="src\Settings.cs">
@@ -93,6 +98,9 @@
     <Compile Include="src\Utility.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="src\HighscoresForm.resx">
+      <DependentUpon>HighscoresForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="src\Settings.resx">
       <DependentUpon>Settings.cs</DependentUpon>
     </EmbeddedResource>

@@ -189,6 +189,10 @@ namespace missile_command
 			}
 			return aliveList;
 		}
+		public int GetScore()
+		{
+			return score;
+		}
 		public void Pause()
 		{
 			isPaused = true;
