@@ -13,21 +13,15 @@ namespace missile_command
 		private const int CURSOR_DIMENSION = 9;
 
 		private ETag tag;
-		private Image sprite;
-		private bool usingMouse;
 
 		public Reticle(int x, int y, PType p, ETag t, int w = CURSOR_DIMENSION, int h = CURSOR_DIMENSION) : base(x, y, w, h)
 		{
 			Body.UpdatePosition(Body.Left - CURSOR_OFFSET, Body.Top);
-			sprite = Config.Instance.GetPlayerCursor(t);
 			tag = t;
-			if (usingMouse = Config.Instance.GetMouseCheck(t))
-				Cursor.Hide();
-
 		}
 		public override void Draw(Graphics g)
 		{
-			g.DrawImage(sprite, Body.TopLeft);
+			g.DrawImage(Config.Instance.GetPlayerCursor(tag), Body.TopLeft);
 		}
 		public void Move(Direction dir)
 		{
@@ -61,7 +55,7 @@ namespace missile_command
 		}
 		public override void Update(long gameTime)
 		{
-			if (usingMouse)
+			if (Config.Instance.GetMouseCheck(tag))
 			{
 				// Mouse tracking enabled.
 				Body.UpdatePosition(Cursor.Position.X, Cursor.Position.Y);

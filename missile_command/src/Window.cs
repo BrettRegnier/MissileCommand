@@ -45,7 +45,7 @@ namespace missile_command
 		}
 		private void LoadContent()
 		{
-			currState = new MenuState(this);
+			currState = new MainMenuState(this);
 		}
 		public void NextState(State state)
 		{

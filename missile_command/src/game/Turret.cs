@@ -106,6 +106,8 @@ namespace missile_command
 		public override void Update(long gameTime)
 		{
 			CalculateGunEnd();
+			if (pen.Color != Config.Instance.GetPlayerColor(Tag))
+				pen = new Pen(Config.Instance.GetPlayerColor(Tag));
 
 			hpBar.Update(gameTime);
 

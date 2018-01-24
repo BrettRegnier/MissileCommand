@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace missile_command
+﻿namespace missile_command
 {
 	abstract class Mode
 	{
-		protected List<Bomb> curBombs;
+		protected System.Collections.Generic.List<Bomb> curBombs;
 		protected long elapsedTime;
 		protected double multiplier;
 		protected int pendingPoints;
@@ -17,6 +11,7 @@ namespace missile_command
 		public abstract void AddPoints(double points);
 		public abstract int ReceivePoints();
 		public abstract Bomb[] SpawnEnemies();
+		public abstract void Draw(System.Drawing.Graphics g);
 		public abstract void Update(long gameTime);
 		public abstract void PostUpdate(long gameTime);
 	}

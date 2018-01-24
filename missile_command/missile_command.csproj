@@ -53,13 +53,14 @@
     <Compile Include="src\game\City.cs" />
     <Compile Include="src\game\Collider.cs" />
     <Compile Include="src\game\Entity.cs" />
-    <Compile Include="src\game\Mode.cs" />
-    <Compile Include="src\game\_PauseMenu.cs" />
-    <Compile Include="src\game\SurvivalMode.cs" />
-    <Compile Include="src\game\WaveMode.cs" />
-    <Compile Include="src\game\_GameState.cs" />
+    <Compile Include="src\gamestates\GameOverState.cs" />
+    <Compile Include="src\gamemodes\Mode.cs" />
+    <Compile Include="src\gamestates\PauseState.cs" />
+    <Compile Include="src\gamemodes\SurvivalMode.cs" />
+    <Compile Include="src\gamemodes\WaveMode.cs" />
+    <Compile Include="src\gamestates\GameState.cs" />
     <Compile Include="src\menu\Highscore.cs" />
-    <Compile Include="src\menu\_HighscoreState.cs" />
+    <Compile Include="src\gamestates\HighscoreState.cs" />
     <Compile Include="src\MouseHandler.cs" />
     <Compile Include="src\PlayerConfiguration.cs" />
     <Compile Include="src\Settings.cs">
@@ -68,7 +69,7 @@
     <Compile Include="src\Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\State.cs" />
+    <Compile Include="src\gamestates\State.cs" />
     <Compile Include="src\menu\GameButton.cs" />
     <Compile Include="src\Component.cs" />
     <Compile Include="src\game\StatusBar.cs" />
@@ -88,7 +89,7 @@
     <Compile Include="src\game\Reticle.cs" />
     <Compile Include="src\game\Turret.cs" />
     <Compile Include="src\KeypressHandler.cs" />
-    <Compile Include="src\menu\_MenuState.cs" />
+    <Compile Include="src\gamestates\MainMenuState.cs" />
     <Compile Include="src\Utility.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

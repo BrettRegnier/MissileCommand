@@ -108,11 +108,13 @@ namespace missile_command
 			foreach (PlayerConfiguration pc in dicPConfigs.Values)
 				pc.Save();
 		}
-		public PlayerConfiguration LoadPlayer(ETag t)
+		public PlayerConfiguration LoadPlayer(ETag t, bool force = false)
 		{
 			// If the pc was not loaded
 			if (!dicPConfigs.ContainsKey(t))
 				dicPConfigs.Add(t, PlayerConfiguration.Load(t));
+			if (force)
+				dicPConfigs[t] = PlayerConfiguration.Load(t);
 
 			return dicPConfigs[t];
 		}

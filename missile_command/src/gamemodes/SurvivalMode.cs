@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace missile_command
 {
@@ -60,7 +61,10 @@ namespace missile_command
 
 			return new Bomb[0];
 		}
-
+		public override void Draw(Graphics g)
+		{
+			//throw new NotImplementedException();
+		}
 		public override void Update(long gameTime)
 		{
 			if (elapsedTime == 0)

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace missile_command
 {
-	class MenuState : State
+	class MainMenuState : State
 	{
 		private List<Component> bombs;
 		private List<Component> components;
@@ -17,7 +17,7 @@ namespace missile_command
 		private int titleX;
 		private int titleY;
 
-		public MenuState(Window g) : base(g)
+		public MainMenuState(Window g) : base(g)
 		{
 			// Init fields
 			bombs = new List<Component>();

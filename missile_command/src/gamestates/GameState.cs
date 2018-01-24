@@ -15,9 +15,10 @@ namespace missile_command
 		private List<Entity> components;
 		private List<Entity> eBombs;
 		private long elapsedTime;
+		private bool isPaused;
+		private bool isGameOver;
 		private List<Entity> pBombs;
 		private List<Player> players;
-		private bool paused;
 		private Random rand;
 
 		private int playTime;
@@ -34,7 +35,8 @@ namespace missile_command
 		{
 			components = new List<Entity>();
 			eBombs = new List<Entity>();
-			paused = false;
+			isPaused = false;
+			isGameOver = false;
 			pBombs = new List<Entity>();
 			players = new List<Player>();
 			rand = new Random();
@@ -79,6 +81,7 @@ namespace missile_command
 				City c = new City(x, y, w_h, w_h);
 				components.Add(c);
 			}
+			Cursor.Hide();
 		}
 		private void InitPlayers(int numPlayers)
 		{
@@ -137,20 +140,19 @@ namespace missile_command
 				hours = "0" + playTimeHours.ToString();
 			return "Play Time: " + hours + ":" + minutes + ":" + seconds;
 		}
+		private void GameOver()
+		{
+			isGameOver = true;
+			Cursor.Show();
+		}
 		private void HotKeys()
 		{
-			if (keyCooldown == 0)
-			{
-				//Keys key = KeypressHandler.Instance.CurrentKey;
+			//Keys key = KeypressHandler.Instance.CurrentKey;
 
-				if (KeypressHandler.Instance.FullPress(Keys.Escape))
-				{
-					Pause();
-				}
-			}
-			else
+			if (KeypressHandler.Instance.FullPress(Keys.Escape))
 			{
-				keyCooldown--;
+				if (!isPaused)
+					Pause();
 			}
 		}
 		private void P_TurretShoot(Point origin, Point destination, ETag a)
@@ -174,6 +176,7 @@ namespace missile_command
 				eBombs.Add(bombs[i]);
 			}
 		}
+		// Finds the list of entities that are alive (Cities and Towers)
 		public List<Entity> AliveEntities()
 		{
 			List<Entity> aliveList = new List<Entity>();
@@ -186,17 +189,26 @@ namespace missile_command
 		}
 		public void Pause()
 		{
-			paused = true;
-			game.NextState(new PauseMenu(game, this));
+			isPaused = true;
+			game.NextState(new PauseState(game, this));
 			Cursor.Show();
 		}
 		public void Resume()
 		{
-			paused = false;
+			isPaused = false;
 			Cursor.Hide();
 		}
 		public override void Draw(Graphics g)
 		{
+			if (isGameOver)
+			{
+				// Show gameover state and buttons for Restart, enter highscore, main menu, quit.
+			}
+			else
+			{
+				gameMode.Draw(g);
+			}
+
 			for (int i = 0; i < components.Count; i++)
 				components[i].Draw(g);
 			for (int i = 0; i < eBombs.Count; i++)
@@ -211,52 +223,65 @@ namespace missile_command
 		}
 		public override void Update(long gameTime)
 		{
-			HotKeys();
-			if (!paused)
+			if (!isGameOver)
 			{
-				gameMode.Update(gameTime);
-				score += gameMode.ReceivePoints();
-				SpawnEnemies();
-
-				for (int i = 0; i < eBombs.Count; i++)
+				HotKeys();
+				if (!isPaused)
 				{
-					for (int j = 0; j < components.Count; j++)
-						components[j].Collider.CollisionDetection(eBombs[i].Collider);
-					for (int j = 0; j < pBombs.Count; j++)
-						pBombs[j].Collider.CollisionDetection(eBombs[i].Collider);
-				}
+					gameMode.Update(gameTime);
+					score += gameMode.ReceivePoints();
+					SpawnEnemies();
 
-				for (int i = 0; i < components.Count; i++)
-					components[i].Update(gameTime);
-				for (int i = 0; i < eBombs.Count; i++)
-					eBombs[i].Update(gameTime);
-				for (int i = 0; i < pBombs.Count; i++)
-					pBombs[i].Update(gameTime);
-				for (int i = 0; i < players.Count; i++)
-					players[i].Update(gameTime);
+					for (int i = 0; i < eBombs.Count; i++)
+					{
+						for (int j = 0; j < components.Count; j++)
+							components[j].Collider.CollisionDetection(eBombs[i].Collider);
+						for (int j = 0; j < pBombs.Count; j++)
+							pBombs[j].Collider.CollisionDetection(eBombs[i].Collider);
+					}
 
-				/// Maybe used FPS since thats more "accurate" on how long you've been "playing"
-				if (gameTime >= elapsedTime + 1000)
-				{
-					// if here, then its been 1 second.
-					elapsedTime = gameTime;
-					playTime += 1;
+					int aliveCount = 0;
+					for (int i = 0; i < components.Count; i++)
+					{
+						components[i].Update(gameTime);
+						if (components[i] is City)
+							if (components[i].Alive)
+								aliveCount++;
+					}
+					for (int i = 0; i < eBombs.Count; i++)
+						eBombs[i].Update(gameTime);
+					for (int i = 0; i < pBombs.Count; i++)
+						pBombs[i].Update(gameTime);
+					for (int i = 0; i < players.Count; i++)
+						players[i].Update(gameTime);
+
+					if (gameTime >= elapsedTime + 1000)
+					{
+						// if here, then its been 1 second.
+						elapsedTime = gameTime;
+						playTime += 1;
+					}
+					if (aliveCount == 0)
+						GameOver();
 				}
 			}
 		}
 		public override void PostUpdate(long gameTime)
 		{
-			if (!paused)
+			if (!isGameOver)
 			{
-				gameMode.PostUpdate(gameTime);
-				for (int i = 0; i < components.Count; i++)
-					components[i].PostUpdate(gameTime);
-				for (int i = 0; i < eBombs.Count; i++)
-					eBombs[i].PostUpdate(gameTime);
-				for (int i = 0; i < pBombs.Count; i++)
-					pBombs[i].PostUpdate(gameTime);
-				for (int i = 0; i < players.Count; i++)
-					players[i].PostUpdate(gameTime);
+				if (!isPaused)
+				{
+					gameMode.PostUpdate(gameTime);
+					for (int i = 0; i < components.Count; i++)
+						components[i].PostUpdate(gameTime);
+					for (int i = 0; i < eBombs.Count; i++)
+						eBombs[i].PostUpdate(gameTime);
+					for (int i = 0; i < pBombs.Count; i++)
+						pBombs[i].PostUpdate(gameTime);
+					for (int i = 0; i < players.Count; i++)
+						players[i].PostUpdate(gameTime);
+				}
 			}
 		}
 	}

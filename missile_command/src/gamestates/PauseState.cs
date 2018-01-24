@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace missile_command
 {
-	class PauseMenu : State
+	class PauseState : State
 	{
 		private List<Component> components;
 		private GameState prevState;
 
-		public PauseMenu(Window g, GameState s) : base(g)
+		public PauseState(Window g, GameState s) : base(g)
 		{
 			components = new List<Component>();
 			prevState = s;
@@ -35,7 +35,7 @@ namespace missile_command
 			settingButton.Click += (sender, e) => { new Settings().ShowDialog(); };
 
 			mainMenuButton = new GameButton("Main Menu", startX, startY + Consts.SEPERATION_VALUE * ++count, btnWidth, btnHeight);
-			mainMenuButton.Click += (sender, e) => { g.NextState(new MenuState(g)); };
+			mainMenuButton.Click += (sender, e) => { g.NextState(new MainMenuState(g)); };
 
 			exitButton = new GameButton("Exit Game", startX, startY + Consts.SEPERATION_VALUE * ++count, btnWidth, btnHeight);
 			exitButton.Click += (sender, e) => { g.Close(); };
@@ -54,11 +54,15 @@ namespace missile_command
 		}
 		public override void PostUpdate(long gameTime)
 		{
+			prevState.Update(gameTime);
+
 			for (int i = 0; i < components.Count; i++)
 				components[i].Update(gameTime);
 		}
 		public override void Update(long gameTime)
 		{
+			prevState.Update(gameTime);
+
 			for (int i = 0; i < components.Count; i++)
 				components[i].PostUpdate(gameTime);
 		}
