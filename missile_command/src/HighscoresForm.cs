@@ -15,33 +15,22 @@ namespace missile_command
 	[Serializable()]
 	public partial class HighscoresForm : Form
 	{
-		private double score = 0;
+		private long score = 0;
 		private string name = "";
 		private List<string> highscoreList = new List<string>();
 		private bool hasScore = false;
+		private bool scoreSaved = false;
 
-		/// <summary>
-		/// Overload :D
-		/// </summary>
 		public HighscoresForm()
 		{
 			InitializeComponent();
 		}
-
-		/// <summary>
-		/// Sets the score bool to true if there is a score.
-		/// Sets the score of the form to the score passed in.
-		/// </summary>
 		public HighscoresForm(long score)
 		{
 			InitializeComponent();
 			this.score = score;
 			hasScore = true;
 		}
-
-		/// <summary>
-		/// Loads the scores from the harddrive and displays them in the listbox.
-		/// </summary>
 		private void HighscoresForm_Load(object sender, EventArgs e)
 		{
 			try
@@ -72,22 +61,21 @@ namespace missile_command
 				lblStatus.Text = "Error while loading making a new file";
 			}
 		}
-
-		/// <summary>
-		/// Saves the new score to the list and to the harddrive.
-		/// </summary>
 		private void btnSave_Click(object sender, EventArgs e)
 		{
 			try
 			{
 				if (txtName.Text.Length != 3)
 				{
-					throw new Exception("You much enter a 3 letter name");
+					throw new Exception("You must enter a 3 letter name");
 				}
 				name = txtName.Text + ", " + score.ToString();
+				scoreSaved = true;
 				highscoreList.Add(name);
 
 				highscoreList.Sort(new HighscoreComparer());
+				if (highscoreList.Count > 10)
+					highscoreList.RemoveAt(10);
 
 				using (Stream myStream = File.Open("Highscore.bin", FileMode.Create))
 				{
@@ -132,14 +120,22 @@ namespace missile_command
 		}
 		private void btnReturn_Click(object sender, EventArgs e)
 		{
-			this.Close();
+			if (scoreSaved || hasScore == false)
+			{
+				this.Close();
+			}
+			else
+			{
+				DialogResult dr = MessageBox.Show("You have not saved your score, are you sure you want to exit?", "Warning", MessageBoxButtons.YesNo);
+				if (dr == DialogResult.Yes)
+					this.Close();
+			}
 		}
-
 		private void HighscoresForm_Paint(object sender, PaintEventArgs e)
 		{
 			int startx = txtName.Left + 200;
 			int starty = lblScore.Top;
-			int seperation = 10;
+			int seperation = 20;
 			for (int i = 0; i < highscoreList.Count; i++)
 			{
 				e.Graphics.DrawString(highscoreList[i], new Font("Times New Roman", 12), new SolidBrush(Config.Instance.SystemColor), startx, starty + seperation * i);

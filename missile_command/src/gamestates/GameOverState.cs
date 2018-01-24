@@ -35,7 +35,12 @@ namespace missile_command
 			GameButton exitButton;
 
 			enterHighscorebutton = new GameButton("Enter Highscore", startX - btnWidth - 5, startY, btnWidth, btnHeight);
-			enterHighscorebutton.Click += (sender, e) => { new HighscoresForm(prevState.GetScore()).ShowDialog(); };
+			enterHighscorebutton.Click += (sender, e) =>
+			{
+				long score = prevState.GetScore();
+				new HighscoresForm(score).ShowDialog();
+				enterHighscorebutton.IsEnabled = false;
+			};
 
 			restartButton = new GameButton("Restart", enterHighscorebutton.Body.Left - btnWidth - 10, startY, btnWidth, btnHeight);
 			restartButton.Click += (sender, e) => { prevState.Restart(); };
