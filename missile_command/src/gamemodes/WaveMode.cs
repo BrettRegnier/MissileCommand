@@ -29,7 +29,7 @@ namespace missile_command
 		}
 		public override Bomb[] SpawnEnemies()
 		{
-			throw new NotImplementedException();
+			return new Bomb[0];
 		}
 		public override void Draw(Graphics g)
 		{

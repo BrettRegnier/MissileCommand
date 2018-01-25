@@ -19,6 +19,7 @@ namespace missile_command
 		private const int COOLDOWN_SET = 10;
 
 		private Body aim;
+		private int ammo;
 		private int cooldown; // TODO player upgrades
 		private StatusBar hpBar;
 		private Pen pen;
@@ -26,6 +27,7 @@ namespace missile_command
 		private Point turretEnd;
 
 		public bool Armed { get; private set; }
+		public bool HasAmmo { get { return (ammo > 0); } }
 
 		public Turret(int x, int y, int w, int h, PType p, ETag t) : base(x, y, w, h, t)
 		{
@@ -34,6 +36,7 @@ namespace missile_command
 			int nY = Body.Top - Config.Instance.TurretDiameter / 2;
 			Body.UpdatePosition(nX, nY);
 
+			ammo = 3;
 			Armed = true;
 			cooldown = 0;
 			hpBar = new HealthBar(Body.Center.X, Body.Center.Y, 50, 10);
@@ -101,6 +104,7 @@ namespace missile_command
 				TurretShoot(origin, aim.Center, Tag);
 				Armed = false;
 				cooldown = 60;
+				ammo--;
 			}
 		}
 		public override void Update(long gameTime)

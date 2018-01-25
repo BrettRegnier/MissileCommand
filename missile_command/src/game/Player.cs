@@ -7,7 +7,7 @@ using System.Windows.Forms;
 namespace missile_command
 {
 	class Player
-	{		
+	{
 		private List<Turret> lTurrets = new List<Turret>();
 
 		private Reticle cursor;
@@ -45,54 +45,35 @@ namespace missile_command
 		}
 		private void Shoot()
 		{
-			if (!lTurrets[fireCount].Alive)
-			{
-				int cycleCount = 0;
-				int curIndex = fireCount;
-				while (!lTurrets[curIndex].Alive && !noActiveTurrets)
-				{
-					if (++curIndex >= lTurrets.Count)
-						curIndex = 0;
+			List<Turret> availableTurrets = new List<Turret>();
+			foreach (Turret t in lTurrets)
+				if (t.Alive && t.HasAmmo && t.Armed)
+					availableTurrets.Add(t);
 
-					if (++cycleCount >= lTurrets.Count)
+			if (availableTurrets.Count > 0)
+			{
+				//Find smallest distance from turret and reticle
+				int distance = int.MaxValue;
+				Turret nTurret = availableTurrets[0];
+				foreach (Turret t in availableTurrets)
+				{
+					int x = Math.Abs(t.Body.Left - cursor.Body.Center.X);
+					int y = Math.Abs(t.Body.Top - cursor.Body.Center.Y);
+
+					int hypotenuse = Convert.ToInt32(Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2)));
+					if (hypotenuse < distance)
 					{
-						return;
+						nTurret = t;
+						distance = hypotenuse;
 					}
 				}
-				fireCount = curIndex;
-			}
-			if (coolingDown == false)
-			{
-				// TODO add logic to shoot from a tower based on the position of the cursor, if its closer
-				// it should fire first, if ammo is 0 then the next closest should fire.
-				
-				lTurrets[fireCount++].ShootTurret();
-				//lTurrets[1].ShootTurret(cursor.Body.Center);
 
-				// TODO move into turret?
-				coolingDown = true;
-
-				if (fireCount >= lTurrets.Count)
-					fireCount = 0;
-
-			}
-			else
-			{
-				coolingDownCount++;
-			}
-
-			if (coolingDownCount == 10)
-			{
-				coolingDown = false;
-				coolingDownCount = 0;
-
+				nTurret.ShootTurret();
 			}
 		}
 		public void Update(long gameTime)
 		{
-			// Determine the keys pressed.
-			KPress keysPressed = KeypressHandler.Instance.PlayerKeyState(tag);
-			if ((keysPressed & KPress.SHOOT) == KPress.SHOOT)
+			if (KeypressHandler.Instance.Press(Keys.Space))
 				Shoot();
 
 			cursor.Update(gameTime);
