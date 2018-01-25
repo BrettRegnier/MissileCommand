@@ -9,7 +9,8 @@ using System.Windows.Forms;
 namespace missile_command
 {
 	// TODO add ammo, each turret has a certain amount of ammo to use.
-	// TODO make cooldown and ready state for turret, on update(draw) game will update on the cooldown
+	// TODO make reload status, make ammo replenish method (depends on gamemode), make indicator light for which tower will fire, needs a bool. 
+	// Green is fire, red is not
 	class Turret : Entity
 	{
 		public delegate void Fire(Point origin, Point destination, ETag a);
@@ -21,10 +22,11 @@ namespace missile_command
 		private Body aim;
 		private int ammo;
 		private int cooldown; // TODO player upgrades
-		private StatusBar hpBar;
+		private Status hpBar;
 		private Pen pen;
 		private Collider prevCollider;
 		private Point turretEnd;
+		private long elapsedTime;
 
 		public bool Armed { get; private set; }
 		public bool HasAmmo { get { return (ammo > 0); } }
@@ -36,10 +38,10 @@ namespace missile_command
 			int nY = Body.Top - Config.Instance.TurretDiameter / 2;
 			Body.UpdatePosition(nX, nY);
 
-			ammo = 3;
+			ammo = 10;
 			Armed = true;
 			cooldown = 0;
-			hpBar = new HealthBar(Body.Center.X, Body.Center.Y, 50, 10);
+			hpBar = new Status(100, Color.Red, Body.Center.X, Body.Center.Y, 50, 10);
 			pen = new Pen(Config.Instance.GetPlayerColor(t));
 		}
 		public void AttachReticleBody(Body r)
@@ -79,10 +81,8 @@ namespace missile_command
 				// Need to check to see if the last collider is the same as the one now.
 				if (collider.Body.Top < Body.Center.Y)
 				{
-					if (hpBar.IsAlive)
-						hpBar.Damage();
-					else
-						Alive = false;
+					if (hpBar.Alive)
+						hpBar.Damage(hpBar.MaxValue / 2); // Could make this into a damage value depending if I add upgrades.
 				}
 				prevCollider = collider;
 			}
@@ -90,9 +90,11 @@ namespace missile_command
 		public override void Draw(Graphics g)
 		{
 			hpBar.Draw(g);
-			g.DrawArc(pen, Body.Left, Body.Top, Body.Width, Body.Height, 180, 180);
 
-			if (Alive)
+			g.DrawArc(pen, Body.Left, Body.Top, Body.Width, Body.Height, 180, 180);
+			g.DrawString("Ammo " + ammo.ToString(), new Font("Times New Roman", 12), new SolidBrush(Config.Instance.GetPlayerColor(Tag)), hpBar.Body.Left - 10, hpBar.Body.Top + 10);
+
+			if (hpBar.Alive)
 				g.DrawLine(pen, Body.Center, turretEnd);
 		}
 		public void ShootTurret()
@@ -109,11 +111,11 @@ namespace missile_command
 		}
 		public override void Update(long gameTime)
 		{
+			hpBar.Update(gameTime);
 			CalculateGunEnd();
 			if (pen.Color != Config.Instance.GetPlayerColor(Tag))
 				pen = new Pen(Config.Instance.GetPlayerColor(Tag));
 
-			hpBar.Update(gameTime);
 
 			if (Armed == false)
 			{
@@ -122,15 +124,17 @@ namespace missile_command
 				else
 					Armed = true;
 			}
-		}
 
+			if (gameTime > elapsedTime + 1000)
+			{
+				elapsedTime = gameTime;
+				if (!hpBar.Alive)
+					hpBar.Heal(10);
+			}
+		}
 		public override void PostUpdate(long gameTime)
 		{
 			hpBar.PostUpdate(gameTime);
-			if (hpBar.IsAlive)
-			{
-				Alive = true;
-			}
 		}
 	}
 }

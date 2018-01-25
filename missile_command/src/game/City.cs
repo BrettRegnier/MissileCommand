@@ -50,7 +50,7 @@ namespace missile_command
 		{
 			if (shield.PreviousCollider != collider && collider != prevCollider)
 			{
-				if (!shield.Active)
+				if (!shield.Alive)
 				{
 					sprite = lSprite[(int)SpriteType.DEAD];
 					Alive = false;
@@ -81,7 +81,7 @@ namespace missile_command
 		public override void Update(long gameTime)
 		{
 			shield.Update(gameTime);
-			if (shield.Active)
+			if (shield.Alive)
 				Collider = shield.Collider;
 			else
 				Collider = cHolder;

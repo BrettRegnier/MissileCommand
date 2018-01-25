@@ -18,7 +18,7 @@ namespace missile_command
 		private const int STATUS_BAR_X_OFFSET = 5;
 		private const int POSITION_Y_OFFSET = 21;
 
-		private ShieldBar spBar;
+		private Status spBar;
 		private Collider prevCollider;
 		private bool isAlive;
 		private bool animate;
@@ -26,18 +26,16 @@ namespace missile_command
 		private int minHeight;
 		private int maxHeight;
 
-		private int minWidth;
-		private int maxWidth;
+		private long elapsedTime;
 
-		public bool Active { get { return spBar.IsAlive; } }
+		public bool Alive { get { return spBar.Alive; } }
 		public Collider PreviousCollider { get { return prevCollider; } }
-		
+
 		// Expects to get the BottomLeft for the hpbar, and the TopCenter for the shield
 		public Shield(int statusBarX, int statusBarY, int x, int y, int w, int h, ETag t) : base(x, y, w, h, t)
 		{
 			// Set the hp bar to be below the city
-			spBar = new ShieldBar(statusBarX + STATUS_BAR_X_OFFSET, statusBarY, 40, 10);
-			spBar.Healed += SpBar_Healed;
+			spBar = new Status(100, Color.Blue, statusBarX + STATUS_BAR_X_OFFSET, statusBarY, 40, 10);
 
 			// Reposition the shield due to the fact that microsoft drawing has some weird dimension things going on.
 			Body.AdjustX(-(Body.Width / 2 - 4));
@@ -59,17 +57,30 @@ namespace missile_command
 		}
 		protected override void Collided(Collider collider)
 		{
-			spBar.Damage();
+			spBar.Damage(spBar.MaxValue);
 			prevCollider = collider;
 		}
 		public override void Draw(Graphics g)
 		{
 			spBar.Draw(g);
-			if (isAlive)
+			if (spBar.Alive)
 				g.DrawArc(Pens.Blue, Body.Left, Body.Top, Body.Width, Body.Height, 180, 180);
 		}
 		public override void Update(long gameTime)
 		{
+			if (gameTime > elapsedTime + 1000)
+			{
+				elapsedTime = gameTime;
+				if (!spBar.Alive)
+				{
+					if (spBar.Heal(spBar.MaxValue / 120)) // Player upgrade rates? Heals in 2 minutes
+					{
+						animate = true;
+						Body.UpdateHeight(minHeight);
+					}
+				}
+			}
+
 			if (animate)
 			{
 				Body.UpdateHeight(Body.Height + 2);
@@ -81,11 +92,12 @@ namespace missile_command
 			}
 
 			spBar.Update(gameTime);
-			isAlive = spBar.IsAlive;
 		}
 		public override void PostUpdate(long gameTime)
 		{
 			spBar.PostUpdate(gameTime);
+			if (KeypressHandler.Instance.CurrentKey == System.Windows.Forms.Keys.H)
+				spBar.Damage(spBar.MaxValue);
 		}
 	}
 }

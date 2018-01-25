@@ -148,7 +148,6 @@ namespace missile_command
 		private void HotKeys()
 		{
 			//Keys key = KeypressHandler.Instance.CurrentKey;
-
 			if (KeypressHandler.Instance.Press(Keys.Escape))
 			{
 				if (!isPaused)

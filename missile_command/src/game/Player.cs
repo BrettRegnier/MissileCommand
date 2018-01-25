@@ -8,7 +8,8 @@ namespace missile_command
 {
 	class Player
 	{
-		private List<Turret> lTurrets = new List<Turret>();
+		private List<Turret> lTurrets;
+		private Turret nextTurret;
 
 		private Reticle cursor;
 		private PType pType;
@@ -28,6 +29,7 @@ namespace missile_command
 			pType = p;
 			tag = a;
 
+			lTurrets = new List<Turret>();
 			fireCount = 0;
 			coolingDownCount = 0;
 			coolingDown = false;
@@ -45,6 +47,11 @@ namespace missile_command
 		}
 		private void Shoot()
 		{
+			if (nextTurret != null)
+				nextTurret.ShootTurret();
+		}
+		public void Update(long gameTime)
+		{
 			List<Turret> availableTurrets = new List<Turret>();
 			foreach (Turret t in lTurrets)
 				if (t.Alive && t.HasAmmo && t.Armed)
@@ -54,7 +61,6 @@ namespace missile_command
 			{
 				//Find smallest distance from turret and reticle
 				int distance = int.MaxValue;
-				Turret nTurret = availableTurrets[0];
 				foreach (Turret t in availableTurrets)
 				{
 					int x = Math.Abs(t.Body.Left - cursor.Body.Center.X);
@@ -63,16 +69,18 @@ namespace missile_command
 					int hypotenuse = Convert.ToInt32(Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2)));
 					if (hypotenuse < distance)
 					{
-						nTurret = t;
+						nextTurret = t;
 						distance = hypotenuse;
 					}
 				}
 
-				nTurret.ShootTurret();
+				//nextTurret
 			}
-		}
-		public void Update(long gameTime)
-		{
+			else
+			{
+				nextTurret = null;
+			}
+
 			if (KeypressHandler.Instance.Press(Keys.Space))
 				Shoot();
 
