@@ -26,8 +26,6 @@ namespace missile_command
 		private int minHeight;
 		private int maxHeight;
 
-		private long elapsedTime;
-
 		public bool Alive { get { return spBar.Alive; } }
 		public Collider PreviousCollider { get { return prevCollider; } }
 
@@ -35,7 +33,7 @@ namespace missile_command
 		public Shield(int statusBarX, int statusBarY, int x, int y, int w, int h, ETag t) : base(x, y, w, h, t)
 		{
 			// Set the hp bar to be below the city
-			spBar = new Status(100, Color.Blue, statusBarX + STATUS_BAR_X_OFFSET, statusBarY, 40, 10);
+			spBar = new Status(100, Color.Blue, (statusBarX - 20) + STATUS_BAR_X_OFFSET, statusBarY + 7, 40, 10);
 
 			// Reposition the shield due to the fact that microsoft drawing has some weird dimension things going on.
 			Body.AdjustX(-(Body.Width / 2 - 4));
@@ -68,16 +66,12 @@ namespace missile_command
 		}
 		public override void Update(long gameTime)
 		{
-			if (gameTime > elapsedTime + 1000)
+			if (!spBar.Alive)
 			{
-				elapsedTime = gameTime;
-				if (!spBar.Alive)
+				if (spBar.Heal((spBar.MaxValue / 120) / (Window.fps))) // Player upgrade rates? Heals in 2 minutes
 				{
-					if (spBar.Heal(spBar.MaxValue / 120)) // Player upgrade rates? Heals in 2 minutes
-					{
-						animate = true;
-						Body.UpdateHeight(minHeight);
-					}
+					animate = true;
+					Body.UpdateHeight(minHeight);
 				}
 			}
 

@@ -8,7 +8,7 @@ namespace missile_command
 	{
 		private int wave;
 
-		public WaveMode(GameState s) : base(s)
+		public WaveMode(PlayState s) : base(s)
 		{
 			curBombs = new List<Bomb>();
 			multiplier = 0.1;

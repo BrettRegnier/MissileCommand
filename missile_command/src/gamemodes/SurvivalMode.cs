@@ -10,7 +10,7 @@ namespace missile_command
 		private long spawnTime;
 		private int spawnCount;
 		private int spawnAmount;
-		public SurvivalMode(GameState s) : base(s)
+		public SurvivalMode(PlayState s) : base(s)
 		{
 			elapsedTime = 0;
 			curBombs = new List<Bomb>();

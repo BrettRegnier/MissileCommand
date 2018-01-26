@@ -65,8 +65,7 @@
     <Compile Include="src\gamestates\PauseState.cs" />
     <Compile Include="src\gamemodes\SurvivalMode.cs" />
     <Compile Include="src\gamemodes\WaveMode.cs" />
-    <Compile Include="src\gamestates\GameState.cs" />
-    <Compile Include="src\menu\Highscore.cs" />
+    <Compile Include="src\gamestates\PlayState.cs" />
     <Compile Include="src\MouseHandler.cs" />
     <Compile Include="src\PlayerConfiguration.cs" />
     <Compile Include="src\Settings.cs">
@@ -76,12 +75,12 @@
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
     <Compile Include="src\gamestates\State.cs" />
-    <Compile Include="src\menu\GameButton.cs" />
+    <Compile Include="src\buttons\GameButton.cs" />
     <Compile Include="src\Component.cs" />
     <Compile Include="src\game\Shield.cs" />
     <Compile Include="src\game\Body.cs" />
     <Compile Include="src\factories\EntityFactory.cs" />
-    <Compile Include="src\menu\LadderButton.cs" />
+    <Compile Include="src\buttons\LadderButton.cs" />
     <Compile Include="src\Window.cs">
       <SubType>Form</SubType>
     </Compile>

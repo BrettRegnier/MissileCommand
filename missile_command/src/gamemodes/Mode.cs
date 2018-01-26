@@ -6,9 +6,9 @@
 		protected long elapsedTime;
 		protected double multiplier;
 		protected int pendingPoints;
-		protected GameState state;
+		protected PlayState state;
 		public GameModes GameModeTag { get; protected set; }
-		public Mode(GameState s) { state = s; }
+		public Mode(PlayState s) { state = s; }
 		public abstract void AddPoints(double points);
 		public abstract int ReceivePoints();
 		public abstract Bomb[] SpawnEnemies();

@@ -21,14 +21,18 @@ namespace missile_command
 
 		private Body aim;
 		private int ammo;
-		private int cooldown; // TODO player upgrades
+		private int maxAmmo;
 		private Status hpBar;
-		private Pen pen;
+		private Status reloadBar;
+		private Pen bodyColor;
 		private Collider prevCollider;
 		private Point turretEnd;
 		private long elapsedTime;
+		private Rectangle indictatorLight;
+		private Rectangle indictatorOutline;
 
-		public bool Armed { get; private set; }
+		public bool FireIndicator { get; set; }
+		public bool Armed { get { return reloadBar.Alive; } }
 		public bool HasAmmo { get { return (ammo > 0); } }
 
 		public Turret(int x, int y, int w, int h, PType p, ETag t) : base(x, y, w, h, t)
@@ -39,10 +43,14 @@ namespace missile_command
 			Body.UpdatePosition(nX, nY);
 
 			ammo = 10;
-			Armed = true;
-			cooldown = 0;
-			hpBar = new Status(100, Color.Red, Body.Center.X, Body.Center.Y, 50, 10);
-			pen = new Pen(Config.Instance.GetPlayerColor(t));
+			maxAmmo = 10;
+			FireIndicator = false;
+			hpBar = new Status(100, Color.Red, Body.Center.X - 23, Body.Center.Y + 4, 50, 10);
+			reloadBar = new Status(100, Color.DarkGray, hpBar.Body.Left, hpBar.Body.Bottom + 2, 36, 10);
+			int lw = 8; int lh = 8;
+			indictatorLight = new Rectangle(reloadBar.Body.Right + 5, reloadBar.Body.Top, lw, lh);
+			indictatorOutline = new Rectangle(indictatorLight.Left, indictatorLight.Top, lw, lh);
+			bodyColor = new Pen(Config.Instance.GetPlayerColor(t));
 		}
 		public void AttachReticleBody(Body r)
 		{
@@ -82,7 +90,8 @@ namespace missile_command
 				if (collider.Body.Top < Body.Center.Y)
 				{
 					if (hpBar.Alive)
-						hpBar.Damage(hpBar.MaxValue / 2); // Could make this into a damage value depending if I add upgrades.
+						Alive = hpBar.Damage(hpBar.MaxValue / 2); // Could make this into a damage value depending if I add upgrades.
+
 				}
 				prevCollider = collider;
 			}
@@ -90,12 +99,19 @@ namespace missile_command
 		public override void Draw(Graphics g)
 		{
 			hpBar.Draw(g);
+			reloadBar.Draw(g);
 
-			g.DrawArc(pen, Body.Left, Body.Top, Body.Width, Body.Height, 180, 180);
-			g.DrawString("Ammo " + ammo.ToString(), new Font("Times New Roman", 12), new SolidBrush(Config.Instance.GetPlayerColor(Tag)), hpBar.Body.Left - 10, hpBar.Body.Top + 10);
+			g.DrawArc(bodyColor, Body.Left, Body.Top, Body.Width, Body.Height, 180, 180);
+			g.DrawString("Ammo " + ammo.ToString(), new Font("Times New Roman", 12), new SolidBrush(Config.Instance.GetPlayerColor(Tag)), reloadBar.Body.Left - 10, reloadBar.Body.Top + 10);
 
-			if (hpBar.Alive)
-				g.DrawLine(pen, Body.Center, turretEnd);
+			if (FireIndicator)
+				g.FillEllipse(Brushes.Green, indictatorLight);
+			else
+				g.FillEllipse(Brushes.Red, indictatorLight);
+			g.DrawEllipse(Pens.Black, indictatorOutline);
+
+			if (Alive)
+				g.DrawLine(bodyColor, Body.Center, turretEnd);
 		}
 		public void ShootTurret()
 		{
@@ -104,33 +120,36 @@ namespace missile_command
 				int bmbRadius = Config.Instance.PBombDiameter / 2;
 				Point origin = new Point(turretEnd.X - bmbRadius, turretEnd.Y - bmbRadius);
 				TurretShoot(origin, aim.Center, Tag);
-				Armed = false;
-				cooldown = 60;
+				reloadBar.Damage(reloadBar.MaxValue);
 				ammo--;
 			}
 		}
 		public override void Update(long gameTime)
 		{
-			hpBar.Update(gameTime);
 			CalculateGunEnd();
-			if (pen.Color != Config.Instance.GetPlayerColor(Tag))
-				pen = new Pen(Config.Instance.GetPlayerColor(Tag));
+			if (bodyColor.Color != Config.Instance.GetPlayerColor(Tag))
+				bodyColor = new Pen(Config.Instance.GetPlayerColor(Tag));
 
+			reloadBar.Heal(reloadBar.MaxValue / Window.fps);
 
-			if (Armed == false)
+			if (hpBar.Alive == false)
 			{
-				if (cooldown > 0)
-					cooldown--;
-				else
-					Armed = true;
+				double healValue = (hpBar.MaxValue / 50) / (Window.fps);
+				Console.WriteLine(healValue);
+				hpBar.Heal(healValue);
 			}
 
-			if (gameTime > elapsedTime + 1000)
+			if (gameTime >= elapsedTime + 1000)
 			{
 				elapsedTime = gameTime;
-				if (!hpBar.Alive)
-					hpBar.Heal(10);
+
+				if (++ammo > maxAmmo)
+					ammo = maxAmmo;
 			}
+
+			if (KeypressHandler.Instance.Press(Keys.H))
+				Alive = hpBar.Damage(hpBar.MaxValue);
+			hpBar.Update(gameTime);
 		}
 		public override void PostUpdate(long gameTime)
 		{

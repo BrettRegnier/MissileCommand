@@ -10,9 +10,9 @@ namespace missile_command
 	class PauseState : State
 	{
 		private List<Component> components;
-		private GameState prevState;
+		private PlayState prevState;
 
-		public PauseState(Window g, GameState s) : base(g)
+		public PauseState(Window g, PlayState s) : base(g)
 		{
 			components = new List<Component>();
 			prevState = s;
@@ -28,8 +28,8 @@ namespace missile_command
 			GameButton mainMenuButton;
 			GameButton exitButton;
 
-			resumeButton = new GameButton("Resume", startX - btnWidth / 2, startY + Consts.SEPERATION_VALUE * ++count, btnWidth, btnHeight);
-			resumeButton.Click += (sender, e) => { prevState.Resume(); g.NextState(prevState); };
+			resumeButton = new GameButton("Resume", startX - btnWidth / 2, startY, btnWidth, btnHeight);
+			resumeButton.Click += (sender, e) => { g.NextState(prevState); prevState.Resume(); };
 
 			settingButton = new GameButton("Settings", startX - btnWidth / 2, startY + Consts.SEPERATION_VALUE * ++count, btnWidth, btnHeight);
 			settingButton.Click += (sender, e) => { new Settings().ShowDialog(); };

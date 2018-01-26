@@ -54,8 +54,11 @@ namespace missile_command
 		{
 			List<Turret> availableTurrets = new List<Turret>();
 			foreach (Turret t in lTurrets)
+			{
+				t.FireIndicator = false;
 				if (t.Alive && t.HasAmmo && t.Armed)
 					availableTurrets.Add(t);
+			}
 
 			if (availableTurrets.Count > 0)
 			{
@@ -74,7 +77,7 @@ namespace missile_command
 					}
 				}
 
-				//nextTurret
+				nextTurret.FireIndicator = true;
 			}
 			else
 			{

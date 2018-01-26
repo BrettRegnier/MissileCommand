@@ -9,12 +9,12 @@ namespace missile_command
 {
 	class GameOverState : State
 	{
-		private GameState prevState;
+		private PlayState prevState;
 		private List<Component> components;
 
 		private StringFormat sf;
 
-		public GameOverState(Window g, GameState s) : base(g)
+		public GameOverState(Window g, PlayState s) : base(g)
 		{
 			components = new List<Component>();
 			prevState = s;

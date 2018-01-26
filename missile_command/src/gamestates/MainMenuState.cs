@@ -77,11 +77,11 @@ namespace missile_command
 			newGameButton.AddButton(onePlayer); newGameButton.AddButton(twoPlayer); newGameButton.AddButton(threePlayer);
 
 			survival = new GameButton("Survival Mode", startX - btnWidth / 2, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
-			survival.Click += (sender, e) => { game.NextState(new GameState(players, GameModes.SURVIVAL, game)); };
+			survival.Click += (sender, e) => { game.NextState(new PlayState(players, GameModes.SURVIVAL, game)); };
 			survival.IsEnabled = false;
 			survival.IsVisible = false;
 			wave = new GameButton("Wave Mode", startX - btnWidth / 2, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
-			wave.Click += (sender, e) => { game.NextState(new GameState(players, GameModes.WAVE, game)); };
+			wave.Click += (sender, e) => { game.NextState(new PlayState(players, GameModes.WAVE, game)); };
 			wave.IsEnabled = false;
 			wave.IsVisible = false;
 

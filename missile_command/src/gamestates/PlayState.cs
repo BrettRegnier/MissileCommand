@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace missile_command
 {
-	class GameState : State
+	class PlayState : State
 	{
 		private Mode gameMode;
 
@@ -29,7 +29,7 @@ namespace missile_command
 		private int scoreX;
 		private int scoreY;
 
-		public GameState(int numPlayers, GameModes gamemode, Window g) : base(g)
+		public PlayState(int numPlayers, GameModes gamemode, Window g) : base(g)
 		{
 			components = new List<Entity>();
 			eBombs = new List<Entity>();
@@ -195,8 +195,8 @@ namespace missile_command
 		public void Pause()
 		{
 			isPaused = true;
-			game.NextState(new PauseState(game, this));
 			Cursor.Show();
+			game.NextState(new PauseState(game, this));
 		}
 		public void Resume()
 		{
@@ -205,7 +205,7 @@ namespace missile_command
 		}
 		public void Restart()
 		{
-			game.NextState(new GameState(players.Count, gameMode.GameModeTag, game));
+			game.NextState(new PlayState(players.Count, gameMode.GameModeTag, game));
 		}
 		public override void Draw(Graphics g)
 		{

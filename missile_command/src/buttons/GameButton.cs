@@ -43,8 +43,6 @@ namespace missile_command
 			IsVisible = true;
 			IsEnabled = true;
 
-			Body.AdjustY(Body.Dimension.Height + OUTLINE_OFFSET);
-
 			sf = new StringFormat
 			{
 				LineAlignment = StringAlignment.Center,
@@ -70,12 +68,8 @@ namespace missile_command
 					fontSize = 10;
 				}
 
-				int nX = Body.Left - OUTLINE_OFFSET;
-				int nY = Body.Top - OUTLINE_OFFSET;
-				int nW = Body.Width + OUTLINE_OFFSET;
-				int nH = Body.Height + OUTLINE_OFFSET;
-				g.DrawRectangle(new Pen(Config.Instance.SystemColor), nX, nY, nW, nH);
 				g.FillRectangle(innerColor, Body.Left, Body.Top, Body.Width, Body.Height);
+				g.DrawRectangle(new Pen(Config.Instance.SystemColor), Body.Left, Body.Top, Body.Width, Body.Height);
 
 				if (!string.IsNullOrEmpty(Text))
 				{

@@ -13,8 +13,9 @@ namespace missile_command
 	{
 		private State currState;
 		private State nextState;
-		
-		private int fps = 0, frames = 0;
+
+		public static int fps = 0;
+		private int frames = 0;
 		private long tickCount = Environment.TickCount;
 		private long elapsedTime = Environment.TickCount;
 

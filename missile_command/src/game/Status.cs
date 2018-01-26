@@ -26,9 +26,7 @@ namespace missile_command
 		{
 			outlinePen = new Pen(Color.Black);
 			innerBrush = new SolidBrush(c);
-
-			Body.AdjustY(Body.Dimension.Height + OUTLINE_OFFSET);
-			Body.AdjustX(-Body.Dimension.Width / 2);
+			
 			innerRectangle = new Rectangle(Body.Left, Body.Top, Body.Width, Body.Height);
 
 			// 2 pixels on all sides
@@ -51,20 +49,17 @@ namespace missile_command
 		}
 		public bool Heal(double amount)
 		{
-			bool r = false;
 			curValue += amount;
 			if (curValue >= MaxValue)
 			{
 				curValue = MaxValue;
 				Alive = true;
-				r = true;
 			}
 			UpdateStatus();
-			return r;
+			return Alive;
 		}
 		public bool Damage(double amount)
 		{
-			bool r = false;
 			if (Alive)
 			{
 				curValue -= amount;
@@ -72,16 +67,15 @@ namespace missile_command
 				{
 					curValue = 0;
 					Alive = false;
-					r = true;
 				}
 			}
 			UpdateStatus();
-			return r;
+			return Alive;
 		}
 		public override void Draw(Graphics g)
 		{
-			g.DrawRectangle(outlinePen, outlineRectangle);
 			g.FillRectangle(innerBrush, innerRectangle);
+			g.DrawRectangle(outlinePen, outlineRectangle);
 		}
 		public override void PostUpdate(long gameTime)
 		{
