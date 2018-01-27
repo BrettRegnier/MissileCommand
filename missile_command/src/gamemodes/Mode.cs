@@ -2,7 +2,6 @@
 {
 	abstract class Mode
 	{
-		protected System.Collections.Generic.List<Bomb> curBombs;
 		protected long elapsedTime;
 		protected double multiplier;
 		protected int pendingPoints;

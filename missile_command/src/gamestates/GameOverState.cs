@@ -39,7 +39,7 @@ namespace missile_command
 			{
 				long score = prevState.GetScore();
 				new HighscoresForm(score).ShowDialog();
-				enterHighscorebutton.IsEnabled = false;
+				enterHighscorebutton.Enabled = false;
 			};
 
 			restartButton = new GameButton("Restart", enterHighscorebutton.Body.Left - btnWidth - 10, startY, btnWidth, btnHeight);

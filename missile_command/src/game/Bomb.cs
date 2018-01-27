@@ -12,7 +12,7 @@ namespace missile_command
 
 		public delegate void Deconstruct(Entity bomb);
 		public event Deconstruct DestroyBomb;
-		
+
 		private bool atDestination;
 		private SolidBrush brush;
 		private Point destination;
@@ -27,6 +27,7 @@ namespace missile_command
 		private float speed;
 		private PointF velocity;
 
+		public float Speed { get { return speed; } set { speed = value; CalculateVelocity(); } }
 		public PType PlayerType { get; private set; }
 		public bool GivePoints { get; private set; }
 
@@ -45,11 +46,10 @@ namespace missile_command
 			GivePoints = false;
 
 			if (p == PType.ENEMY)
-				speed = Config.Instance.EBombSpeed;
+				Speed = Config.Instance.EBombSpeed;
 			else
-				speed = Config.Instance.PBombSpeed;
-
-			CalculateVelocity();
+				Speed = Config.Instance.PBombSpeed;
+			
 			SetColor();
 		}
 		private void CalculateVelocity()
@@ -148,14 +148,13 @@ namespace missile_command
 
 				// Start growing the explosion
 				// if false then grow the size of it.
-				growthCount++;
-				if (growthCount % 4 == 0)
+				if (++growthCount % 2 == 0)
 				{
 					// flash the graphics
-					if (growthCount % 6 == 0)
+					if (growthCount % 10 == 0)
 						flash = !flash;
 
-					int growth = explosionSize / 30;
+					int growth = explosionSize / 50;
 					// if growth is not even, then make it even.
 					if (growth % 2 != 0)
 						growth++;

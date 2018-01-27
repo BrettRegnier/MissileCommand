@@ -8,9 +8,6 @@ using System.Windows.Forms;
 
 namespace missile_command
 {
-	// TODO add ammo, each turret has a certain amount of ammo to use.
-	// TODO make reload status, make ammo replenish method (depends on gamemode), make indicator light for which tower will fire, needs a bool. 
-	// Green is fire, red is not
 	class Turret : Entity
 	{
 		public delegate void Fire(Point origin, Point destination, ETag a);
@@ -20,7 +17,7 @@ namespace missile_command
 		private const int COOLDOWN_SET = 10;
 
 		private Body aim;
-		private int ammo;
+		private double ammo;
 		private int maxAmmo;
 		private Status hpBar;
 		private Status reloadBar;
@@ -33,7 +30,7 @@ namespace missile_command
 
 		public bool FireIndicator { get; set; }
 		public bool Armed { get { return reloadBar.Alive; } }
-		public bool HasAmmo { get { return (ammo > 0); } }
+		public bool HasAmmo { get { return ((int)ammo % 1 == 0); } }
 
 		public Turret(int x, int y, int w, int h, PType p, ETag t) : base(x, y, w, h, t)
 		{
@@ -102,7 +99,7 @@ namespace missile_command
 			reloadBar.Draw(g);
 
 			g.DrawArc(bodyColor, Body.Left, Body.Top, Body.Width, Body.Height, 180, 180);
-			g.DrawString("Ammo " + ammo.ToString(), new Font("Times New Roman", 12), new SolidBrush(Config.Instance.GetPlayerColor(Tag)), reloadBar.Body.Left - 10, reloadBar.Body.Top + 10);
+			g.DrawString("Ammo " + Convert.ToInt32(ammo).ToString(), new Font("Times New Roman", 12), new SolidBrush(Config.Instance.GetPlayerColor(Tag)), reloadBar.Body.Left - 10, reloadBar.Body.Top + 10);
 
 			if (FireIndicator)
 				g.FillEllipse(Brushes.Green, indictatorLight);
@@ -139,13 +136,8 @@ namespace missile_command
 				hpBar.Heal(healValue);
 			}
 
-			if (gameTime >= elapsedTime + 1000)
-			{
-				elapsedTime = gameTime;
-
-				if (++ammo > maxAmmo)
-					ammo = maxAmmo;
-			}
+			if (ammo < maxAmmo)
+				ammo += 1.0 / (Window.fps * 3);
 
 			if (KeypressHandler.Instance.Press(Keys.H))
 				Alive = hpBar.Damage(hpBar.MaxValue);

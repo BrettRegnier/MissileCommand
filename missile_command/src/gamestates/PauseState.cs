@@ -28,9 +28,6 @@ namespace missile_command
 			GameButton mainMenuButton;
 			GameButton exitButton;
 
-			resumeButton = new GameButton("Resume", startX - btnWidth / 2, startY, btnWidth, btnHeight);
-			resumeButton.Click += (sender, e) => { g.NextState(prevState); prevState.Resume(); };
-
 			settingButton = new GameButton("Settings", startX - btnWidth / 2, startY + Consts.SEPERATION_VALUE * ++count, btnWidth, btnHeight);
 			settingButton.Click += (sender, e) => { new Settings().ShowDialog(); };
 
@@ -39,6 +36,17 @@ namespace missile_command
 
 			exitButton = new GameButton("Exit Game", startX - btnWidth / 2, startY + Consts.SEPERATION_VALUE * ++count, btnWidth, btnHeight);
 			exitButton.Click += (sender, e) => { g.Close(); };
+
+			resumeButton = new GameButton("Resume", startX - btnWidth / 2, startY, btnWidth, btnHeight);
+			resumeButton.Click += (sender, e) =>
+			{
+				settingButton.Enabled = false;
+				mainMenuButton.Enabled = false;
+				exitButton.Enabled = false;
+
+				prevState.Resume();
+				g.NextState(prevState);
+			};
 
 			components.Add(resumeButton);
 			components.Add(settingButton);

@@ -27,7 +27,7 @@ namespace missile_command
 		public void Toggle()
 		{
 			foreach (GameButton btn in buttons)
-				btn.IsEnabled = false;
+				btn.Enabled = false;
 
 			if (btnsVisible)
 			{
@@ -116,7 +116,7 @@ namespace missile_command
 				if (inYPosition)
 				{
 					foreach (GameButton btn in buttons)
-						btn.IsEnabled = true;
+						btn.Enabled = true;
 					revealing = false;
 					btnsVisible = true;
 				}

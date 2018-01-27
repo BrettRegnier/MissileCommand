@@ -55,22 +55,22 @@ namespace missile_command
 			GameButton highscoresButton;
 			GameButton exitButton;
 
-			newGameButton = new LadderButton("New Game", startX - btnWidth/2, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
+			newGameButton = new LadderButton("New Game", startX - btnWidth / 2, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
 			newGameButton.Click += (sender, e) => { ((LadderButton)sender).Toggle(); };
 
 			onePlayer = new LadderButton("One Player", startX - btnWidth / 2, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
 			onePlayer.Click += (sender, e) => { players = 1; ((LadderButton)sender).Toggle(); };
-			onePlayer.IsEnabled = false;
+			onePlayer.Enabled = false;
 			onePlayer.IsVisible = false;
 
 			twoPlayer = new LadderButton("Two Players", startX - btnWidth / 2, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
 			twoPlayer.Click += (sender, e) => { players = 2; ((LadderButton)sender).Toggle(); };
-			twoPlayer.IsEnabled = false;
+			twoPlayer.Enabled = false;
 			twoPlayer.IsVisible = false;
 
 			threePlayer = new LadderButton("Three Player", startX - btnWidth / 2, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
 			threePlayer.Click += (sender, e) => { players = 3; ((LadderButton)sender).Toggle(); };
-			threePlayer.IsEnabled = false;
+			threePlayer.Enabled = false;
 			threePlayer.IsVisible = false;
 
 			//Attach the buttons.
@@ -78,11 +78,11 @@ namespace missile_command
 
 			survival = new GameButton("Survival Mode", startX - btnWidth / 2, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
 			survival.Click += (sender, e) => { game.NextState(new PlayState(players, GameModes.SURVIVAL, game)); };
-			survival.IsEnabled = false;
+			survival.Enabled = false;
 			survival.IsVisible = false;
 			wave = new GameButton("Wave Mode", startX - btnWidth / 2, startY + Consts.SEPERATION_VALUE * numButton, btnWidth, btnHeight);
 			wave.Click += (sender, e) => { game.NextState(new PlayState(players, GameModes.WAVE, game)); };
-			wave.IsEnabled = false;
+			wave.Enabled = false;
 			wave.IsVisible = false;
 
 
@@ -138,26 +138,16 @@ namespace missile_command
 		}
 		private void SpawnBombs(long gameTime)
 		{
-			if (gameTime > elapsedTime + 200)
-			{
 				elapsedTime = gameTime;
 				Random rand = new Random();
 				Point o = new Point(rand.Next(0, Consts.gameBounds.Width), 0);
-				Point destination = new Point(rand.Next(o.X, Consts.gameBounds.Width), Consts.gameBounds.Height);
+				Point destination = new Point(rand.Next(Consts.gameBounds.Width/2, Consts.gameBounds.Width), Consts.gameBounds.Height);
 				if (o.X < Consts.gameBounds.Width / 2)
 					destination.X = rand.Next(0, Consts.gameBounds.Width / 2);
 				Bomb bmb = EntityFactory.MakeBomb(o.X, o.Y, destination, PType.ENEMY, ETag.ENEMY);
+				bmb.Speed = 10.0f;
 				bmb.DestroyBomb += (Entity b) => { bombs.Remove(b); };
 				bombs.Add(bmb);
-
-				o = new Point(rand.Next(0, Consts.gameBounds.Width), Consts.gameBounds.Height);
-				destination = new Point(rand.Next(o.X, Consts.gameBounds.Width), 0);
-				if (o.X < Consts.gameBounds.Width / 2)
-					destination.X = rand.Next(0, Consts.gameBounds.Width / 2);
-				Bomb bmb2 = EntityFactory.MakeBomb(o.X, o.Y, destination, PType.ENEMY, ETag.ENEMY);
-				bmb2.DestroyBomb += (Entity b) => { bombs.Remove(b); };
-				bombs.Add(bmb2);
 			}
-		}
 	}
 }

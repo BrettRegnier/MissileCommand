@@ -24,7 +24,7 @@ namespace missile_command
 		private Brush innerColor;
 		private StringFormat sf;
 
-		public bool IsEnabled { get; set; }
+		public bool Enabled { get; set; }
 		public int MovePosition { get; set; }
 		public String Text { get; set; }
 		public bool IsVisible { get; set; }
@@ -41,7 +41,7 @@ namespace missile_command
 		private void Init()
 		{
 			IsVisible = true;
-			IsEnabled = true;
+			Enabled = true;
 
 			sf = new StringFormat
 			{
@@ -62,7 +62,7 @@ namespace missile_command
 					fontSize = 12;
 				else
 					fontSize = 10;
-				if (!IsEnabled)
+				if (!Enabled)
 				{
 					innerColor = new SolidBrush(Color.FromArgb(20, 20, 20));
 					fontSize = 10;
@@ -90,7 +90,7 @@ namespace missile_command
 			if (mouseRectangle.IntersectsWith(new Rectangle(Body.TopLeft, Body.Dimension)))
 			{
 				isHovering = true;
-				if (currentMouse == false && previousMouse == true && IsEnabled)
+				if (currentMouse == false && previousMouse == true && Enabled)
 				{
 					// Then the mouse is hovering and clicked.
 					Click?.Invoke(this, new EventArgs());

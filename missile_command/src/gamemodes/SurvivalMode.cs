@@ -13,7 +13,6 @@ namespace missile_command
 		public SurvivalMode(PlayState s) : base(s)
 		{
 			elapsedTime = 0;
-			curBombs = new List<Bomb>();
 			multiplier = 1.0;
 			pendingPoints = 0;
 			rand = new Random();

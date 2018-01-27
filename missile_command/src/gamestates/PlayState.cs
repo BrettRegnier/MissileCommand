@@ -29,6 +29,10 @@ namespace missile_command
 		private int scoreX;
 		private int scoreY;
 
+		private Point prevMousePosition;
+
+		public int RemainingBombs { get { return eBombs.Count; } }
+
 		public PlayState(int numPlayers, GameModes gamemode, Window g) : base(g)
 		{
 			components = new List<Entity>();
@@ -195,12 +199,15 @@ namespace missile_command
 		public void Pause()
 		{
 			isPaused = true;
+			prevMousePosition = Cursor.Position;
+			Cursor.Position = new Point(Consts.gameBounds.Width / 2, 215);
 			Cursor.Show();
 			game.NextState(new PauseState(game, this));
 		}
 		public void Resume()
 		{
 			isPaused = false;
+			Cursor.Position = prevMousePosition;
 			Cursor.Hide();
 		}
 		public void Restart()

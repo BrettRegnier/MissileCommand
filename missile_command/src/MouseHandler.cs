@@ -13,8 +13,6 @@ namespace missile_command
 		public static extern int GetAsyncKeyState(int vKey);
 
 		private static MouseHandler instance;
-		private bool prevState;
-		private bool currentState;
 
 		public static MouseHandler Instance
 		{

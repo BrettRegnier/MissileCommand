@@ -1,5 +1,1 @@
-﻿// TODO state inside of he game (playstate.cs maybe)
-
-// TODO Mouse compatibility
-
-// TODO Config needs to be reloaded everytime we change something in settings.
+﻿

@@ -15,10 +15,8 @@ namespace missile_command
 		private PType pType;
 		private ETag tag;
 
-		private int fireCount;
-		private int coolingDownCount;
-		private bool coolingDown;
-		private bool noActiveTurrets;
+		private bool prevMouseState;
+		private bool currentMouseState;
 
 		public ETag GetTag() { return tag; }
 		public PType GetPType() { return pType; }
@@ -30,16 +28,13 @@ namespace missile_command
 			tag = a;
 
 			lTurrets = new List<Turret>();
-			fireCount = 0;
-			coolingDownCount = 0;
-			coolingDown = false;
-			noActiveTurrets = true;
+			prevMouseState = false;
+			currentMouseState = false;
 		}
 		public void AttachTurret(Turret t)
 		{
 			t.AttachReticleBody(cursor.Body);
 			lTurrets.Add(t);
-			noActiveTurrets = false;
 		}
 		public void Draw(Graphics g)
 		{
@@ -84,8 +79,19 @@ namespace missile_command
 				nextTurret = null;
 			}
 
-			if (KeypressHandler.Instance.Press(Keys.Space))
-				Shoot();
+			if (Config.Instance.GetMouseCheck(tag))
+			{
+				prevMouseState = currentMouseState;
+				currentMouseState = MouseHandler.Instance.MouseState(MOUSE_BUTTONS.VK_LBUTTON);
+
+				if (currentMouseState == false && prevMouseState == true)
+					Shoot();
+			}
+			else
+			{
+				if (KeypressHandler.Instance.Press(Keys.Space))
+					Shoot();
+			}
 
 			cursor.Update(gameTime);
 		}
