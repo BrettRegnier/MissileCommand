@@ -7,16 +7,15 @@ using System.Windows.Forms;
 
 namespace missile_command
 {
-	// TODO switch to async states like mouse.
 	class KeypressHandler
 	{
 		private static KeypressHandler instance;
-
-		//TODO maybe could make into a struct.
+		
 		private List<KPress> lPress = new List<KPress>();
-		private Dictionary<Player, Dictionary<KPress, Keys>> dlPKeys = new Dictionary<Player, Dictionary<KPress, Keys>>();
-		private Dictionary<Player, KPress> dPKPress = new Dictionary<Player, KPress>();
+		private Dictionary<ETag, Dictionary<KPress, Keys>> dlPKeys = new Dictionary<ETag, Dictionary<KPress, Keys>>();
+		private Dictionary<ETag, KPress> dPKPress = new Dictionary<ETag, KPress>();
 		private Keys currentKey;
+		private Keys prevKey;
 
 		public static KeypressHandler Instance
 		{
@@ -29,44 +28,49 @@ namespace missile_command
 		}
 		public void Initialize(List<Player> ps)
 		{
-			// TODO replace with config
-			//Dummy information
-			Dictionary<KPress, Keys> lk = new Dictionary<KPress, Keys>();
-			lk.Add(KPress.UP, Keys.W);
-			lk.Add(KPress.RIGHT, Keys.D);
-			lk.Add(KPress.DOWN, Keys.S);
-			lk.Add(KPress.LEFT, Keys.A);
-			lk.Add(KPress.SHOOT, Keys.Space);
-
 			// Load config of keypresses
 			foreach (Player p in ps)
 			{
-				// Load here what their designated keypress is into a dictionary.
-				dlPKeys.Add(p, lk);
-				dPKPress.Add(p, KPress.NONE);
+				if (!dlPKeys.ContainsKey(p.GetTag()))
+				{
+					// Load here what their designated keypress is into a dictionary.
+					dlPKeys.Add(p.GetTag(), Config.Instance.GetPlayerKeys(p.GetTag()));
+					dPKPress.Add(p.GetTag(), KPress.NONE);
+				}
 			}
 		}
 		public void KeyDown(KeyEventArgs e)
 		{
 			currentKey = e.KeyData;
-			foreach (KeyValuePair<Player, Dictionary<KPress, Keys>> PDKPressKeys in dlPKeys)
+			foreach (KeyValuePair<ETag, Dictionary<KPress, Keys>> PDKPressKeys in dlPKeys)
 				foreach (KeyValuePair<KPress, Keys> KPressKeys in PDKPressKeys.Value)
 					if (e.KeyData == KPressKeys.Value)
 						dPKPress[PDKPressKeys.Key] |= KPressKeys.Key;
 		}
 		public void KeyUp(KeyEventArgs e)
 		{
+			prevKey = currentKey;
 			currentKey = Keys.None;
-			foreach (KeyValuePair<Player, Dictionary<KPress, Keys>> PDKPressKeys in dlPKeys)
+			foreach (KeyValuePair<ETag, Dictionary<KPress, Keys>> PDKPressKeys in dlPKeys)
 				foreach (KeyValuePair<KPress, Keys> KPressKeys in PDKPressKeys.Value)
 					if (e.KeyData == KPressKeys.Value)
 						dPKPress[PDKPressKeys.Key] &= ~KPressKeys.Key;
 		}
-		public KPress PlayerKeyState(Player p)
+		public KPress PlayerKeyState(ETag t)
 		{
-			return dPKPress[p];
+			return dPKPress[t];
 		}
 
 		public Keys CurrentKey { get { return currentKey; } }
+		public bool Press(Keys key)
+		{
+			if (currentKey == Keys.None && prevKey == key)
+			{
+				prevKey = Keys.None;
+				return true;
+			}
+			else
+				return false;
+		}
 	}
 }

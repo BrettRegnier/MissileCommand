@@ -13,7 +13,6 @@ namespace missile_command
 
 		public LandMass(int x, int y, int w, int h, ETag t = ETag.SYSTEM) : base(x, y, w, h, t)
 		{
-			// TODO maybe for hills chop it up so that it makes a hill ish? Perhaps make a new class for it.
 			// adjust the origin for the height, good ole microsoft windows and stuff
 			Body.AdjustY(-(Body.Dimension.Height - 5));
 			

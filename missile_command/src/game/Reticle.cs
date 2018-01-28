@@ -13,22 +13,18 @@ namespace missile_command
 		private const int CURSOR_DIMENSION = 9;
 
 		private ETag tag;
-		private Image sprite;
 
 		public Reticle(int x, int y, PType p, ETag t, int w = CURSOR_DIMENSION, int h = CURSOR_DIMENSION) : base(x, y, w, h)
 		{
 			Body.UpdatePosition(Body.Left - CURSOR_OFFSET, Body.Top);
-			// TODO load cursor by config
-			sprite = Properties.Resources.cursor_09;
 			tag = t;
 		}
 		public override void Draw(Graphics g)
 		{
-			g.DrawImage(sprite, Body.TopLeft);
+			g.DrawImage(Config.Instance.GetPlayerCursor(tag), Body.TopLeft);
 		}
 		public void Move(Direction dir)
 		{
-			// TODO could just pass in x and y values of 1, -1
 			switch (dir)
 			{
 				case Direction.UP:
@@ -59,11 +55,25 @@ namespace missile_command
 		}
 		public override void Update(long gameTime)
 		{
-
+			if (Config.Instance.GetMouseCheck(tag))
+			{
+				// Mouse tracking enabled.
+				Body.UpdatePosition(Cursor.Position.X, Cursor.Position.Y);
+			}
+			else
+			{
+				// Determine the keys pressed.
+				KPress keysPressed = KeypressHandler.Instance.PlayerKeyState(tag);
+				if ((keysPressed & KPress.UP) == KPress.UP)
+					Move(Direction.UP);
+				if ((keysPressed & KPress.RIGHT) == KPress.RIGHT)
+					Move(Direction.RIGHT);
+				if ((keysPressed & KPress.DOWN) == KPress.DOWN)
+					Move(Direction.DOWN);
+				if ((keysPressed & KPress.LEFT) == KPress.LEFT)
+					Move(Direction.LEFT);
+			}
 		}
-		public override void PostUpdate(long gameTime)
-		{
-
-		}
+		public override void PostUpdate(long gameTime) { }
 	}
 }

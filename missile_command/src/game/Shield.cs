@@ -18,7 +18,7 @@ namespace missile_command
 		private const int STATUS_BAR_X_OFFSET = 5;
 		private const int POSITION_Y_OFFSET = 21;
 
-		private ShieldBar spBar;
+		private Status spBar;
 		private Collider prevCollider;
 		private bool isAlive;
 		private bool animate;
@@ -26,20 +26,14 @@ namespace missile_command
 		private int minHeight;
 		private int maxHeight;
 
-		private int minWidth;
-		private int maxWidth;
-
-		public bool Active { get { return spBar.IsAlive; } }
+		public bool Alive { get { return spBar.Alive; } }
 		public Collider PreviousCollider { get { return prevCollider; } }
 
-		// TODO rethink the logic for shield's positioning it might fix the problems I am having with all the magic numbers
 		// Expects to get the BottomLeft for the hpbar, and the TopCenter for the shield
 		public Shield(int statusBarX, int statusBarY, int x, int y, int w, int h, ETag t) : base(x, y, w, h, t)
 		{
-			// TODO I think the size of the bar should match the width of the city
 			// Set the hp bar to be below the city
-			spBar = new ShieldBar(statusBarX + STATUS_BAR_X_OFFSET, statusBarY, 40, 10);
-			spBar.Healed += SpBar_Healed;
+			spBar = new Status(100, Color.Blue, (statusBarX - 20) + STATUS_BAR_X_OFFSET, statusBarY + 7, 40, 10);
 
 			// Reposition the shield due to the fact that microsoft drawing has some weird dimension things going on.
 			Body.AdjustX(-(Body.Width / 2 - 4));
@@ -61,18 +55,26 @@ namespace missile_command
 		}
 		protected override void Collided(Collider collider)
 		{
-			spBar.Damage();
+			spBar.Damage(spBar.MaxValue);
 			prevCollider = collider;
 		}
 		public override void Draw(Graphics g)
 		{
 			spBar.Draw(g);
-			// TODO Animate the shield, by uh growing? or by flashing a lighter blue.
-			if (isAlive)
+			if (spBar.Alive)
 				g.DrawArc(Pens.Blue, Body.Left, Body.Top, Body.Width, Body.Height, 180, 180);
 		}
 		public override void Update(long gameTime)
 		{
+			if (!spBar.Alive)
+			{
+				if (spBar.Heal((spBar.MaxValue / 120) / (Window.fps))) // Player upgrade rates? Heals in 2 minutes
+				{
+					animate = true;
+					Body.UpdateHeight(minHeight);
+				}
+			}
+
 			if (animate)
 			{
 				Body.UpdateHeight(Body.Height + 2);
@@ -84,11 +86,12 @@ namespace missile_command
 			}
 
 			spBar.Update(gameTime);
-			isAlive = spBar.IsAlive;
 		}
 		public override void PostUpdate(long gameTime)
 		{
 			spBar.PostUpdate(gameTime);
+			if (KeypressHandler.Instance.CurrentKey == System.Windows.Forms.Keys.H)
+				spBar.Damage(spBar.MaxValue);
 		}
 	}
 }

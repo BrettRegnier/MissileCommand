@@ -14,9 +14,8 @@ namespace missile_command
 		private State currState;
 		private State nextState;
 
-		// TODO move into gameManager
-		// TODO make wave game mode
-		private int fps = 0, frames = 0;
+		public static int fps = 0;
+		private int frames = 0;
 		private long tickCount = Environment.TickCount;
 		private long elapsedTime = Environment.TickCount;
 
@@ -47,7 +46,7 @@ namespace missile_command
 		}
 		private void LoadContent()
 		{
-			currState = new MenuState(this);
+			currState = new MainMenuState(this);
 		}
 		public void NextState(State state)
 		{
@@ -59,6 +58,7 @@ namespace missile_command
 			{
 				while (true)
 				{
+					// Every 60 seconds report fps
 					if (Environment.TickCount >= elapsedTime + 1000)
 					{
 						fps = frames;
@@ -67,6 +67,7 @@ namespace missile_command
 						Console.Out.WriteLine("Frames: " + fps);
 					}
 
+					// Refresh so that there is ~60 fps
 					if (Environment.TickCount >= tickCount + 15)
 					{
 						tickCount = Environment.TickCount;
@@ -94,7 +95,7 @@ namespace missile_command
 				currState = nextState;
 				nextState = null;
 			}
-
+			
 			currState.Update(elapsedTime);
 			currState.PostUpdate(elapsedTime);
 		}
@@ -102,8 +103,6 @@ namespace missile_command
 		{
 			currState.Draw(e.Graphics);
 			frames++;
-
-			// Update after drawing
 			Loop();
 		}
 		private void GameForm_KeyDown(object sender, KeyEventArgs e)

@@ -10,12 +10,14 @@ namespace missile_command
 	{
 		public Collider Collider { get; protected set; }
 		public ETag Tag { get; private set; }
+		public bool Alive { get; protected set; }
 
 		public Entity(int x, int y, int w, int h, ETag t) : base(x,y,w,h)
 		{
-			Collider = new Collider(Body);
+			Collider = new Collider(Body, this);
 			Collider.OnCollision += Collided;
 			Tag = t;
+			Alive = true;
 		}
 		protected abstract void Collided(Collider body);
 	}

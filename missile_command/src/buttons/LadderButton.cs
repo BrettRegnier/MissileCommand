@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace missile_command
 {
-	class SlideRightButton : GameButton
+	class LadderButton : GameButton
 	{
 		private List<GameButton> buttons;
 		private bool revealing;
@@ -17,7 +17,7 @@ namespace missile_command
 		private int xMoveSpeed = 5;
 		private int yMoveSpeed = 5;
 
-		public SlideRightButton(string s, int x, int y, int w, int h) : base(s, x, y, w, h)
+		public LadderButton(string s, int x, int y, int w, int h) : base(s, x, y, w, h)
 		{
 			buttons = new List<GameButton>();
 			revealing = false;
@@ -27,17 +27,17 @@ namespace missile_command
 		public void Toggle()
 		{
 			foreach (GameButton btn in buttons)
-				btn.IsEnabled = false;
+				btn.Enabled = false;
 
 			if (btnsVisible)
 			{
 				hiding = true;
 				foreach (GameButton btn in buttons)
 				{
-					if (btn is SlideRightButton)
+					if (btn is LadderButton)
 					{
-						if (((SlideRightButton)btn).btnsVisible)
-							((SlideRightButton)btn).Toggle();
+						if (((LadderButton)btn).btnsVisible)
+							((LadderButton)btn).Toggle();
 					}
 				}
 			}
@@ -82,9 +82,9 @@ namespace missile_command
 						if (buttons[i].Body.Left >= this.Body.Left + this.Body.Width + 4)
 						{
 							buttons[i].Body.UpdatePositionX(this.Body.Left + this.Body.Width + 4);
-							if (buttons[i] is SlideRightButton)
+							if (buttons[i] is LadderButton)
 							{
-								((SlideRightButton)buttons[i]).PositionHiddenButtons();
+								((LadderButton)buttons[i]).PositionHiddenButtons();
 							}
 						}
 						else
@@ -116,7 +116,7 @@ namespace missile_command
 				if (inYPosition)
 				{
 					foreach (GameButton btn in buttons)
-						btn.IsEnabled = true;
+						btn.Enabled = true;
 					revealing = false;
 					btnsVisible = true;
 				}

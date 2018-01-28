@@ -1,7 +1,1 @@
-﻿// TODO maybe State pattern for, damage, death, explode, moving, etc on gameobjects. 
-
-// TODO add deconstructors for starting the game over.
-// TODO state inside of he game (playstate.cs maybe)
-
-// TODO Points
-//When a enemy bomb collides with the Player bomb first then it will give points on the destroy method
+﻿

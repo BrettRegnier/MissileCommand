@@ -22,11 +22,9 @@ namespace missile_command
 
 		private int fontSize;
 		private Brush innerColor;
-		private Pen outlineColor;
-		private Color textColor;
 		private StringFormat sf;
 
-		public bool IsEnabled { get; set; }
+		public bool Enabled { get; set; }
 		public int MovePosition { get; set; }
 		public String Text { get; set; }
 		public bool IsVisible { get; set; }
@@ -42,13 +40,8 @@ namespace missile_command
 		}
 		private void Init()
 		{
-			outlineColor = Pens.Green;
-			textColor = Color.Green;
 			IsVisible = true;
-			IsEnabled = true;
-
-			Body.AdjustY(Body.Dimension.Height + OUTLINE_OFFSET);
-			Body.AdjustX(-Body.Dimension.Width / 2);
+			Enabled = true;
 
 			sf = new StringFormat
 			{
@@ -66,32 +59,21 @@ namespace missile_command
 					innerColor = new SolidBrush(Color.FromArgb(40, 40, 40));
 
 				if (currentMouse == true && isHovering)
-				{
-					textColor = Color.LimeGreen;
 					fontSize = 12;
-				}
 				else
-				{
-					textColor = Color.Green;
 					fontSize = 10;
-				}
-				if (!IsEnabled)
+				if (!Enabled)
 				{
 					innerColor = new SolidBrush(Color.FromArgb(20, 20, 20));
-					textColor = Color.Green;
 					fontSize = 10;
 				}
 
-				int nX = Body.Left - OUTLINE_OFFSET;
-				int nY = Body.Top - OUTLINE_OFFSET;
-				int nW = Body.Width + OUTLINE_OFFSET;
-				int nH = Body.Height + OUTLINE_OFFSET;
-				g.DrawRectangle(outlineColor, nX, nY, nW, nH);
 				g.FillRectangle(innerColor, Body.Left, Body.Top, Body.Width, Body.Height);
+				g.DrawRectangle(new Pen(Config.Instance.SystemColor), Body.Left, Body.Top, Body.Width, Body.Height);
 
 				if (!string.IsNullOrEmpty(Text))
 				{
-					g.DrawString(Text, new Font("Times New Roman", fontSize), new SolidBrush(textColor), Body.Center.X, Body.Center.Y, sf);
+					g.DrawString(Text, new Font(Config.Instance.Typeface, fontSize), new SolidBrush(Config.Instance.SystemColor), Body.Center.X, Body.Center.Y, sf);
 				}
 			}
 		}
@@ -108,7 +90,7 @@ namespace missile_command
 			if (mouseRectangle.IntersectsWith(new Rectangle(Body.TopLeft, Body.Dimension)))
 			{
 				isHovering = true;
-				if (currentMouse == false && previousMouse == true && IsEnabled)
+				if (currentMouse == false && previousMouse == true && Enabled)
 				{
 					// Then the mouse is hovering and clicked.
 					Click?.Invoke(this, new EventArgs());

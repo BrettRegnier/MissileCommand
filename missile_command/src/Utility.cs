@@ -13,9 +13,9 @@
 	public enum ETag
 	{
 		SYSTEM,
-		P1,
-		P2,
-		P3,
+		PLAYER1,
+		PLAYER2,
+		PLAYER3,
 		ENEMY
 	}
 	public enum Direction
@@ -37,7 +37,6 @@
 	};
 	public static class Consts
 	{
-		//TODO hill sizes based on the screen
 		// landmass + 100 + hill height
 		public const int STAGE_BOUND_HEIGHT = LAND_MASS_HEIGHT + HILL_MASS_HEIGHT + 100;
 		public const int LAND_MASS_HEIGHT = 50;

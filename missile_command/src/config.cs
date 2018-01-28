@@ -1,87 +1,132 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace missile_command
 {
 	// Singleton class.
+	[Serializable]
 	public class Config
 	{
+		[XmlIgnore()] private static Config instance;
+		[XmlIgnore()] private Dictionary<ETag, PlayerConfiguration> dicPConfigs;
+		[XmlIgnore()] private static string dir = "./config";
+		[XmlIgnore()] public Color SystemColor { get { return Color.FromArgb(Convert.ToInt32(SysColor)); } }
+		[XmlIgnore()] public Font TitleFont { get { return new Font(Typeface, TitleFontSize); } }
+		[XmlIgnore()] public Font GameFont { get { return new Font(Typeface, GameFontSize); } }
 
-		private struct KeyConfig
-		{
-			Keys up;
-			Keys down;
-			Keys left;
-			Keys right;
-			Keys shoot;
-		};
-
-		private static Config instance;
-
-		private List<List<Keys>> lPKeys = new List<List<Keys>>();
-		private List<Color> lAccountColors;
-		// TODO Remove magic numbers
-		private int bombRadius = 4;
-		private float bombSpeed = 4f;
-		private int explosionSize = 100;
-		private int turretRadius = 50;
+		public int EBombDiameter { get; set; }
+		public int PBombDiameter { get; set; }
+		public float EBombSpeed { get; set; }
+		public float PBombSpeed { get; set; }
+		public int ExplosionDiameter { get; set; }
+		public int TurretDiameter { get; set; }
+		public string SysColor { get; set; }
+		public string Typeface { get; set; }
+		public int TitleFontSize { get; set; }
+		public int GameFontSize { get; set; }
 
 		public static Config Instance
 		{
 			get
 			{
 				if (instance == null)
-					instance = new Config();
+					instance = Config.Load();
 
 				return instance;
 			}
 		}
-
-		// TODO figure out how to select the image for a cursor, maybe a string that will load it?
-		// TODO Pretty much this whole class.
-		// TODO decide on how many players... leaning towards 3
 		public Config()
 		{
-			LoadBasicConfig();
-			LoadColorConfig();
-			LoadPlayerKeys();
+			dicPConfigs = new Dictionary<ETag, PlayerConfiguration>();
 		}
-		public Color GetPlayerColor(ETag p)
+		public Color GetPlayerColor(ETag t)
 		{
-			int index = (int)p;
-			return lAccountColors[index];
+			if (t == ETag.ENEMY)
+				return Color.White;
+			else if (t == ETag.SYSTEM)
+				return Color.White;
+
+			return LoadPlayer(t).PColor;
 		}
-		public List<Keys> GetPlayerKeySet()
+		public Dictionary<KPress, Keys> GetPlayerKeys(ETag t)
 		{
-			throw new NotImplementedException();
+			return LoadPlayer(t).PKeys;
+		}
+		public Bitmap GetPlayerCursor(ETag t)
+		{
+			return (Bitmap)Properties.Resources.ResourceManager.GetObject(LoadPlayer(t).PCursor);
+		}
+		public bool GetMouseCheck(ETag t)
+		{
+			return LoadPlayer(t).MouseEnabled;
 		}
 
-		public Size DefaultBombSize { get { return new Size(bombRadius, bombRadius); } }
-		public int DefaultExplosionSize { get { return explosionSize; } }
-		public float DefaultBombSpeed { get { return bombSpeed; } }
-		public Size TurretSize { get { return new Size(turretRadius, turretRadius); } }
-		public int TurretRadius { get { return turretRadius; } }
-
-		private void LoadBasicConfig()
+		public static Config Load()
 		{
+			Config c;
+			string cdir = dir + "/configuration";
 
+			if (File.Exists(cdir))
+			{
+				StreamReader r = new StreamReader(cdir);
+				XmlSerializer xmlSerializer = new XmlSerializer(typeof(Config));
+				c = (Config)xmlSerializer.Deserialize(r);
+				r.Close();
+			}
+			else
+			{
+				MessageBox.Show("Configurations not found, generating defaults");
+				Directory.CreateDirectory(dir);
+
+				c = new Config
+				{
+					EBombDiameter = 4,
+					EBombSpeed = 1f,
+					PBombDiameter = 4,
+					PBombSpeed = 15f,
+					ExplosionDiameter = 50,
+					TurretDiameter = 50,
+					SysColor = "-8323200",
+					TitleFontSize = 100,
+					GameFontSize = 12,
+				};
+
+				c.Save();
+				MessageBox.Show("Configurations generated");
+			}
+
+			return c;
 		}
-		private void LoadColorConfig()
+		public void Save()
 		{
-			// TODO load config
-			lAccountColors = new List<Color>();
-			lAccountColors.Add(Color.White);
-			lAccountColors.Add(Color.LightGreen);
-			lAccountColors.Add(Color.Blue);
-			lAccountColors.Add(Color.Yellow);
-			lAccountColors.Add(Color.White);
-		}
-		private void LoadPlayerKeys()
-		{
+			string cdir = dir + "/configuration";
+			bool append = true;
 
+			if (File.Exists(cdir))
+				append = false;
+
+			XmlSerializer xmlSerializer = new XmlSerializer(typeof(Config));
+			StreamWriter myWriter = new StreamWriter(cdir, append);
+			xmlSerializer.Serialize(myWriter, this);
+			myWriter.Close();
+
+			foreach (PlayerConfiguration pc in dicPConfigs.Values)
+				pc.Save();
+		}
+		public PlayerConfiguration LoadPlayer(ETag t, bool force = false)
+		{
+			// If the pc was not loaded
+			if (!dicPConfigs.ContainsKey(t))
+				dicPConfigs.Add(t, PlayerConfiguration.Load(t));
+			if (force)
+				dicPConfigs[t] = PlayerConfiguration.Load(t);
+
+			return dicPConfigs[t];
 		}
 	}
 }

@@ -8,12 +8,16 @@ namespace missile_command
 {
 	class Bomb : Entity
 	{
+		public void Jump()
+		{
+			atDestination = true;
+		}
+
 		private const int CURSOR_OFFSET = 5;
 
 		public delegate void Deconstruct(Entity bomb);
 		public event Deconstruct DestroyBomb;
 
-		// TODO add some sort of config based settings
 		private bool atDestination;
 		private SolidBrush brush;
 		private Point destination;
@@ -25,29 +29,36 @@ namespace missile_command
 		private Point lOrigin; // traceOrigin
 		private int oriRadius;
 		private Pen pen;
+		private float speed;
 		private PointF velocity;
 
-		public Bomb(Point o, Size d, Point des, PType p, ETag t) : base(o.X, o.Y, d.Width, d.Height, t)
-		{
-			// Adjust the bomb so the "origin" of it is the center 
-			//Body.AdjustX(-Body.Width / 2);
+		public float Speed { get { return speed; } set { speed = value; CalculateVelocity(); } }
+		public PType PlayerType { get; private set; }
+		public bool GivePoints { get; private set; }
 
+		public Bomb(int x, int y, int w, int h, Point des, PType p, ETag t) : base(x, y, w, h, t)
+		{
 			// Set fields
 			atDestination = false;
 			destination = des;
-			explosionSize = Config.Instance.DefaultExplosionSize;
+			explosionSize = Config.Instance.ExplosionDiameter;
 			flash = false;
 			fNextPosition = Body.TopLeft;
 			growthCount = 0;
 			lOrigin = Body.Center;
 			oriRadius = Body.Dimension.Width;
+			PlayerType = p;
+			GivePoints = false;
+
+			if (p == PType.ENEMY)
+				Speed = Config.Instance.EBombSpeed;
+			else
+				Speed = Config.Instance.PBombSpeed;
 			
-			CalculateVelocity();
 			SetColor();
 		}
 		private void CalculateVelocity()
 		{
-			float speed = Config.Instance.DefaultBombSpeed;
 			// Difference between the origin and where it will hit.
 			double diffX = Body.Left - destination.X;
 			double diffY = Body.Top - destination.Y;
@@ -83,7 +94,7 @@ namespace missile_command
 		private void RepositionExplosion()
 		{
 			//Reposition the bomb's point for the explosion
-			int explosionSize = Config.Instance.DefaultExplosionSize;
+			int explosionSize = Config.Instance.ExplosionDiameter;
 			int meanCoorindates = ((explosionSize / 2) - (Body.Width / 2));
 
 			int nX = Body.Left - meanCoorindates;
@@ -133,18 +144,22 @@ namespace missile_command
 			if (atDestination)
 			{
 				if (Body.Width >= explosionSize)
+				{
+					if (firstCollider != null && firstCollider.Owner is Bomb)
+						if (((Bomb)firstCollider.Owner).PlayerType == PType.PLAYER)
+							GivePoints = true;
 					DestroyBomb(this);
+				}
 
 				// Start growing the explosion
 				// if false then grow the size of it.
-				growthCount++;
-				if (growthCount % 4 == 0)
+				if (++growthCount % 2 == 0)
 				{
 					// flash the graphics
-					if (growthCount % 6 == 0)
+					if (growthCount % 10 == 0)
 						flash = !flash;
 
-					int growth = explosionSize / 30;
+					int growth = explosionSize / 50;
 					// if growth is not even, then make it even.
 					if (growth % 2 != 0)
 						growth++;

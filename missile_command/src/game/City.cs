@@ -20,7 +20,6 @@ namespace missile_command
 		private static int aliveCities = 0;
 
 		private Image sprite;
-		private bool isDestroyed;
 		private Shield shield;
 
 		private Collider prevCollider;
@@ -29,26 +28,18 @@ namespace missile_command
 		static City()
 		{
 			if (lSprite.Count == 0)
-			{
 				for (int i = 0; i < 2; i++)
-				{
-					object obj = Properties.Resources.ResourceManager.GetObject("City_" + i);
-					Bitmap bm = ((System.Drawing.Bitmap)(obj));
-					lSprite.Add(bm);
-				}
-			}
+					lSprite.Add((Bitmap)Properties.Resources.ResourceManager.GetObject("City_" + i));
 		}
 		public City(int x, int y, int w, int h, ETag t = ETag.SYSTEM) : base(x, y, w, h, t)
 		{
 			sprite = lSprite[(int)SpriteType.ALIVE];
 			aliveCities++;
-			isDestroyed = false;
 
 			Size shieldSize = Body.Dimension;
 			shieldSize.Width += Consts.CITY_TRUE_SIZE + 6;
 			shieldSize.Height += Consts.CITY_TRUE_SIZE * 2;
-
-			// I need to pass in the city true size /2, since that would be the TRUE center (windows drawing issues)
+			
 			shield = new Shield(Body.Center.X, Body.Bottom, Body.Center.X, Body.Top, shieldSize.Width, shieldSize.Height, Tag);
 
 			cHolder = Collider;
@@ -58,10 +49,10 @@ namespace missile_command
 		{
 			if (shield.PreviousCollider != collider && collider != prevCollider)
 			{
-				if (!shield.Active)
+				if (!shield.Alive)
 				{
 					sprite = lSprite[(int)SpriteType.DEAD];
-					isDestroyed = true;
+					Alive = false;
 					prevCollider = collider;
 				}
 			}
@@ -69,7 +60,7 @@ namespace missile_command
 		public override void Draw(Graphics g)
 		{
 			g.DrawImage(sprite, Body.TopLeft);
-			if (!isDestroyed)
+			if (Alive)
 			{
 				shield.Draw(g);
 			}
@@ -89,7 +80,7 @@ namespace missile_command
 		public override void Update(long gameTime)
 		{
 			shield.Update(gameTime);
-			if (shield.Active)
+			if (shield.Alive)
 				Collider = shield.Collider;
 			else
 				Collider = cHolder;

@@ -50,20 +50,37 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\game\Status.cs" />
+    <Compile Include="src\HighscoresForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\HighscoresForm.Designer.cs">
+      <DependentUpon>HighscoresForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="src\game\City.cs" />
     <Compile Include="src\game\Collider.cs" />
     <Compile Include="src\game\Entity.cs" />
-    <Compile Include="src\game\GameMode.cs" />
-    <Compile Include="src\game\_GameState.cs" />
+    <Compile Include="src\gamestates\GameOverState.cs" />
+    <Compile Include="src\gamemodes\Mode.cs" />
+    <Compile Include="src\gamestates\PauseState.cs" />
+    <Compile Include="src\gamemodes\SurvivalMode.cs" />
+    <Compile Include="src\gamemodes\WaveMode.cs" />
+    <Compile Include="src\gamestates\PlayState.cs" />
     <Compile Include="src\MouseHandler.cs" />
-    <Compile Include="src\State.cs" />
-    <Compile Include="src\ui\GameButton.cs" />
-    <Compile Include="src\ui\Component.cs" />
-    <Compile Include="src\game\StatusBar.cs" />
+    <Compile Include="src\PlayerConfiguration.cs" />
+    <Compile Include="src\Settings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\Settings.Designer.cs">
+      <DependentUpon>Settings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\gamestates\State.cs" />
+    <Compile Include="src\buttons\GameButton.cs" />
+    <Compile Include="src\Component.cs" />
     <Compile Include="src\game\Shield.cs" />
     <Compile Include="src\game\Body.cs" />
     <Compile Include="src\factories\EntityFactory.cs" />
-    <Compile Include="src\ui\SlideRightButton.cs" />
+    <Compile Include="src\buttons\LadderButton.cs" />
     <Compile Include="src\Window.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -76,10 +93,16 @@
     <Compile Include="src\game\Reticle.cs" />
     <Compile Include="src\game\Turret.cs" />
     <Compile Include="src\KeypressHandler.cs" />
-    <Compile Include="src\ui\_MenuState.cs" />
+    <Compile Include="src\gamestates\MainMenuState.cs" />
     <Compile Include="src\Utility.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="src\HighscoresForm.resx">
+      <DependentUpon>HighscoresForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\Settings.resx">
+      <DependentUpon>Settings.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="src\Window.resx">
       <DependentUpon>Window.cs</DependentUpon>
     </EmbeddedResource>

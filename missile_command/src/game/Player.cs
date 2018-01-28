@@ -8,19 +8,15 @@ namespace missile_command
 {
 	class Player
 	{
-		// TODO move delegates to turret
-		// TODO Add ammo
-
-		private List<Turret> lTurrets = new List<Turret>();
+		private List<Turret> lTurrets;
+		private Turret nextTurret;
 
 		private Reticle cursor;
 		private PType pType;
 		private ETag tag;
 
-		private int fireCount;
-		private int coolingDownCount;
-		private bool coolingDown;
-		private bool noActiveTurrets;
+		private bool prevMouseState;
+		private bool currentMouseState;
 
 		public ETag GetTag() { return tag; }
 		public PType GetPType() { return pType; }
@@ -31,16 +27,14 @@ namespace missile_command
 			pType = p;
 			tag = a;
 
-			fireCount = 0;
-			coolingDownCount = 0;
-			coolingDown = false;
-			noActiveTurrets = true;
+			lTurrets = new List<Turret>();
+			prevMouseState = false;
+			currentMouseState = false;
 		}
 		public void AttachTurret(Turret t)
 		{
 			t.AttachReticleBody(cursor.Body);
 			lTurrets.Add(t);
-			noActiveTurrets = false;
 		}
 		public void Draw(Graphics g)
 		{
@@ -48,64 +42,56 @@ namespace missile_command
 		}
 		private void Shoot()
 		{
-			if (lTurrets[fireCount].IsDestroyed)
-			{
-				int cycleCount = 0;
-				int curIndex = fireCount;
-				while (lTurrets[curIndex].IsDestroyed && !noActiveTurrets)
-				{
-					if (++curIndex >= lTurrets.Count)
-						curIndex = 0;
-
-					if (++cycleCount >= lTurrets.Count)
-					{
-						return;
-					}
-				}
-				fireCount = curIndex;
-			}
-			if (coolingDown == false)
-			{
-				// TODO add logic to shoot from a tower based on the position of the cursor, if its closer
-				// it should fire first, if ammo is 0 then the next closest should fire.
-
-				// TODO add logic for destroyed turrets
-				lTurrets[fireCount++].ShootTurret();
-				//lTurrets[1].ShootTurret(cursor.Body.Center);
-
-				// TODO move into turret?
-				coolingDown = true;
-
-				if (fireCount >= lTurrets.Count)
-					fireCount = 0;
-
-			}
-			else
-			{
-				coolingDownCount++;
-			}
-
-			if (coolingDownCount == 10)
-			{
-				coolingDown = false;
-				coolingDownCount = 0;
-
-			}
+			if (nextTurret != null)
+				nextTurret.ShootTurret();
 		}
 		public void Update(long gameTime)
 		{
-			// Determine the keys pressed.
-			KPress keysPressed = KeypressHandler.Instance.PlayerKeyState(this);
-			if ((keysPressed & KPress.UP) == KPress.UP)
-				cursor.Move(Direction.UP);
-			if ((keysPressed & KPress.RIGHT) == KPress.RIGHT)
-				cursor.Move(Direction.RIGHT);
-			if ((keysPressed & KPress.DOWN) == KPress.DOWN)
-				cursor.Move(Direction.DOWN);
-			if ((keysPressed & KPress.LEFT) == KPress.LEFT)
-				cursor.Move(Direction.LEFT);
-			if ((keysPressed & KPress.SHOOT) == KPress.SHOOT)
-				Shoot();
+			List<Turret> availableTurrets = new List<Turret>();
+			foreach (Turret t in lTurrets)
+			{
+				t.FireIndicator = false;
+				if (t.Alive && t.HasAmmo && t.Armed)
+					availableTurrets.Add(t);
+			}
+
+			if (availableTurrets.Count > 0)
+			{
+				//Find smallest distance from turret and reticle
+				int distance = int.MaxValue;
+				foreach (Turret t in availableTurrets)
+				{
+					int x = Math.Abs(t.Body.Left - cursor.Body.Center.X);
+					int y = Math.Abs(t.Body.Top - cursor.Body.Center.Y);
+
+					int hypotenuse = Convert.ToInt32(Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2)));
+					if (hypotenuse < distance)
+					{
+						nextTurret = t;
+						distance = hypotenuse;
+					}
+				}
+
+				nextTurret.FireIndicator = true;
+			}
+			else
+			{
+				nextTurret = null;
+			}
+
+			if (Config.Instance.GetMouseCheck(tag))
+			{
+				prevMouseState = currentMouseState;
+				currentMouseState = MouseHandler.Instance.MouseState(MOUSE_BUTTONS.VK_LBUTTON);
+
+				if (currentMouseState == false && prevMouseState == true)
+					Shoot();
+			}
+			else
+			{
+				if (KeypressHandler.Instance.Press(Keys.Space))
+					Shoot();
+			}
 
 			cursor.Update(gameTime);
 		}

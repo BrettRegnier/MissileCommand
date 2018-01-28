@@ -7,8 +7,6 @@ namespace missile_command
 		private Point position;
 		private Size dimension;
 
-		// TODO perhaps integer values that are offsets. For things like Reticle.
-
 		public Body(int x, int y, int w, int h)
 		{
 			position = new Point(x, y);
