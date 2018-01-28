@@ -11,19 +11,21 @@ namespace missile_command
 	{
 		private List<Component> bombs;
 		private List<Component> components;
-		private long elapsedTime;
 		private int players;
 		private StringFormat sf;
 		private int titleX;
 		private int titleY;
+		private float spawnTime;
+		private long elapsedTime;
 
 		public MainMenuState(Window g) : base(g)
 		{
 			// Init fields
 			bombs = new List<Component>();
 			components = new List<Component>();
-			elapsedTime = 0;
 			players = 0;
+			spawnTime = 0.0f;
+			elapsedTime = 0;
 
 			sf = new StringFormat
 			{
@@ -31,11 +33,11 @@ namespace missile_command
 				Alignment = StringAlignment.Center
 			};
 			titleX = Consts.gameBounds.Width / 2;
-			titleY = 200;
+			titleY = 150;
 
 			int numButton = 0;
 			int startX = Consts.gameBounds.Width / 2;
-			int startY = 300;
+			int startY = 200;
 			int btnWidth = 100;
 			int btnHeight = 30;
 
@@ -118,11 +120,15 @@ namespace missile_command
 			for (int i = 0; i < components.Count; i++)
 				components[i].Draw(g);
 
-			g.DrawString("Missile Command", Config.Instance.TitleFont, new SolidBrush(Config.Instance.SystemColor), titleX, titleY, sf);
+			g.DrawString("Missile Command", new Font("Times New Roman", 30), new SolidBrush(Config.Instance.SystemColor), titleX, titleY, sf);
 		}
 		public override void Update(long gameTime)
 		{
-			SpawnBombs(gameTime);
+			if (elapsedTime == 0)
+				elapsedTime = gameTime;
+
+			if (gameTime > elapsedTime + 1000)
+				SpawnBombs();
 
 			for (int i = 0; i < bombs.Count; i++)
 				bombs[i].Update(gameTime);
@@ -136,11 +142,12 @@ namespace missile_command
 			for (int i = 0; i < components.Count; i++)
 				components[i].PostUpdate(gameTime);
 		}
-		private void SpawnBombs(long gameTime)
+		private void SpawnBombs()
 		{
-			if (gameTime > elapsedTime + 200)
+			spawnTime += 1.0f / Window.fps;
+
+			if (spawnTime > 1.0f)
 			{
-				elapsedTime = gameTime;
 				Random rand = new Random();
 				Point o = new Point(rand.Next(0, Consts.gameBounds.Width), 0);
 				Point destination = new Point(rand.Next(Consts.gameBounds.Width / 2, Consts.gameBounds.Width), Consts.gameBounds.Height);
@@ -150,6 +157,8 @@ namespace missile_command
 				bmb.Speed = 10.0f;
 				bmb.DestroyBomb += (Entity b) => { bombs.Remove(b); };
 				bombs.Add(bmb);
+
+				spawnTime = 0.0f;
 			}
 		}
 	}
