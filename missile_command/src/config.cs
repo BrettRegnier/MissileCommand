@@ -16,6 +16,8 @@ namespace missile_command
 		[XmlIgnore()] private Dictionary<ETag, PlayerConfiguration> dicPConfigs;
 		[XmlIgnore()] private static string dir = "./config";
 		[XmlIgnore()] public Color SystemColor { get { return Color.FromArgb(Convert.ToInt32(SysColor)); } }
+		[XmlIgnore()] public Font TitleFont { get { return new Font(Typeface, TitleFontSize); } }
+		[XmlIgnore()] public Font GameFont { get { return new Font(Typeface, GameFontSize); } }
 
 		public int EBombDiameter { get; set; }
 		public int PBombDiameter { get; set; }
@@ -24,6 +26,9 @@ namespace missile_command
 		public int ExplosionDiameter { get; set; }
 		public int TurretDiameter { get; set; }
 		public string SysColor { get; set; }
+		public string Typeface { get; set; }
+		public int TitleFontSize { get; set; }
+		public int GameFontSize { get; set; }
 
 		public static Config Instance
 		{
@@ -75,7 +80,7 @@ namespace missile_command
 			}
 			else
 			{
-				MessageBox.Show("Configurations not found, generationg defaults");
+				MessageBox.Show("Configurations not found, generating defaults");
 				Directory.CreateDirectory(dir);
 
 				c = new Config
@@ -86,7 +91,9 @@ namespace missile_command
 					PBombSpeed = 15f,
 					ExplosionDiameter = 100,
 					TurretDiameter = 50,
-					SysColor = "-8323200"
+					SysColor = "-8323200",
+					TitleFontSize = 100,
+					GameFontSize = 10,
 				};
 
 				c.Save();

@@ -8,6 +8,11 @@ namespace missile_command
 {
 	class Bomb : Entity
 	{
+		public void Jump()
+		{
+			atDestination = true;
+		}
+
 		private const int CURSOR_OFFSET = 5;
 
 		public delegate void Deconstruct(Entity bomb);

@@ -31,11 +31,11 @@ namespace missile_command
 				Alignment = StringAlignment.Center
 			};
 			titleX = Consts.gameBounds.Width / 2;
-			titleY = 150;
+			titleY = 200;
 
 			int numButton = 0;
 			int startX = Consts.gameBounds.Width / 2;
-			int startY = 200;
+			int startY = 300;
 			int btnWidth = 100;
 			int btnHeight = 30;
 
@@ -118,7 +118,7 @@ namespace missile_command
 			for (int i = 0; i < components.Count; i++)
 				components[i].Draw(g);
 
-			g.DrawString("Missile Command", new Font("Times New Roman", 30), new SolidBrush(Config.Instance.SystemColor), titleX, titleY, sf);
+			g.DrawString("Missile Command", Config.Instance.TitleFont, new SolidBrush(Config.Instance.SystemColor), titleX, titleY, sf);
 		}
 		public override void Update(long gameTime)
 		{
@@ -138,10 +138,12 @@ namespace missile_command
 		}
 		private void SpawnBombs(long gameTime)
 		{
+			if (gameTime > elapsedTime + 200)
+			{
 				elapsedTime = gameTime;
 				Random rand = new Random();
 				Point o = new Point(rand.Next(0, Consts.gameBounds.Width), 0);
-				Point destination = new Point(rand.Next(Consts.gameBounds.Width/2, Consts.gameBounds.Width), Consts.gameBounds.Height);
+				Point destination = new Point(rand.Next(Consts.gameBounds.Width / 2, Consts.gameBounds.Width), Consts.gameBounds.Height);
 				if (o.X < Consts.gameBounds.Width / 2)
 					destination.X = rand.Next(0, Consts.gameBounds.Width / 2);
 				Bomb bmb = EntityFactory.MakeBomb(o.X, o.Y, destination, PType.ENEMY, ETag.ENEMY);
@@ -149,5 +151,6 @@ namespace missile_command
 				bmb.DestroyBomb += (Entity b) => { bombs.Remove(b); };
 				bombs.Add(bmb);
 			}
+		}
 	}
 }

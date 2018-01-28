@@ -44,6 +44,7 @@ namespace missile_command
 				{
 					for (int i = 0; i < spawnAmount; i++)
 					{
+
 						Entity attackPoint = POA[rand.Next(0, POA.Count)];
 						int attackX = attackPoint.Body.Center.X;
 						int attackY = attackPoint.Body.Center.Y;
@@ -52,7 +53,9 @@ namespace missile_command
 						if (attackX > Consts.gameBounds.Width / 2)
 							oX = rand.Next(Consts.gameBounds.Width / 2, Consts.gameBounds.Width);
 
-						bombs[i] = EntityFactory.MakeBomb(oX, oY, new System.Drawing.Point(attackX, attackY), PType.ENEMY, ETag.ENEMY);
+						Bomb b = EntityFactory.MakeBomb(oX, oY, new System.Drawing.Point(attackX, attackY), PType.ENEMY, ETag.ENEMY);
+						b.Speed = 1.2f;
+						bombs[i] = b;
 						spawnCount++;
 					}
 					spawnTime %= 1000;

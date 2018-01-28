@@ -157,8 +157,10 @@ namespace missile_command
 				if (!isPaused)
 					Pause();
 			}
-			else if (KeypressHandler.Instance.Press(Keys.Delete))
+			if (KeypressHandler.Instance.Press(Keys.Delete))
 				GameOver();
+			if (KeypressHandler.Instance.Press(Keys.Enter))
+				DestroyAllEnemyBombs();
 		}
 		private void P_TurretShoot(Point origin, Point destination, ETag a)
 		{
@@ -293,6 +295,11 @@ namespace missile_command
 						players[i].PostUpdate(gameTime);
 				}
 			}
+		}
+		public void DestroyAllEnemyBombs()
+		{
+			for (int i = eBombs.Count; i > 0; i--)
+				((Bomb)eBombs[i-1]).Jump();
 		}
 	}
 }

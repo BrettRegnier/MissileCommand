@@ -132,7 +132,6 @@ namespace missile_command
 			if (hpBar.Alive == false)
 			{
 				double healValue = (hpBar.MaxValue / 50) / (Window.fps);
-				Console.WriteLine(healValue);
 				hpBar.Heal(healValue);
 			}
 

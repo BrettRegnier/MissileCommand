@@ -73,7 +73,7 @@ namespace missile_command
 
 				if (!string.IsNullOrEmpty(Text))
 				{
-					g.DrawString(Text, new Font("Times New Roman", fontSize), new SolidBrush(Config.Instance.SystemColor), Body.Center.X, Body.Center.Y, sf);
+					g.DrawString(Text, new Font(Config.Instance.Typeface, fontSize), new SolidBrush(Config.Instance.SystemColor), Body.Center.X, Body.Center.Y, sf);
 				}
 			}
 		}
