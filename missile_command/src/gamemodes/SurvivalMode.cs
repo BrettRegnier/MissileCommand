@@ -7,9 +7,18 @@ namespace missile_command
 	class SurvivalMode : Mode
 	{
 		private Random rand;
-		private long spawnTime;
-		private int spawnCount;
 		private int spawnAmount;
+
+		private float speedMod;
+		private int spawnNum;
+
+		private bool spawning;
+		private float spawnWait;
+
+		private float spawnTime;
+		private float speedTime;
+		private float unitTime;
+
 		public SurvivalMode(PlayState s) : base(s)
 		{
 			elapsedTime = 0;
@@ -17,7 +26,7 @@ namespace missile_command
 			pendingPoints = 0;
 			rand = new Random();
 			spawnAmount = 1;
-			spawnCount = 0;
+			spawnTime = 0.0f;
 
 			GameModeTag = GameModes.SURVIVAL;
 		}
@@ -33,8 +42,7 @@ namespace missile_command
 		}
 		public override Bomb[] SpawnEnemies()
 		{
-			// TODO setup a certain amount of time passed that increases as playtime increases
-			if (spawnTime > 1000)
+			if (spawning)
 			{
 				Bomb[] bombs = new Bomb[spawnAmount];
 				//Points of Attack
@@ -56,9 +64,8 @@ namespace missile_command
 						Bomb b = EntityFactory.MakeBomb(oX, oY, new System.Drawing.Point(attackX, attackY), PType.ENEMY, ETag.ENEMY);
 						b.Speed = 1.2f;
 						bombs[i] = b;
-						spawnCount++;
 					}
-					spawnTime %= 1000;
+					spawning = false;
 					return bombs;
 				}
 			}
@@ -71,18 +78,30 @@ namespace missile_command
 		}
 		public override void Update(long gameTime)
 		{
-			if (elapsedTime == 0)
-				elapsedTime = gameTime;
-			// Keep track fo the milliseconds that have elasped
-			if (gameTime >= elapsedTime)
+			// every 20 seconds increase the speed of the bombs
+			// every 60 seconds incease the number of bombs being spawned 
+			spawnTime += 1.0f / Window.fps;
+			speedTime += 1.0f / Window.fps;
+			unitTime += 1.0f / Window.fps;
+
+			if (spawnTime > 2.0f )
 			{
-				spawnTime += gameTime - elapsedTime;
-				elapsedTime = gameTime;
+				spawning = true;
+				spawnTime = 0.0f;
+			}
+			if (speedTime > 20.0f)
+			{
+				speedMod += 0.2f;
+				speedTime = 0.0f;
+			}
+			if (unitTime > 60.0f)
+			{
+				spawnAmount++;
+				unitTime = 0.0f;
 			}
 		}
 		public override void PostUpdate(long gameTime)
 		{
-			//throw new NotImplementedException();
 		}
 	}
 }

@@ -89,11 +89,11 @@ namespace missile_command
 					EBombSpeed = 1f,
 					PBombDiameter = 4,
 					PBombSpeed = 15f,
-					ExplosionDiameter = 100,
+					ExplosionDiameter = 50,
 					TurretDiameter = 50,
 					SysColor = "-8323200",
 					TitleFontSize = 100,
-					GameFontSize = 10,
+					GameFontSize = 12,
 				};
 
 				c.Save();

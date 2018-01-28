@@ -21,7 +21,7 @@ namespace missile_command
 		private List<Player> players;
 		private Random rand;
 
-		private int playTime;
+		private double playTime;
 		private int playTimeX;
 		private int playTimeY;
 
@@ -127,8 +127,8 @@ namespace missile_command
 		private string FormatTime()
 		{
 			// Format time into hrs, minutes, seconds.
-			int playTimeSec = playTime % 60;
-			int totalMinutes = playTime / 60;
+			int playTimeSec = (int)playTime % 60;
+			int totalMinutes = (int)playTime / 60;
 			int playTimeMinutes = totalMinutes % 60;
 			int playTimeHours = totalMinutes / 60;
 			string seconds = playTimeSec.ToString();
@@ -157,10 +157,10 @@ namespace missile_command
 				if (!isPaused)
 					Pause();
 			}
-			if (KeypressHandler.Instance.Press(Keys.Delete))
-				GameOver();
-			if (KeypressHandler.Instance.Press(Keys.Enter))
-				DestroyAllEnemyBombs();
+			//if (KeypressHandler.Instance.Press(Keys.Delete))
+			//	GameOver();
+			//if (KeypressHandler.Instance.Press(Keys.Enter))
+			//	DestroyAllEnemyBombs();
 		}
 		private void P_TurretShoot(Point origin, Point destination, ETag a)
 		{
@@ -230,8 +230,8 @@ namespace missile_command
 			for (int i = 0; i < players.Count; i++)
 				players[i].Draw(g);
 			string scoreText = "Score: " + score.ToString();
-			g.DrawString(scoreText, new Font("Times New Roman", 12), new SolidBrush(Config.Instance.SystemColor), scoreX, scoreY);
-			g.DrawString(FormatTime(), new Font("Times New Roman", 12), new SolidBrush(Config.Instance.SystemColor), playTimeX, playTimeY);
+			g.DrawString(scoreText, Config.Instance.GameFont, new SolidBrush(Config.Instance.SystemColor), scoreX, scoreY);
+			g.DrawString(FormatTime(), Config.Instance.GameFont, new SolidBrush(Config.Instance.SystemColor), playTimeX, playTimeY);
 		}
 		public override void Update(long gameTime)
 		{
@@ -267,12 +267,8 @@ namespace missile_command
 					for (int i = 0; i < players.Count; i++)
 						players[i].Update(gameTime);
 
-					if (gameTime >= elapsedTime + 1000)
-					{
-						// if here, then its been 1 second.
-						elapsedTime = gameTime;
-						playTime += 1;
-					}
+					playTime += 1.0 / Window.fps;
+
 					if (aliveCount == 0)
 						GameOver();
 				}
